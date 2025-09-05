@@ -17,7 +17,7 @@ export interface QueuedEmail {
   priority: 'low' | 'normal' | 'high'
   attempts: number
   maxAttempts: number
-  status: 'pending' | 'sending' | 'sent' | 'failed' | 'cancelled'
+  status: 'PENDING' | 'SENDING' | 'SENT' | 'FAILED' | 'CANCELLED'
   scheduledFor: Date
   lastAttempt?: Date
   error?: string
@@ -75,7 +75,7 @@ class EmailQueue {
           // Log successful immediate send
           await this.logEmailAttempt({
             ...message,
-            status: 'sent',
+            status: 'SENT',
             messageId: immediateResult.messageId,
             attempts: 1
           })
@@ -94,7 +94,7 @@ class EmailQueue {
           priority: message.priority || 'normal',
           maxAttempts: message.maxAttempts || 3,
           scheduledFor: message.scheduledFor || new Date(),
-          status: 'pending'
+          status: 'PENDING'
         }
       })
 
@@ -129,7 +129,7 @@ class EmailQueue {
       // Get pending emails ordered by priority and scheduled time
       const pendingEmails = await prisma.emailQueue.findMany({
         where: {
-          status: 'pending',
+          status: 'PENDING',
           scheduledFor: {
             lte: new Date()
           },
@@ -152,7 +152,7 @@ class EmailQueue {
           await prisma.emailQueue.update({
             where: { id: queuedEmail.id },
             data: { 
-              status: 'sending',
+              status: 'SENDING',
               lastAttempt: new Date(),
               attempts: queuedEmail.attempts + 1
             }
@@ -175,7 +175,7 @@ class EmailQueue {
             await prisma.emailQueue.update({
               where: { id: queuedEmail.id },
               data: { 
-                status: 'sent',
+                status: 'SENT',
                 messageId: result.messageId,
                 updatedAt: new Date()
               }
@@ -192,7 +192,7 @@ class EmailQueue {
             await prisma.emailQueue.update({
               where: { id: queuedEmail.id },
               data: { 
-                status: isMaxAttempts ? 'failed' : 'pending',
+                status: isMaxAttempts ? 'FAILED' : 'PENDING',
                 error: result.error || 'Unknown error',
                 ...(nextScheduled && { scheduledFor: nextScheduled }),
                 updatedAt: new Date()
@@ -215,7 +215,7 @@ class EmailQueue {
           await prisma.emailQueue.update({
             where: { id: queuedEmail.id },
             data: { 
-              status: isMaxAttempts ? 'failed' : 'pending',
+              status: isMaxAttempts ? 'FAILED' : 'PENDING',
               error: (error as any).message || 'Processing error',
               scheduledFor: isMaxAttempts 
                 ? queuedEmail.scheduledFor 
@@ -254,7 +254,7 @@ class EmailQueue {
         }),
         prisma.emailQueue.findMany({
           where: {
-            status: 'failed',
+            status: 'FAILED',
             updatedAt: {
               gte: new Date(Date.now() - 24 * 60 * 60 * 1000) // Last 24 hours
             }
@@ -295,7 +295,7 @@ class EmailQueue {
 
       // Process counts
       counts.forEach(count => {
-        const status = count.status as keyof Pick<EmailQueueStats, 'pending' | 'sending' | 'sent' | 'failed'>
+        const status = count.status as keyof Pick<EmailQueueStats, 'PENDING' | 'SENDING' | 'SENT' | 'FAILED'>
         const priority = count.priority as keyof EmailQueueStats['byPriority']
         
         stats[status] += count._count.id
@@ -316,13 +316,13 @@ class EmailQueue {
   async retryFailedEmails(emailIds?: string[]): Promise<{ queued: number }> {
     try {
       const whereCondition = emailIds 
-        ? { id: { in: emailIds }, status: 'failed' }
-        : { status: 'failed' }
+        ? { id: { in: emailIds }, status: 'FAILED' }
+        : { status: 'FAILED' }
 
       const result = await prisma.emailQueue.updateMany({
         where: whereCondition,
         data: {
-          status: 'pending',
+          status: 'PENDING',
           scheduledFor: new Date(),
           error: null,
           updatedAt: new Date()
@@ -349,10 +349,10 @@ class EmailQueue {
       const result = await prisma.emailQueue.updateMany({
         where: {
           id: { in: emailIds },
-          status: { in: ['pending', 'sending'] }
+          status: { in: ['PENDING', 'SENDING'] }
         },
         data: {
-          status: 'cancelled',
+          status: 'CANCELLED',
           updatedAt: new Date()
         }
       })
@@ -374,7 +374,7 @@ class EmailQueue {
 
       const result = await prisma.emailQueue.deleteMany({
         where: {
-          status: { in: ['sent', 'cancelled'] },
+          status: { in: ['SENT', 'CANCELLED'] },
           updatedAt: {
             lt: cutoffDate
           }

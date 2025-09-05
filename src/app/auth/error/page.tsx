@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
   const searchParams = useSearchParams()
   const error = searchParams.get('error')
 
@@ -61,5 +62,22 @@ export default function AuthErrorPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function AuthErrorPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-gradient-primary flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          <div className="card-floating bg-white text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
+            <p className="mt-4 text-neutral-600">Carregando...</p>
+          </div>
+        </div>
+      </main>
+    }>
+      <AuthErrorContent />
+    </Suspense>
   )
 }

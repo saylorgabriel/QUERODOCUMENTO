@@ -10,7 +10,14 @@ export const metadata: Metadata = {
   description: 'Consulte protestos e emita certidões de forma rápida e segura em cartórios de todo o Brasil',
   keywords: 'protesto, certidão, consulta protesto, certidão negativa, certidão positiva, cartório',
   authors: [{ name: 'QueroDocumento' }],
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: 'no',
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({
