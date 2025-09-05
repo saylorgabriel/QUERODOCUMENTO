@@ -23,8 +23,16 @@ export function InputPhone({
   ...props
 }: InputPhoneProps) {
   const [internalValue, setInternalValue] = useState(value)
+  const [displayValue, setDisplayValue] = useState(formatPhone(value))
   const [isValid, setIsValid] = useState(false)
   const [touched, setTouched] = useState(false)
+
+  useEffect(() => {
+    if (value !== internalValue) {
+      setInternalValue(value)
+      setDisplayValue(formatPhone(value))
+    }
+  }, [value])
 
   useEffect(() => {
     const valid = validatePhone(internalValue)
@@ -32,17 +40,37 @@ export function InputPhone({
     onChange?.(internalValue, valid)
   }, [internalValue])
 
-  // getMask function temporarily disabled for React 19 compatibility
-  // const getMask = () => {
-  //   const clean = internalValue.replace(/[^\d]/g, '')
-  //   if (clean.length <= 10) {
-  //     return '(99) 9999-9999'
-  //   }
-  //   return '(99) 99999-9999'
-  // }
+  // Função para aplicar máscara de telefone
+  const applyPhoneMask = (value: string): string => {
+    const numbers = value.replace(/[^\d]/g, '')
+    
+    if (numbers.length === 0) return ''
+    if (numbers.length <= 2) return `(${numbers}`
+    if (numbers.length <= 6) {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`
+    }
+    if (numbers.length <= 10) {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 6)}-${numbers.slice(6)}`
+    }
+    // Para números com 11 dígitos (celular com 9)
+    return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInternalValue(e.target.value)
+    const rawValue = e.target.value
+    const numbers = rawValue.replace(/[^\d]/g, '')
+    
+    // Limita a 11 dígitos
+    if (numbers.length <= 11) {
+      const masked = applyPhoneMask(rawValue)
+      setDisplayValue(masked)
+      setInternalValue(numbers)
+      
+      // Reset validation state when value changes
+      if (numbers !== internalValue.replace(/[^\d]/g, '')) {
+        setIsValid(false)
+      }
+    }
   }
 
   const handleBlur = () => {
@@ -60,9 +88,10 @@ export function InputPhone({
       )}
       <div className="relative">
         <input
-          value={internalValue}
+          value={displayValue}
           onChange={handleChange}
           onBlur={handleBlur}
+          placeholder="(99) 99999-9999"
           className={cn(
             'input-primary w-full',
             showError && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10',
