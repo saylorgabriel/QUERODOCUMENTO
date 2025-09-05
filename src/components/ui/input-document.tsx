@@ -32,13 +32,22 @@ export function InputDocument({
   const [touched, setTouched] = useState(false)
   const [isValidating, setIsValidating] = useState(false)
   
+  // Effect para sincronizar com valor externo
+  useEffect(() => {
+    if (value !== internalValue) {
+      setInternalValue(value)
+    }
+  }, [value])
+  
   // Debounce do valor para validação
   const debouncedValue = useDebounce(internalValue, validationDelay)
 
   // Effect para validação com debounce
   useEffect(() => {
-    if (!debouncedValue || debouncedValue === value) {
+    if (!debouncedValue) {
       setIsValidating(false)
+      setIsValid(false)
+      setDocumentType(null)
       return
     }
 
@@ -56,7 +65,7 @@ export function InputDocument({
     }, 200) // Pequeno delay visual para mostrar loading
 
     return () => clearTimeout(validationTimer)
-  }, [debouncedValue, onChange])
+  }, [debouncedValue])
 
   // Effect para indicar quando está validando
   useEffect(() => {
@@ -64,7 +73,7 @@ export function InputDocument({
       setIsValidating(true)
       onChange?.(internalValue, false, null, true)
     }
-  }, [internalValue, debouncedValue, touched, onChange])
+  }, [internalValue, debouncedValue, touched])
 
   // getMask function temporarily disabled for React 19 compatibility
   // const getMask = () => {
@@ -76,7 +85,14 @@ export function InputDocument({
   // }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInternalValue(e.target.value)
+    const newValue = e.target.value
+    setInternalValue(newValue)
+    
+    // Reset validation state immediately when value changes
+    if (newValue !== internalValue) {
+      setIsValid(false)
+      setDocumentType(null)
+    }
   }
 
   const handleBlur = () => {
