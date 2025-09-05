@@ -209,7 +209,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-sm sm:text-base font-semibold mb-2 text-white">Atendimento via WhatsApp</p>
-                  <p className="text-sm text-blue-200 leading-relaxed">Resposta em até <span className="font-semibold text-accent-300">48h</span> com nossa equipe especializada</p>
+                  <p className="text-sm text-blue-200 leading-relaxed">Resposta em até <span className="font-semibold text-accent-300">24h</span> com nossa equipe especializada</p>
                 </div>
               </div>
             </div>
@@ -384,7 +384,7 @@ export default function Home() {
             </div>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-neutral-900 via-primary-700 to-neutral-900 bg-clip-text text-transparent mb-6 leading-tight">Como Funciona</h2>
             <p className="text-xl sm:text-2xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
-              Processo <span className="font-semibold text-primary-700">simples e transparente</span> para sua consulta de protesto
+              Processo <span className="font-semibold text-primary-700">simples e profissional</span> com resultado garantido em até 24h
             </p>
           </div>
           
@@ -402,7 +402,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">Digite seus dados</h3>
               <p className="text-base sm:text-lg text-neutral-600 leading-relaxed max-w-sm mx-auto">
-                Informe seu <span className="font-semibold text-primary-700">CPF ou CNPJ</span> no formulário seguro e receba consulta instantânea
+                Informe seu <span className="font-semibold text-primary-700">CPF ou CNPJ</span> no formulário seguro e efetue o pagamento
               </p>
             </div>
             
@@ -417,9 +417,9 @@ export default function Home() {
                 {/* Connecting line */}
                 <div className="hidden md:block absolute top-12 left-full w-16 lg:w-32 h-0.5 bg-gradient-to-r from-success-300 to-accent-300"></div>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">Consulta realizada</h3>
+              <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">Processamento</h3>
               <p className="text-base sm:text-lg text-neutral-600 leading-relaxed max-w-sm mx-auto">
-                Nossa plataforma verifica em <span className="font-semibold text-success-700">tempo real</span> todos os cartórios do Brasil
+                Nossa equipe inicia a <span className="font-semibold text-success-700">verificação</span> em todos os cartórios do Brasil
               </p>
             </div>
             
@@ -434,7 +434,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">Receba o resultado</h3>
               <p className="text-base sm:text-lg text-neutral-600 leading-relaxed max-w-sm mx-auto">
-                Resultado <span className="font-semibold text-accent-700">instantâneo</span> na tela e PDF enviado para seu e-mail
+                Resultado em <span className="font-semibold text-accent-700">até 24 horas</span> por email com relatório completo
               </p>
             </div>
           </div>
@@ -490,7 +490,7 @@ export default function Home() {
                     <Users className="w-4 h-4 sm:w-5 sm:h-5 text-success-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-neutral-900 mb-1 text-sm sm:text-base">Resposta em até 48h</h4>
+                    <h4 className="font-semibold text-neutral-900 mb-1 text-sm sm:text-base">Resposta em até 24h</h4>
                     <p className="text-xs sm:text-sm text-neutral-600">Atendimento via WhatsApp com especialistas</p>
                   </div>
                 </div>
@@ -519,7 +519,7 @@ export default function Home() {
         <div className="container-padded text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Comece Agora Mesmo</h2>
           <p className="text-lg sm:text-xl text-primary-100 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
-            Consulte protestos gratuitamente ou solicite sua certidão oficial de forma rápida e segura
+            Consulte protestos ou solicite sua certidão oficial de forma rápida e segura
           </p>
           <button 
             onClick={scrollToHero}
@@ -554,7 +554,7 @@ export default function Home() {
               </svg>
               <div className="text-left">
                 <p className="font-semibold text-neutral-900 text-sm sm:text-base">WhatsApp</p>
-                <p className="text-neutral-600 text-sm sm:text-base">Resposta em até 48h</p>
+                <p className="text-neutral-600 text-sm sm:text-base">Resposta em até 24h</p>
               </div>
             </div>
           </div>
