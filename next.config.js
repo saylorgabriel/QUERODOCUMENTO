@@ -14,10 +14,6 @@ const nextConfig = {
   images: {
     remotePatterns: [],
   },
-  // Disable telemetry
-  telemetry: {
-    enabled: false
-  }
 }
 
 module.exports = nextConfig
