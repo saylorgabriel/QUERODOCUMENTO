@@ -1,11 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import { CheckCircle, Calendar, CreditCard, FileText, Clock, ArrowRight, Copy, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+
+// Force dynamic rendering for this page due to searchParams usage
+export const dynamic = 'force-dynamic'
 
 interface OrderData {
   id: string
@@ -17,7 +20,7 @@ interface OrderData {
   createdAt: string
 }
 
-export default function CertidaoProtestoSuccessPage() {
+function CertidaoProtestoSuccessContent() {
   const searchParams = useSearchParams()
   const orderId = searchParams?.get('orderId')
   
@@ -338,5 +341,24 @@ export default function CertidaoProtestoSuccessPage() {
         </div>
       </main>
     </LayoutWrapper>
+  )
+}
+
+export default function CertidaoProtestoSuccessPage() {
+  return (
+    <Suspense fallback={
+      <LayoutWrapper>
+        <main className="min-h-screen bg-gradient-to-br from-primary-50 to-white">
+          <div className="max-w-4xl mx-auto px-4 py-20">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+              <p className="text-neutral-600">Carregando...</p>
+            </div>
+          </div>
+        </main>
+      </LayoutWrapper>
+    }>
+      <CertidaoProtestoSuccessContent />
+    </Suspense>
   )
 }
