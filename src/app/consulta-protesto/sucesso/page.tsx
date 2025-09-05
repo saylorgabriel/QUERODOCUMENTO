@@ -1,5 +1,8 @@
 'use client'
 
+// Force dynamic rendering for this page due to searchParams usage
+export const dynamic = 'force-dynamic'
+
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
