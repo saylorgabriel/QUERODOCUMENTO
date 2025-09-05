@@ -146,7 +146,6 @@ export async function cleanupOrphanedFiles(): Promise<CleanupResult> {
 
   try {
     const fs = require('fs').promises
-    const path = require('path')
     
     const uploadsDir = join(process.cwd(), 'public', 'uploads', 'orders')
     

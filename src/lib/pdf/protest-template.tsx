@@ -13,8 +13,7 @@ import {
   formatDocument, 
   getDocumentType,
   generateWatermark,
-  generateQRCodeData,
-  getStateName 
+  generateQRCodeData
 } from './utils'
 
 // Define the protest query result interface
