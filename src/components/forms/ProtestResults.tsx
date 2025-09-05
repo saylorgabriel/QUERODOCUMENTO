@@ -194,7 +194,7 @@ export function ProtestResults({ data, onRequestCertificate }: ProtestResultsPro
               {!isPaidConsultation && totalProtests > 0 && (
                 <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                   <p className="text-sm text-amber-700">
-                    <strong>Consulta gratuita:</strong> Alguns detalhes estão ocultos. Para ver informações completas e obter certidão oficial, solicite uma certidão paga.
+                    <strong>Consulta básica:</strong> Alguns detalhes estão ocultos. Para ver informações completas e obter certidão oficial, solicite uma certidão paga.
                   </p>
                 </div>
               )}
@@ -375,7 +375,7 @@ export function ProtestResults({ data, onRequestCertificate }: ProtestResultsPro
             </p>
             
             <p>
-              • {isPaidConsultation ? 'Consulta paga com detalhes completos' : 'Consulta gratuita com informações básicas'}
+              • {isPaidConsultation ? 'Consulta paga com detalhes completos' : 'Consulta básica com informações principais'}
             </p>
             
             <p>

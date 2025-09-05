@@ -141,7 +141,7 @@ export default function FaleConosco() {
                     Atendimento via WhatsApp
                   </h3>
                   <p className="text-green-100 mb-3">
-                    Tenha a resposta da sua consulta em até 48h!
+                    Tenha a resposta da sua consulta em até 24h!
                   </p>
                   <p className="text-green-100 text-sm mb-4">
                     Nossa equipe de especialistas garante rapidez e qualidade.

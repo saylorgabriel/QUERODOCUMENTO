@@ -42,11 +42,13 @@ export default function ConsultaProtestoPage() {
   const [consultationResult, setConsultationResult] = useState<ConsultationResult | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [consultationSubmitted, setConsultationSubmitted] = useState<{documentNumber: string, name: string, phone?: string} | null>(null)
 
   const handleQuerySubmit = async (documentNumber: string, name: string, phone?: string) => {
     setIsLoading(true)
     setError(null)
     setConsultationResult(null)
+    setConsultationSubmitted(null)
 
     try {
       const response = await fetch('/api/protest/query', {
@@ -56,7 +58,7 @@ export default function ConsultaProtestoPage() {
           documentNumber,
           name,
           phone,
-          consultationType: 'BASIC' // Free consultation
+          consultationType: 'BASIC' // Basic consultation
         })
       })
 
@@ -66,7 +68,8 @@ export default function ConsultaProtestoPage() {
       }
 
       const data = await response.json()
-      setConsultationResult(data.data)
+      // Ao invés de mostrar o resultado, mostra mensagem de confirmação
+      setConsultationSubmitted({ documentNumber, name, phone })
 
     } catch (error) {
       console.error('Consultation error:', error)
@@ -78,6 +81,7 @@ export default function ConsultaProtestoPage() {
 
   const handleNewConsultation = () => {
     setConsultationResult(null)
+    setConsultationSubmitted(null)
     setError(null)
   }
 
@@ -87,9 +91,9 @@ export default function ConsultaProtestoPage() {
         <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
           <div className="text-center">
             <LoadingSpinner size="lg" className="mb-4" />
-            <h3 className="text-lg font-semibold text-neutral-900 mb-2">Consultando protestos...</h3>
+            <h3 className="text-lg font-semibold text-neutral-900 mb-2">Processando sua consulta...</h3>
             <p className="text-neutral-600">
-              Aguarde enquanto verificamos os cartórios de todo o Brasil
+              Aguarde enquanto processamos seu pagamento e enviamos sua solicitação
             </p>
           </div>
         </div>
@@ -97,6 +101,109 @@ export default function ConsultaProtestoPage() {
     )
   }
 
+  // Mostra mensagem de confirmação após envio da consulta
+  if (consultationSubmitted) {
+    return (
+      <LayoutWrapper>
+        <div className="min-h-screen bg-neutral-50 py-4 sm:py-6 lg:py-8">
+          <div className="container-padded">
+            <div className="max-w-2xl mx-auto">
+              {/* Header with back button */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <Button variant="outline" onClick={handleNewConsultation} className="w-full sm:w-auto">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Nova Consulta
+                </Button>
+                <div className="text-center sm:text-left">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">Consulta Enviada</h1>
+                  <p className="text-sm sm:text-base text-neutral-600">Sua solicitação foi processada</p>
+                </div>
+              </div>
+
+              {/* Confirmation Message */}
+              <Card className="p-6 sm:p-8 text-center">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                
+                <h2 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-4">
+                  Consulta Solicitada com Sucesso!
+                </h2>
+                
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                  <div className="space-y-2 text-sm text-neutral-700">
+                    <p><strong>Nome:</strong> {consultationSubmitted.name}</p>
+                    <p><strong>Documento:</strong> {consultationSubmitted.documentNumber}</p>
+                    {consultationSubmitted.phone && (
+                      <p><strong>Telefone:</strong> {consultationSubmitted.phone}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-4 text-left">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-xs font-bold text-primary-600">1</span>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-neutral-900 mb-1">Confirmação de Pagamento</h3>
+                      <p className="text-sm text-neutral-600">
+                        Você receberá um email confirmando que o pagamento do pedido foi concluído com sucesso.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-accent-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-xs font-bold text-accent-600">2</span>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-neutral-900 mb-1">Resultado da Consulta</h3>
+                      <p className="text-sm text-neutral-600">
+                        <strong>Prazo:</strong> Até 24 horas para receber outro email com a atualização e resultado completo da sua consulta de protesto.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    <h4 className="font-semibold text-amber-800">Importante</h4>
+                  </div>
+                  <p className="text-xs sm:text-sm text-amber-700">
+                    Verifique sua caixa de entrada e spam. Caso não receba os emails no prazo, entre em contato conosco pelo WhatsApp.
+                  </p>
+                </div>
+
+                <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                  <Button 
+                    onClick={handleNewConsultation} 
+                    variant="outline" 
+                    className="w-full sm:w-auto"
+                  >
+                    Fazer Nova Consulta
+                  </Button>
+                  <Button 
+                    onClick={() => window.open('https://wa.me/5511999999999', '_blank')} 
+                    className="w-full sm:w-auto"
+                  >
+                    Falar no WhatsApp
+                  </Button>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </LayoutWrapper>
+    )
+  }
+
+  // Esta seção é mantida para casos onde o resultado é mostrado imediatamente (futura automação)
   if (consultationResult) {
     return (
       <LayoutWrapper>
@@ -159,7 +266,7 @@ export default function ConsultaProtestoPage() {
             </h1>
             <p className="text-base sm:text-lg text-neutral-600 max-w-3xl mx-auto px-4">
               Consulte se há protestos registrados em seu CPF ou CNPJ em cartórios de todo o Brasil. 
-              Consulta gratuita com informações básicas.
+              Consulta paga com informações básicas.
             </p>
           </div>
 
@@ -169,9 +276,9 @@ export default function ConsultaProtestoPage() {
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-success-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
                 <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-success-600" />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">Consulta Gratuita</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">Consulta Básica</h3>
               <p className="text-xs sm:text-sm text-neutral-600">
-                Veja se há protestos registrados sem pagar nada
+                Consulte protestos registrados rapidamente
               </p>
             </div>
 
@@ -179,9 +286,9 @@ export default function ConsultaProtestoPage() {
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
                 <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">Resultado Instantâneo</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">Resultado em até 24h</h3>
               <p className="text-xs sm:text-sm text-neutral-600">
-                Consulta em tempo real em cartórios de todo o Brasil
+                Consulta completa em cartórios de todo o Brasil
               </p>
             </div>
 
@@ -226,7 +333,7 @@ export default function ConsultaProtestoPage() {
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-sm">
                     <span className="text-base sm:text-lg font-bold text-primary-600">2</span>
                   </div>
-                  <p className="font-medium text-neutral-900 mb-1 text-sm sm:text-base">Consulta Gratuita</p>
+                  <p className="font-medium text-neutral-900 mb-1 text-sm sm:text-base">Consulta</p>
                   <p className="text-xs sm:text-sm text-neutral-600">
                     Veja se há protestos registrados
                   </p>
@@ -236,9 +343,9 @@ export default function ConsultaProtestoPage() {
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-sm">
                     <span className="text-base sm:text-lg font-bold text-primary-600">3</span>
                   </div>
-                  <p className="font-medium text-neutral-900 mb-1 text-sm sm:text-base">Resultado Instantâneo</p>
+                  <p className="font-medium text-neutral-900 mb-1 text-sm sm:text-base">Resultado em até 24h</p>
                   <p className="text-xs sm:text-sm text-neutral-600">
-                    Informações básicas em tempo real
+                    Informações básicas por email
                   </p>
                 </div>
                 
@@ -259,15 +366,15 @@ export default function ConsultaProtestoPage() {
           <div className="mt-12 sm:mt-14 lg:mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <div className="p-6 sm:p-8 bg-white rounded-card shadow-card">
               <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-4">
-                Consulta Gratuita vs. Certidão Oficial
+                Consulta Básica vs. Certidão Oficial
               </h3>
               <div className="space-y-4">
                 <div className="p-3 bg-success-50 border border-success-200 rounded-lg">
-                  <h4 className="font-semibold text-success-800 mb-2">Consulta Gratuita</h4>
+                  <h4 className="font-semibold text-success-800 mb-2">Consulta Básica</h4>
                   <ul className="text-sm text-success-700 space-y-1">
                     <li>• Informações básicas sobre protestos</li>
                     <li>• Resultado instantâneo</li>
-                    <li>• Sem custo</li>
+                    <li>• A partir de R$ 29,90</li>
                     <li>• Não tem validade jurídica</li>
                   </ul>
                 </div>
@@ -291,10 +398,10 @@ export default function ConsultaProtestoPage() {
               <div className="space-y-4">
                 <div>
                   <h4 className="font-medium text-neutral-900 mb-1">
-                    A consulta gratuita é confiável?
+                    A consulta básica é confiável?
                   </h4>
                   <p className="text-sm text-neutral-600">
-                    Sim, consultamos os mesmos cartórios. A diferença é que na versão gratuita 
+                    Sim, consultamos os mesmos cartórios. A diferença é que na versão básica 
                     algumas informações detalhadas ficam ocultas.
                   </p>
                 </div>

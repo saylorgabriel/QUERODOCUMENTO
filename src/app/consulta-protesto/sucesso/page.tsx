@@ -355,7 +355,7 @@ function SucessoContent() {
                   </div>
                   <div>
                     <p className="font-medium text-neutral-900">WhatsApp</p>
-                    <p className="text-sm text-neutral-600">Resposta em até 48h</p>
+                    <p className="text-sm text-neutral-600">Resposta em até 24h</p>
                   </div>
                 </div>
 

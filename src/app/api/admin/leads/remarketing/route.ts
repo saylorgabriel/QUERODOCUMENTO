@@ -265,9 +265,9 @@ Equipe QueroDocumento`
 
 Há um tempo você utilizou nossos serviços de consulta de protesto.
 
-Como sua situação pode ter mudado, que tal fazer uma nova consulta gratuita?
+Como sua situação pode ter mudado, que tal fazer uma nova consulta?
 
-✨ Consulta 100% gratuita
+✨ Consulta rápida e confiável
 ⚡ Resultado instantâneo
 📱 Acesse de qualquer dispositivo
 

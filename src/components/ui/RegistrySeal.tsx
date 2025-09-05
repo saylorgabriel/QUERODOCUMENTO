@@ -32,7 +32,7 @@ export default function RegistrySeal() {
         {/* Bottom text */}
         <text fontSize="9" fontWeight="600" fill="#333" letterSpacing="1">
           <textPath href="#circle-path-bottom" startOffset="50%" textAnchor="middle">
-            PROTESTO EM 48H
+            PROTESTO EM 24H
           </textPath>
         </text>
         

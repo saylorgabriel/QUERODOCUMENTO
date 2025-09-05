@@ -59,7 +59,7 @@ export function getWelcomeTemplate(data: EmailTemplateData): EmailTemplate {
       <div class="alert alert-info">
         <div class="alert-title">💡 Dica Importante</div>
         <div class="alert-text">
-          Para sua primeira consulta, recomendamos começar com a <strong>Consulta de Protesto</strong> - é gratuita e você conhecerá nossa agilidade!
+          Para sua primeira consulta, recomendamos começar com a <strong>Consulta de Protesto</strong> - você conhecerá nossa agilidade!
         </div>
       </div>
       
@@ -127,7 +127,7 @@ export function getWelcomeTemplate(data: EmailTemplateData): EmailTemplate {
     Seus dados estão protegidos conforme a LGPD. Utilizamos criptografia avançada e nunca compartilhamos informações com terceiros.
     
     💡 DICA IMPORTANTE  
-    Para sua primeira consulta, recomendamos começar com a Consulta de Protesto - é gratuita!
+    Para sua primeira consulta, recomendamos começar com a Consulta de Protesto!
     
     📞 PRECISA DE AJUDA?
     • WhatsApp: Resposta em até 2 horas úteis

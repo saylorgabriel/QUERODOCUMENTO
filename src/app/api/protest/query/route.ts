@@ -89,12 +89,12 @@ function generateMockProtestData(documentNumber: string, documentType: 'CPF' | '
   // Vary number of protests based on last digit
   const numberOfProtests = lastDigit === 0 ? 1 : (lastDigit === 3 ? 2 : 1)
   
-  // For free consultations, show limited information
+  // For basic consultations, show limited information
   const protestsToShow = isPaidConsultation 
     ? mockProtests.slice(0, numberOfProtests)
     : mockProtests.slice(0, numberOfProtests).map(protest => ({
         ...protest,
-        // Hide sensitive details in free consultation
+        // Hide sensitive details in basic consultation
         creditor: protest.creditor.replace(/\w/g, '*').slice(0, -10) + ' [Detalhes na certidão paga]',
         value: 0, // Hide value
         protocol: '***HIDDEN***'
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
       documentType, // This might be provided by client or auto-detected
       name,
       phone,
-      consultationType = 'BASIC', // 'BASIC' (free) or 'DETAILED' (paid)
+      consultationType = 'BASIC', // 'BASIC' (paid basic) or 'DETAILED' (paid detailed)
       orderId // If provided, this is a paid consultation linked to an order
     } = body
 
@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
     
     const queryId = `mock-${Date.now()}-${Math.floor(Math.random() * 1000)}`
 
-    // If this is a free consultation, save lead data for remarketing
+    // If this is a basic consultation, save lead data for remarketing
     if (!isPaidConsultation) {
       try {
         await prisma.lead.upsert({

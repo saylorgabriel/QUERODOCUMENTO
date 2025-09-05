@@ -13,7 +13,7 @@ export default function Footer() {
               de forma rápida e segura.
             </p>
             <p className="text-xs text-neutral-500">
-              Atendimento via WhatsApp - Resposta em até 48h
+              Atendimento via WhatsApp - Resposta em até 24h
             </p>
           </div>
 
