@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
       paymentId,
       amount: order.amount,
       currency: 'BRL',
-      status: 'pending',
+      status: 'PENDING',
       expiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes from now
       createdAt: new Date()
     }
@@ -243,7 +243,7 @@ export async function GET(request: NextRequest) {
     // For demo purposes, we'll simulate different states based on time elapsed
     const minutesElapsed = Math.floor((Date.now() - order.createdAt.getTime()) / (1000 * 60))
     
-    let status = 'pending'
+    let status = 'PENDING'
     let mockPaidAt = null
 
     // Simulate payment progression over time for demo

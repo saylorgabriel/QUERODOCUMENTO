@@ -55,7 +55,7 @@ interface EmailLog {
   from: string
   subject: string
   provider: string
-  status: 'sent' | 'failed'
+  status: 'SENT' | 'FAILED'
   messageId?: string
   error?: string
   retryCount: number
@@ -353,11 +353,11 @@ export default function AdminEmailsPage() {
                     onChange={(e) => setStatusFilter(e.target.value)}
                   >
                     <option value="all">All Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="sending">Sending</option>
-                    <option value="sent">Sent</option>
-                    <option value="failed">Failed</option>
-                    <option value="cancelled">Cancelled</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="SENDING">Sending</option>
+                    <option value="SENT">Sent</option>
+                    <option value="FAILED">Failed</option>
+                    <option value="CANCELLED">Cancelled</option>
                   </select>
                 </div>
               </div>
@@ -449,9 +449,9 @@ export default function AdminEmailsPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <Badge
                             variant={
-                              email.status === 'sent' ? 'default' :
-                              email.status === 'failed' ? 'destructive' :
-                              email.status === 'sending' ? 'secondary' :
+                              email.status === 'SENT' ? 'default' :
+                              email.status === 'FAILED' ? 'destructive' :
+                              email.status === 'SENDING' ? 'secondary' :
                               'outline'
                             }
                           >
@@ -476,7 +476,7 @@ export default function AdminEmailsPage() {
                           {new Date(email.scheduledFor).toLocaleString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                          {email.status === 'failed' && (
+                          {email.status === 'FAILED' && (
                             <Button
                               onClick={() => handleRetryFailedEmails([email.id])}
                               size="sm"
@@ -485,7 +485,7 @@ export default function AdminEmailsPage() {
                               <RefreshCw className="w-4 h-4" />
                             </Button>
                           )}
-                          {(email.status === 'pending' || email.status === 'sending') && (
+                          {(email.status === 'PENDING' || email.status === 'SENDING') && (
                             <Button
                               onClick={() => handleCancelEmails([email.id])}
                               size="sm"
@@ -554,7 +554,7 @@ export default function AdminEmailsPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <Badge
-                            variant={log.status === 'sent' ? 'default' : 'destructive'}
+                            variant={log.status === 'SENT' ? 'default' : 'destructive'}
                           >
                             {log.status}
                           </Badge>

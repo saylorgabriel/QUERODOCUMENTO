@@ -627,13 +627,13 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                                 ? 'bg-green-100 text-green-800'
                                 : cert.status === 'processing'
                                 ? 'bg-yellow-100 text-yellow-800'
-                                : cert.status === 'pending'
+                                : cert.status === 'PENDING'
                                 ? 'bg-blue-100 text-blue-800'
                                 : 'bg-neutral-100 text-neutral-800'
                             }`}>
                               {cert.status === 'ready' && 'Pronto para download'}
                               {cert.status === 'processing' && 'Em processamento'}
-                              {cert.status === 'pending' && 'Pendente'}
+                              {cert.status === 'PENDING' && 'Pendente'}
                             </span>
                             {cert.status === 'ready' && (
                               <button className="p-2 hover:bg-neutral-100 rounded-lg" title="Baixar certidão">
@@ -738,7 +738,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                               }`}>
                                 {(item as any).status === 'ready' && 'Pronto'}
                                 {(item as any).status === 'processing' && 'Processando'}
-                                {(item as any).status === 'pending' && 'Pendente'}
+                                {(item as any).status === 'PENDING' && 'Pendente'}
                               </span>
                             )}
                             <button className="p-2 hover:bg-neutral-100 rounded-lg">
