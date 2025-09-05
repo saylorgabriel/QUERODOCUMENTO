@@ -192,7 +192,7 @@ export default function ConsultaProtestoPage() {
                     Fazer Nova Consulta
                   </Button>
                   <Button 
-                    onClick={() => window.open('https://wa.me/5511999999999', '_blank')} 
+                    onClick={() => window.open('https://wa.me/5519981806261', '_blank')} 
                     className="w-full sm:w-auto"
                   >
                     Falar no WhatsApp

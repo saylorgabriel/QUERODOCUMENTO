@@ -195,6 +195,7 @@ export default function Header() {
                   </div>
                 ) : (
                   <>
+                    {/* Telefone 0800 temporariamente oculto
                     <div className="flex items-center text-neutral-600 mb-4">
                       <Phone className="w-4 h-4 mr-2" />
                       <div className="text-sm">
@@ -202,6 +203,7 @@ export default function Header() {
                         <p className="font-semibold">0800-xxx-xxxx</p>
                       </div>
                     </div>
+                    */}
                     
                     <Link 
                       href="/auth/login"

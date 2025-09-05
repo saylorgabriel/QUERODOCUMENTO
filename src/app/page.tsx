@@ -539,7 +539,8 @@ export default function Home() {
             Nossa equipe está sempre disponível para ajudar você. Entre em contato conosco!
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 max-w-2xl mx-auto">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:gap-8 max-w-2xl mx-auto">
+            {/* Telefone 0800 temporariamente oculto
             <div className="flex items-center justify-center gap-3 p-4 sm:p-6 bg-white rounded-lg shadow-sm min-h-20 sm:min-h-24">
               <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600 flex-shrink-0" />
               <div className="text-left">
@@ -547,6 +548,7 @@ export default function Home() {
                 <p className="text-neutral-600 text-sm sm:text-base">0800-xxx-xxxx</p>
               </div>
             </div>
+            */}
             
             <div className="flex items-center justify-center gap-3 p-4 sm:p-6 bg-white rounded-lg shadow-sm min-h-20 sm:min-h-24">
               <svg className="w-5 h-5 sm:w-6 sm:h-6 text-success-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
