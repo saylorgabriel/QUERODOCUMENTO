@@ -1,0 +1,12 @@
+# Ignore all uploaded files for security and privacy
+*
+!.gitignore
+
+# Allow the directory structure to be tracked
+!orders/
+orders/*
+!orders/.gitkeep
+
+!temp/
+temp/*
+!temp/.gitkeep

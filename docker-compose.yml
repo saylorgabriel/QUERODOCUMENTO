@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # Aplicação principal com Bun + Next.js
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: querodocumento-app
+    ports:
+      - "3009:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://querodoc:querodoc123@postgres:5432/querodocumento
+      - REDIS_URL=redis://redis:6379
+      - NEXTAUTH_URL=http://localhost:3009
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - ASAAS_API_KEY=${ASAAS_API_KEY}
+      - PAGARME_API_KEY=${PAGARME_API_KEY}
+      - EMAIL_SERVICE_API_KEY=${EMAIL_SERVICE_API_KEY}
+      - WHATSAPP_BUSINESS_TOKEN=${WHATSAPP_BUSINESS_TOKEN}
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    networks:
+      - querodoc-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: querodocumento-db
+    environment:
+      - POSTGRES_USER=querodoc
+      - POSTGRES_PASSWORD=querodoc123
+      - POSTGRES_DB=querodocumento
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U querodoc"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - querodoc-network
+
+  # Redis para cache e filas
+  redis:
+    image: redis:7-alpine
+    container_name: querodocumento-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - querodoc-network
+
+  # Nginx como proxy reverso
+  nginx:
+    image: nginx:alpine
+    container_name: querodocumento-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - querodoc-network
+
+  # MailHog para teste de emails (desenvolvimento)
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: querodocumento-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    profiles:
+      - dev
+    networks:
+      - querodoc-network
+
+# Volumes persistentes
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+
+# Rede customizada
+networks:
+  querodoc-network:
+    driver: bridge

@@ -1,0 +1,627 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// NextAuth Models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expires])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  password      String?
+  image         String?
+  cpf           String?   @unique
+  cnpj          String?   @unique
+  phone         String?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts         Account[]
+  sessions         Session[]
+  protestQueries   ProtestQuery[]
+  certificates     Certificate[]
+  payments         Payment[]
+  auditLogs        AuditLog[]
+  orders           Order[]
+  processedOrders  Order[]       @relation("OrderProcessor")
+  orderHistories   OrderHistory[]
+  uploadedDocuments OrderDocument[] @relation("DocumentUploader")
+  downloadLogs     DownloadLog[] @relation("DocumentDownloader")
+  emailLogs        EmailLog[]
+  emailUnsubscribes EmailUnsubscribe[]
+  leads            Lead[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Reset tokens for password recovery
+model ResetToken {
+  id         String   @id @default(cuid())
+  email      String   
+  token      String   @unique
+  expires    DateTime
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([email])
+  @@index([token])
+}
+
+// Audit logs for LGPD compliance
+model AuditLog {
+  id          String    @id @default(cuid())
+  userId      String?   
+  action      String    // CREATE, READ, UPDATE, DELETE, LOGIN, LOGOUT, etc.
+  resource    String    // USER, PROTEST_QUERY, CERTIFICATE, PAYMENT, etc.
+  resourceId  String?   
+  metadata    Json?     // Additional data about the action
+  ipAddress   String?   
+  userAgent   String?   
+  createdAt   DateTime  @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([createdAt])
+}
+
+// Business Models
+model ProtestQuery {
+  id           String       @id @default(cuid())
+  userId       String
+  document     String       // CPF or CNPJ
+  documentType DocumentType
+  status       QueryStatus  @default(PENDING)
+  result       Json?        // Store the query result as JSON
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id])
+  certificates Certificate[]
+  lead         Lead?        @relation(fields: [document], references: [documentNumber])
+}
+
+model Certificate {
+  id            String           @id @default(cuid())
+  userId        String
+  queryId       String
+  type          CertificateType
+  status        CertificateStatus @default(PENDING)
+  documentUrl   String?
+  validUntil    DateTime?
+  metadata      Json?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  user  User         @relation(fields: [userId], references: [id])
+  query ProtestQuery @relation(fields: [queryId], references: [id])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  userId        String
+  amount        Float
+  currency      String        @default("BRL")
+  status        PaymentStatus @default(PENDING)
+  method        String?       // PIX, CREDIT_CARD, etc
+  transactionId String?       @unique
+  metadata      Json?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// Order model for manual processing
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique // Human-readable order number
+  userId          String
+  serviceType     ServiceType
+  status          OrderStatus   @default(AWAITING_PAYMENT)
+  
+  // Document being consulted/certified
+  documentNumber  String        // CPF/CNPJ being consulted
+  documentType    DocumentType
+  
+  // Invoice data for NF
+  invoiceName     String        // Nome/Razão Social for invoice
+  invoiceDocument String        // CPF/CNPJ for invoice
+  
+  // Manual processing fields
+  protocolNumber  String?       // CENPROT protocol number
+  processingNotes String?       @db.Text // Employee notes
+  resultText      String?       @db.Text // Manual result entry
+  quotedAmount    Float?        // For certificate quotes
+  
+  // Payment information
+  amount          Float
+  paymentMethod   PaymentMethod
+  paymentStatus   PaymentStatus @default(PENDING)
+  paidAt          DateTime?
+  
+  // File attachments
+  attachmentUrl   String?       // For uploaded PDFs
+  
+  // Processing employee
+  processedById   String?       
+  
+  // Certificate specific fields (for CERTIFICATE_REQUEST)
+  state           String?       // Estado
+  city            String?       // Município
+  notaryOffice    String?       // Cartório
+  reason          String?       // Motivo da solicitação
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  // Relations
+  user            User          @relation(fields: [userId], references: [id])
+  processedBy     User?         @relation("OrderProcessor", fields: [processedById], references: [id])
+  orderHistories  OrderHistory[]
+  documents       OrderDocument[]
+  emailLogs       EmailLog[]
+  
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+  @@index([serviceType])
+  @@index([createdAt])
+  @@index([processedById])
+}
+
+// Order status history tracking
+model OrderHistory {
+  id             String      @id @default(cuid())
+  orderId        String
+  previousStatus OrderStatus?
+  newStatus      OrderStatus
+  changedById    String
+  notes          String?     @db.Text
+  changedAt      DateTime    @default(now())
+  
+  // Relations
+  order          Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  changedBy      User        @relation(fields: [changedById], references: [id])
+  
+  @@index([orderId])
+  @@index([changedAt])
+  @@index([changedById])
+}
+
+// Enums
+enum UserRole {
+  USER
+  ADMIN
+  SUPPORT
+}
+
+enum DocumentType {
+  CPF
+  CNPJ
+}
+
+enum QueryStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum CertificateType {
+  NEGATIVE
+  POSITIVE
+  DETAILED
+}
+
+enum CertificateStatus {
+  PENDING
+  PROCESSING
+  READY
+  DELIVERED
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// New enums for Order system
+enum ServiceType {
+  PROTEST_QUERY      // Consulta de Protesto
+  CERTIFICATE_REQUEST // Certidão de Protesto
+}
+
+enum OrderStatus {
+  AWAITING_PAYMENT    // Aguardando Pagamento
+  PAYMENT_CONFIRMED   // Pagamento Confirmado  
+  PAYMENT_REFUSED     // Pagamento Recusado
+  ORDER_CONFIRMED     // Pedido Confirmado
+  AWAITING_QUOTE      // Aguardando Orçamento
+  DOCUMENT_REQUESTED  // Documento Solicitado
+  PROCESSING          // Processando/Aguardando Retorno
+  COMPLETED           // Finalizado
+  CANCELLED           // Cancelado
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  BOLETO
+}
+
+// File Upload and Document Management Models
+model OrderDocument {
+  id              String      @id @default(cuid())
+  orderId         String
+  filename        String      // Original filename
+  storedFilename  String      // Stored filename on disk
+  filePath        String      // Relative path from uploads directory
+  fileSize        Int         // File size in bytes
+  mimeType        String      // MIME type (e.g., application/pdf)
+  documentType    DocumentFileType @default(RESULT)
+  version         Int         @default(1)
+  
+  // Upload metadata
+  uploadedById    String      // Admin who uploaded the file
+  uploadedAt      DateTime    @default(now())
+  
+  // File access and security
+  isActive        Boolean     @default(true)
+  expiresAt       DateTime?   // TTL - auto-delete after 3 months
+  downloadToken   String?     @unique // Secure download token
+  
+  // File integrity
+  checksum        String?     // SHA-256 checksum
+  
+  // Audit trail
+  downloadCount   Int         @default(0)
+  lastDownloaded  DateTime?
+  
+  // Relations
+  order           Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  uploadedBy      User        @relation("DocumentUploader", fields: [uploadedById], references: [id])
+  downloadLogs    DownloadLog[]
+  
+  @@index([orderId])
+  @@index([uploadedById])
+  @@index([expiresAt])
+  @@index([isActive])
+  @@index([downloadToken])
+}
+
+// Track all file download activities for security and audit
+model DownloadLog {
+  id              String        @id @default(cuid())
+  documentId      String
+  userId          String?       // User who downloaded (null for admin downloads)
+  ipAddress       String?
+  userAgent       String?
+  downloadedAt    DateTime      @default(now())
+  success         Boolean       @default(true)
+  errorMessage    String?
+  
+  // Relations
+  document        OrderDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user            User?         @relation("DocumentDownloader", fields: [userId], references: [id])
+  
+  @@index([documentId])
+  @@index([userId])
+  @@index([downloadedAt])
+  @@index([success])
+}
+
+enum DocumentFileType {
+  RESULT      // Resultado da consulta
+  CERTIFICATE // Certidão emitida
+  INVOICE     // Nota fiscal
+  RECEIPT     // Comprovante de pagamento
+  OTHER       // Outros documentos
+}
+
+// Email Service Models for LGPD Compliance and Monitoring
+model EmailLog {
+  id          String       @id @default(cuid())
+  
+  // Email details
+  to          String       // Recipient email(s), comma-separated if multiple
+  from        String       // Sender email
+  subject     String       // Email subject
+  
+  // Provider and delivery info
+  provider    EmailProvider // Which provider was used
+  status      EmailStatus   @default(PENDING)
+  messageId   String?       // Provider message ID
+  error       String?       @db.Text // Error message if failed
+  retryCount  Int          @default(0)
+  
+  // Timestamps
+  createdAt   DateTime     @default(now())
+  sentAt      DateTime?    // When successfully sent
+  deliveredAt DateTime?    // When delivered (if tracked)
+  openedAt    DateTime?    // When opened (if tracked)
+  clickedAt   DateTime?    // When clicked (if tracked)
+  
+  // Additional data
+  metadata    String?      @db.Text // JSON metadata about the email
+  templateName String?     // Template used (if any)
+  userId      String?      // Associated user (if applicable)
+  orderId     String?      // Associated order (if applicable)
+  
+  // LGPD compliance - automatic cleanup
+  expiresAt   DateTime?    // When to delete this log
+  
+  // Relations
+  user        User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  order       Order?       @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  bounces     EmailBounce[] // One-to-many relationship with bounces
+  
+  @@index([provider])
+  @@index([status])
+  @@index([createdAt])
+  @@index([userId])
+  @@index([orderId])
+  @@index([expiresAt])
+  @@index([to])
+}
+
+// Email bounce and complaint tracking for reputation management
+model EmailBounce {
+  id          String        @id @default(cuid())
+  emailLogId  String?       // Reference to original email log
+  email       String        // Bounced email address
+  bounceType  BounceType    // Type of bounce
+  reason      String?       @db.Text // Bounce reason
+  timestamp   DateTime      @default(now())
+  
+  // Provider info
+  provider    EmailProvider
+  messageId   String?       // Provider message ID
+  
+  // Bounce details
+  diagnosticCode String?     @db.Text // Technical details
+  action      String?       // Action taken (failed, delayed, etc.)
+  status      String?       // Delivery status code
+  
+  // Relations
+  emailLog    EmailLog?     @relation(fields: [emailLogId], references: [id], onDelete: SetNull)
+  
+  @@index([email])
+  @@index([bounceType])
+  @@index([timestamp])
+  @@index([provider])
+}
+
+// Email unsubscribe requests for compliance
+model EmailUnsubscribe {
+  id          String    @id @default(cuid())
+  email       String    @unique // Email address that unsubscribed
+  userId      String?   // User ID if registered user
+  reason      String?   // Reason for unsubscribing
+  source      String?   // How they unsubscribed (email_link, api, manual)
+  createdAt   DateTime  @default(now())
+  
+  // Relations
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([email])
+  @@index([createdAt])
+}
+
+// Lead capture for remarketing and analytics
+model Lead {
+  id             String       @id @default(cuid())
+  
+  // Lead basic info
+  documentNumber String       // CPF or CNPJ
+  name           String       
+  phone          String?      // Optional initially
+  email          String?      // Optional initially
+  
+  // Lead source tracking
+  source         String?      @default("landing_page") // Where they came from
+  utm_source     String?      // UTM tracking
+  utm_medium     String?      
+  utm_campaign   String?      
+  utm_content    String?
+  utm_term       String?
+  
+  // Lead status for remarketing
+  status         LeadStatus   @default(NEW)
+  stage          LeadStage    @default(FORM_FILLED) // Current funnel stage
+  
+  // Interaction tracking
+  firstVisit     DateTime     @default(now())
+  lastActivity   DateTime     @default(now())
+  consultations  Int          @default(0) // Number of consultations performed
+  
+  // Conversion tracking
+  converted      Boolean      @default(false)
+  convertedAt    DateTime?    // When they became a customer
+  userId         String?      // If they registered
+  totalSpent     Decimal?     @default(0) @db.Decimal(10, 2)
+  
+  // Lead scoring for prioritization
+  score          Int          @default(0) // Lead quality score
+  
+  // Marketing data
+  lastEmailSent  DateTime?    // Last remarketing email
+  emailsSent     Int          @default(0) // Total emails sent
+  emailOpens     Int          @default(0) // Email engagement
+  emailClicks    Int          @default(0)
+  unsubscribed   Boolean      @default(false)
+  
+  // Additional data
+  metadata       String?      @db.Text // JSON with additional info
+  notes          String?      @db.Text // Manual notes from sales team
+  
+  // Relations
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  consultations_records ProtestQuery[] // Consultations performed by this lead
+  
+  // Timestamps
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  @@unique([documentNumber]) // Prevent duplicate leads
+  @@index([status])
+  @@index([stage]) 
+  @@index([score])
+  @@index([source])
+  @@index([createdAt])
+  @@index([lastActivity])
+  @@index([converted])
+}
+
+// Enums for Email Service
+enum EmailProvider {
+  SENDGRID
+  MAILGUN  
+  SMTP
+  RESEND
+  MAILHOG
+}
+
+enum EmailStatus {
+  PENDING     // Queued for sending
+  SENDING     // Currently being sent
+  SENT        // Successfully sent to provider
+  DELIVERED   // Confirmed delivered to recipient
+  OPENED      // Email was opened
+  CLICKED     // Link in email was clicked
+  BOUNCED     // Email bounced
+  FAILED      // Failed to send
+  COMPLAINED  // Marked as spam
+}
+
+enum BounceType {
+  HARD        // Permanent failure (invalid email, domain doesn't exist)
+  SOFT        // Temporary failure (mailbox full, server down)
+  COMPLAINT   // Marked as spam
+  SUPPRESSION // Suppressed by provider
+}
+
+// Email Queue for reliable delivery with retry mechanism
+model EmailQueue {
+  id          String           @id @default(cuid())
+  
+  // Email content
+  to          String           // Recipient email(s)
+  subject     String           // Email subject
+  html        String           @db.Text // HTML content
+  text        String?          @db.Text // Plain text content
+  
+  // Queue metadata
+  metadata    String?          @db.Text // JSON metadata
+  priority    EmailPriority    @default(NORMAL)
+  status      EmailQueueStatus @default(PENDING)
+  
+  // Retry configuration
+  attempts    Int              @default(0)
+  maxAttempts Int              @default(3)
+  
+  // Scheduling
+  scheduledFor DateTime        @default(now()) // When to send
+  lastAttempt DateTime?        // Last attempt timestamp
+  
+  // Results
+  messageId   String?          // Provider message ID when sent
+  error       String?          @db.Text // Last error message
+  
+  // Timestamps
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  
+  @@index([status])
+  @@index([priority])
+  @@index([scheduledFor])
+  @@index([createdAt])
+  @@index([attempts, maxAttempts])
+}
+
+// Email Queue enums
+enum EmailPriority {
+  LOW
+  NORMAL
+  HIGH
+}
+
+enum EmailQueueStatus {
+  PENDING
+  SENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+// Lead Management Enums
+enum LeadStatus {
+  NEW           // Just captured
+  CONTACTED     // Sales team contacted
+  QUALIFIED     // Qualified lead
+  CONVERTED     // Became customer
+  LOST          // Lost opportunity
+  UNSUBSCRIBED  // Opted out
+}
+
+enum LeadStage {
+  FORM_FILLED      // Filled initial form
+  CONSULTATION     // Performed consultation
+  QUOTE_REQUESTED  // Requested certificate quote
+  PAYMENT_STARTED  // Started payment process
+  CUSTOMER         // Completed purchase
+}

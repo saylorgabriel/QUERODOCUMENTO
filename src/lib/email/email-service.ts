@@ -1,0 +1,479 @@
+/**
+ * Main Email Service
+ * Provides a unified interface for sending emails with multiple provider support,
+ * retry mechanisms, rate limiting, and comprehensive logging
+ */
+
+import { getEmailConfig, getProviderConfig, EmailProvider, EmailConfig } from './email-config'
+import { SendGridProvider } from './providers/sendgrid'
+import { MailgunProvider } from './providers/mailgun'
+import { SMTPProvider } from './providers/smtp'
+import { MailHogProvider } from './providers/mailhog'
+import { ResendProvider } from './providers/resend'
+import { prisma } from '../prisma'
+
+export interface EmailMessage {
+  to: string | string[]
+  from?: string
+  subject: string
+  html?: string
+  text?: string
+  attachments?: Array<{
+    content: Buffer
+    filename: string
+    contentType: string
+  }>
+  metadata?: Record<string, string>
+  priority?: 'low' | 'normal' | 'high'
+  template?: {
+    name: string
+    variables: Record<string, any>
+  }
+}
+
+export interface EmailResult {
+  success: boolean
+  messageId?: string
+  provider: EmailProvider
+  error?: string
+  retries?: number
+  deliveryStatus?: {
+    delivered?: boolean
+    bounced?: boolean
+    opened?: boolean
+    clicked?: boolean
+  }
+}
+
+export interface EmailQueue {
+  id: string
+  email: EmailMessage
+  attempts: number
+  maxAttempts: number
+  nextRetry: Date
+  createdAt: Date
+  status: 'pending' | 'sending' | 'sent' | 'failed'
+}
+
+class EmailService {
+  private config: EmailConfig
+  private providers: Map<EmailProvider, any> = new Map()
+  private rateLimitCounters: Map<string, { count: number; resetTime: number }> = new Map()
+  private emailQueue: EmailQueue[] = []
+  
+  constructor() {
+    this.config = getEmailConfig()
+    this.initializeProviders()
+  }
+  
+  private initializeProviders() {
+    // Initialize primary provider
+    const primaryConfig = getProviderConfig(this.config.primaryProvider)
+    if (primaryConfig.enabled) {
+      this.providers.set(this.config.primaryProvider, this.createProvider(this.config.primaryProvider, primaryConfig.config))
+    }
+    
+    // Initialize fallback provider
+    if (this.config.fallbackProvider) {
+      const fallbackConfig = getProviderConfig(this.config.fallbackProvider)
+      if (fallbackConfig.enabled) {
+        this.providers.set(this.config.fallbackProvider, this.createProvider(this.config.fallbackProvider, fallbackConfig.config))
+      }
+    }
+    
+    console.log(`📧 Email service initialized with providers: ${Array.from(this.providers.keys()).join(', ')}`)
+  }
+  
+  private createProvider(type: EmailProvider, config: any) {
+    switch (type) {
+      case 'sendgrid':
+        return new SendGridProvider(config)
+      case 'mailgun':
+        return new MailgunProvider(config)
+      case 'smtp':
+        return new SMTPProvider(config)
+      case 'resend':
+        return new ResendProvider(config)
+      case 'mailhog':
+        return new MailHogProvider(config)
+      default:
+        throw new Error(`Unsupported email provider: ${type}`)
+    }
+  }
+  
+  /**
+   * Send an email with automatic provider fallback and retry logic
+   */
+  async sendEmail(message: EmailMessage): Promise<EmailResult> {
+    // Rate limiting check
+    const rateLimitCheck = this.checkRateLimit()
+    if (!rateLimitCheck.allowed) {
+      return {
+        success: false,
+        provider: this.config.primaryProvider,
+        error: `Rate limit exceeded: ${rateLimitCheck.message}`,
+      }
+    }
+    
+    // Skip sending in development if configured
+    if (this.config.development.skipSending) {
+      console.log('📧 Skipping email send (development mode):', message.subject)
+      return {
+        success: true,
+        messageId: 'dev-skip-' + Date.now(),
+        provider: 'mailhog',
+      }
+    }
+    
+    // Process template if provided
+    const processedMessage = await this.processTemplate(message)
+    
+    // Set default from address if not provided
+    if (!processedMessage.from) {
+      processedMessage.from = this.config.defaultFrom
+    }
+    
+    // Try primary provider first
+    let result = await this.attemptSend(this.config.primaryProvider, processedMessage)
+    
+    // Try fallback provider if primary fails
+    if (!result.success && this.config.fallbackProvider && this.providers.has(this.config.fallbackProvider)) {
+      console.warn(`Primary provider (${this.config.primaryProvider}) failed, trying fallback (${this.config.fallbackProvider})`)
+      result = await this.attemptSend(this.config.fallbackProvider, processedMessage)
+    }
+    
+    // Log the email attempt
+    await this.logEmail(processedMessage, result)
+    
+    // Update rate limit counter
+    this.updateRateLimit()
+    
+    return result
+  }
+  
+  private async attemptSend(providerType: EmailProvider, message: EmailMessage): Promise<EmailResult> {
+    const provider = this.providers.get(providerType)
+    if (!provider) {
+      return {
+        success: false,
+        provider: providerType,
+        error: `Provider ${providerType} not available`,
+      }
+    }
+    
+    let lastError: string = 'Unknown error'
+    
+    for (let attempt = 1; attempt <= this.config.retryConfig.maxAttempts; attempt++) {
+      try {
+        if (this.config.development.logToConsole) {
+          console.log(`📧 Attempting to send email via ${providerType} (attempt ${attempt}/${this.config.retryConfig.maxAttempts})`)
+        }
+        
+        const providerResult = await provider.sendEmail(message)
+        
+        if (providerResult.success) {
+          return {
+            success: true,
+            messageId: providerResult.messageId,
+            provider: providerType,
+            retries: attempt - 1,
+          }
+        } else {
+          lastError = providerResult.error || 'Provider returned unsuccessful result'
+        }
+      } catch (error: any) {
+        lastError = error.message || 'Unknown provider error'
+        console.error(`Email send attempt ${attempt} failed for ${providerType}:`, error)
+      }
+      
+      // Wait before retry (exponential backoff)
+      if (attempt < this.config.retryConfig.maxAttempts) {
+        const delay = this.config.retryConfig.initialDelayMs * Math.pow(this.config.retryConfig.backoffMultiplier, attempt - 1)
+        await this.sleep(delay)
+      }
+    }
+    
+    return {
+      success: false,
+      provider: providerType,
+      error: lastError,
+      retries: this.config.retryConfig.maxAttempts,
+    }
+  }
+  
+  private async processTemplate(message: EmailMessage): Promise<EmailMessage> {
+    if (!message.template) {
+      return message
+    }
+    
+    // This is a simplified template processor
+    // In production, you might want to use a proper template engine like Handlebars or Mustache
+    const processedMessage = { ...message }
+    
+    if (message.html) {
+      processedMessage.html = this.replaceTemplateVariables(message.html, message.template.variables)
+    }
+    
+    if (message.text) {
+      processedMessage.text = this.replaceTemplateVariables(message.text, message.template.variables)
+    }
+    
+    if (message.subject) {
+      processedMessage.subject = this.replaceTemplateVariables(message.subject, message.template.variables)
+    }
+    
+    return processedMessage
+  }
+  
+  private replaceTemplateVariables(template: string, variables: Record<string, any>): string {
+    let result = template
+    
+    Object.entries(variables).forEach(([key, value]) => {
+      const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g')
+      result = result.replace(regex, String(value))
+    })
+    
+    return result
+  }
+  
+  private checkRateLimit(): { allowed: boolean; message?: string } {
+    const now = Date.now()
+    const minute = Math.floor(now / 60000)
+    const hour = Math.floor(now / 3600000)
+    const day = Math.floor(now / 86400000)
+    
+    // Check per-minute limit
+    const minuteKey = `minute-${minute}`
+    const minuteCounter = this.rateLimitCounters.get(minuteKey) || { count: 0, resetTime: (minute + 1) * 60000 }
+    if (minuteCounter.count >= this.config.rateLimiting.maxPerMinute) {
+      return { allowed: false, message: 'Per-minute rate limit exceeded' }
+    }
+    
+    // Check per-hour limit
+    const hourKey = `hour-${hour}`
+    const hourCounter = this.rateLimitCounters.get(hourKey) || { count: 0, resetTime: (hour + 1) * 3600000 }
+    if (hourCounter.count >= this.config.rateLimiting.maxPerHour) {
+      return { allowed: false, message: 'Per-hour rate limit exceeded' }
+    }
+    
+    // Check per-day limit
+    const dayKey = `day-${day}`
+    const dayCounter = this.rateLimitCounters.get(dayKey) || { count: 0, resetTime: (day + 1) * 86400000 }
+    if (dayCounter.count >= this.config.rateLimiting.maxPerDay) {
+      return { allowed: false, message: 'Per-day rate limit exceeded' }
+    }
+    
+    // Clean up expired counters
+    this.cleanupRateLimitCounters(now)
+    
+    return { allowed: true }
+  }
+  
+  private updateRateLimit() {
+    const now = Date.now()
+    const minute = Math.floor(now / 60000)
+    const hour = Math.floor(now / 3600000)
+    const day = Math.floor(now / 86400000)
+    
+    // Update counters
+    const minuteKey = `minute-${minute}`
+    const hourKey = `hour-${hour}`
+    const dayKey = `day-${day}`
+    
+    this.rateLimitCounters.set(minuteKey, {
+      count: (this.rateLimitCounters.get(minuteKey)?.count || 0) + 1,
+      resetTime: (minute + 1) * 60000,
+    })
+    
+    this.rateLimitCounters.set(hourKey, {
+      count: (this.rateLimitCounters.get(hourKey)?.count || 0) + 1,
+      resetTime: (hour + 1) * 3600000,
+    })
+    
+    this.rateLimitCounters.set(dayKey, {
+      count: (this.rateLimitCounters.get(dayKey)?.count || 0) + 1,
+      resetTime: (day + 1) * 86400000,
+    })
+  }
+  
+  private cleanupRateLimitCounters(now: number) {
+    for (const [key, counter] of this.rateLimitCounters.entries()) {
+      if (now > counter.resetTime) {
+        this.rateLimitCounters.delete(key)
+      }
+    }
+  }
+  
+  private async logEmail(message: EmailMessage, result: EmailResult) {
+    if (!this.config.compliance.logEmails) {
+      return
+    }
+    
+    try {
+      await prisma.emailLog.create({
+        data: {
+          to: Array.isArray(message.to) ? message.to.join(', ') : message.to,
+          from: message.from || this.config.defaultFrom,
+          subject: message.subject,
+          provider: result.provider,
+          status: result.success ? 'sent' : 'failed',
+          messageId: result.messageId,
+          error: result.error,
+          retryCount: result.retries || 0,
+          metadata: message.metadata ? JSON.stringify(message.metadata) : null,
+          sentAt: result.success ? new Date() : null,
+        },
+      })
+    } catch (error) {
+      console.error('Failed to log email:', error)
+    }
+  }
+  
+  private sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+  
+  /**
+   * Test connection to all configured providers
+   */
+  async testConnections(): Promise<Record<EmailProvider, { success: boolean; error?: string }>> {
+    const results: Record<string, { success: boolean; error?: string }> = {}
+    
+    for (const [providerType, provider] of this.providers) {
+      try {
+        const result = await provider.verifyConnection()
+        results[providerType] = result
+      } catch (error: any) {
+        results[providerType] = {
+          success: false,
+          error: error.message || 'Connection test failed',
+        }
+      }
+    }
+    
+    return results as Record<EmailProvider, { success: boolean; error?: string }>
+  }
+  
+  /**
+   * Get email statistics
+   */
+  async getEmailStats(days = 7): Promise<{
+    totalSent: number
+    totalFailed: number
+    byProvider: Record<string, number>
+    byDay: Array<{ date: string; sent: number; failed: number }>
+  }> {
+    if (!this.config.compliance.logEmails) {
+      return {
+        totalSent: 0,
+        totalFailed: 0,
+        byProvider: {},
+        byDay: [],
+      }
+    }
+    
+    try {
+      const since = new Date()
+      since.setDate(since.getDate() - days)
+      
+      const logs = await prisma.emailLog.findMany({
+        where: {
+          createdAt: {
+            gte: since,
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      })
+      
+      const totalSent = logs.filter(log => log.status === 'sent').length
+      const totalFailed = logs.filter(log => log.status === 'failed').length
+      
+      const byProvider: Record<string, number> = {}
+      logs.forEach(log => {
+        byProvider[log.provider] = (byProvider[log.provider] || 0) + 1
+      })
+      
+      // Group by day
+      const byDay: Array<{ date: string; sent: number; failed: number }> = []
+      const dayGroups: Record<string, { sent: number; failed: number }> = {}
+      
+      logs.forEach(log => {
+        const dateKey = log.createdAt.toISOString().split('T')[0]
+        if (!dayGroups[dateKey]) {
+          dayGroups[dateKey] = { sent: 0, failed: 0 }
+        }
+        
+        if (log.status === 'sent') {
+          dayGroups[dateKey].sent++
+        } else {
+          dayGroups[dateKey].failed++
+        }
+      })
+      
+      Object.entries(dayGroups)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .forEach(([date, stats]) => {
+          byDay.push({ date, ...stats })
+        })
+      
+      return {
+        totalSent,
+        totalFailed,
+        byProvider,
+        byDay,
+      }
+    } catch (error) {
+      console.error('Failed to get email stats:', error)
+      return {
+        totalSent: 0,
+        totalFailed: 0,
+        byProvider: {},
+        byDay: [],
+      }
+    }
+  }
+  
+  /**
+   * Get service information
+   */
+  getServiceInfo() {
+    const providers = Array.from(this.providers.entries()).map(([type, provider]) => ({
+      type,
+      info: provider.getProviderInfo(),
+      features: provider.getSupportedFeatures(),
+    }))
+    
+    return {
+      config: {
+        primaryProvider: this.config.primaryProvider,
+        fallbackProvider: this.config.fallbackProvider,
+        rateLimiting: this.config.rateLimiting,
+        development: this.config.development,
+      },
+      providers,
+      status: providers.length > 0 ? 'ready' : 'not configured',
+    }
+  }
+}
+
+// Create singleton instance
+export const emailService = new EmailService()
+
+// Convenience functions
+export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
+  return emailService.sendEmail(message)
+}
+
+export async function testEmailConnections() {
+  return emailService.testConnections()
+}
+
+export async function getEmailStats(days?: number) {
+  return emailService.getEmailStats(days)
+}
+
+export function getEmailServiceInfo() {
+  return emailService.getServiceInfo()
+}
