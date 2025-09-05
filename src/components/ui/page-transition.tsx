@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { motion } from 'framer-motion' // Temporarily disabled for React 19 compatibility
+// import { motion } from 'framer-motion' // Temporarily disabled for React 19 compatibility
 import { usePathname } from 'next/navigation'
 import { useReducedMotion } from './motion-provider'
 

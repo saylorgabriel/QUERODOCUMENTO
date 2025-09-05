@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion' // Temporarily disabled for React 19 compatibility
+// import { motion } from 'framer-motion' // Temporarily disabled for React 19 compatibility
 import { CheckCircle, Circle, Loader2, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
