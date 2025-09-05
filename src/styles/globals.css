@@ -388,7 +388,7 @@
 
   /* Enhanced Input Styles with Modern Design */
   .input-primary {
-    @apply border border-neutral-300 rounded-xl px-5 py-4 text-base bg-white transition-all duration-300 focus:outline-none min-h-14;
+    @apply border border-neutral-300 rounded-lg px-4 py-3 text-sm bg-white transition-all duration-300 focus:outline-none;
     box-shadow: var(--shadow-soft);
     background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
     border: 1px solid rgba(203, 213, 225, 0.8);

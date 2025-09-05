@@ -93,7 +93,7 @@ export function InputPhone({
           onBlur={handleBlur}
           placeholder="(99) 99999-9999"
           className={cn(
-            'input-primary w-full',
+            'w-full h-11 px-4 py-2.5 border border-neutral-300 rounded-lg text-base focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20',
             showError && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10',
             isValid && touched && 'border-green-500 focus:border-green-500 focus:ring-green-500/10',
             className

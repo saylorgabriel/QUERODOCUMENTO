@@ -162,7 +162,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section - Modern Professional Design */}
-      <section className="relative overflow-hidden min-h-[85vh] sm:min-h-[75vh] lg:min-h-[70vh] flex items-center justify-center px-4 py-12 sm:py-16 lg:py-24">
+      <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-4 py-8 sm:py-12 lg:py-16">
         {/* Enhanced Background with Gradient Mesh */}
         <div className="absolute inset-0 bg-gradient-hero"></div>
         <div className="absolute inset-0 bg-gradient-mesh opacity-30"></div>
@@ -176,83 +176,92 @@ export default function Home() {
         <div className="absolute inset-0 bg-pattern-grid opacity-5"></div>
         
         <div className="container-padded relative z-10">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center max-w-7xl mx-auto">
+          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-16 items-center max-w-7xl mx-auto relative w-full">
+            {/* Registry Seal - Positioned between left content and form */}
+            <div className="absolute left-1/2 hidden xl:block z-20 animate-spin-slow" style={{top: '60%', transform: 'translateX(-50%)', marginLeft: '20px'}}>
+              <div className="relative">
+                <RegistrySeal />
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-400/20 to-accent-400/20 rounded-full blur-xl"></div>
+              </div>
+            </div>
+            
             {/* Left Side - Enhanced Content */}
-            <div className="text-white space-y-8 lg:space-y-10 order-2 lg:order-1 text-center lg:text-left animate-slide-in-left">
-              <div className="space-y-6">
-                <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight mb-6 lg:mb-8 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text">
+            <div className="text-white space-y-4 lg:space-y-8 order-2 lg:order-1 text-center lg:text-left animate-slide-in-left w-full">
+              <div className="space-y-4">
+                <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight mb-3 lg:mb-6 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text">
                   Consulte protestos,
                   <span className="block text-transparent bg-gradient-to-r from-accent-400 via-accent-300 to-accent-400 bg-clip-text animate-gradient-shift" style={{backgroundSize: '200% auto'}}>faça a busca agora!</span>
                 </h1>
-                <p className="text-xl sm:text-2xl lg:text-3xl text-blue-100/90 font-light leading-relaxed max-w-3xl mx-auto lg:mx-0">
+                <p className="text-lg sm:text-xl lg:text-3xl text-blue-100/90 font-light leading-relaxed max-w-2xl mx-auto lg:mx-0">
                   Evite surpresas e tenha <strong className="font-semibold text-white">controle total</strong> dos seus dados nos cartórios de todo o Brasil.
                 </p>
               </div>
               
               {/* Enhanced Trust Indicators */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 sm:gap-8">
-                <div className="flex -space-x-3">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-success-400 to-success-600 rounded-full flex items-center justify-center border-3 border-white shadow-lg hover:scale-110 transition-transform duration-300">
-                    <Users className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+              <div className="hidden lg:flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-6">
+                <div className="flex -space-x-2">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-success-400 to-success-600 rounded-full flex items-center justify-center border-2 border-white shadow-lg hover:scale-110 transition-transform duration-300">
+                    <Users className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-accent-400 to-accent-600 rounded-full flex items-center justify-center border-3 border-white shadow-lg hover:scale-110 transition-transform duration-300" style={{transitionDelay: '100ms'}}>
-                    <Award className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-accent-400 to-accent-600 rounded-full flex items-center justify-center border-2 border-white shadow-lg hover:scale-110 transition-transform duration-300" style={{transitionDelay: '100ms'}}>
+                    <Award className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center border-3 border-white shadow-lg hover:scale-110 transition-transform duration-300" style={{transitionDelay: '200ms'}}>
-                    <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center border-2 border-white shadow-lg hover:scale-110 transition-transform duration-300" style={{transitionDelay: '200ms'}}>
+                    <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                 </div>
                 <div className="text-blue-100 text-center lg:text-left">
-                  <div className="flex items-center gap-1 mb-3 justify-center lg:justify-start">
+                  <div className="flex items-center gap-1 mb-2 justify-center lg:justify-start">
                     {[...Array(5)].map((_, i) => (
-                      <div key={i} className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-sm shadow-sm hover:scale-110 transition-transform duration-200" style={{transitionDelay: `${i * 50}ms`}} />
+                      <div key={i} className="w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-sm shadow-sm hover:scale-110 transition-transform duration-200" style={{transitionDelay: `${i * 50}ms`}} />
                     ))}
                   </div>
-                  <p className="text-sm sm:text-base font-semibold mb-2 text-white">Atendimento via WhatsApp</p>
-                  <p className="text-sm text-blue-200 leading-relaxed">Resposta em até <span className="font-semibold text-accent-300">24h</span> com nossa equipe especializada</p>
+                  <p className="text-xs sm:text-sm font-semibold mb-1 text-white">Atendimento via WhatsApp</p>
+                  <p className="text-xs sm:text-sm text-blue-200 leading-relaxed">Resposta em até <span className="font-semibold text-accent-300">24h</span> com nossa equipe especializada</p>
                 </div>
               </div>
             </div>
 
             {/* Right Side - Enhanced Form Card */}
-            <div className="lg:justify-self-end w-full max-w-lg mx-auto lg:mx-0 relative order-1 lg:order-2 animate-slide-in-right">
-              {/* Registry Seal - Enhanced positioning */}
-              <div className="absolute -left-32 bottom-44 hidden xl:block z-20 animate-float">
-                <div className="relative">
-                  <RegistrySeal />
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary-400/20 to-accent-400/20 rounded-full blur-xl animate-pulse"></div>
-                </div>
-              </div>
-              <div className="card-modern relative z-10 overflow-hidden">
+            <div className="w-full max-w-sm sm:max-w-md mx-auto lg:mx-0 lg:justify-self-end relative order-1 lg:order-2 animate-slide-in-right">
+              {/* Stacked cards container with padding for background cards */}
+              <div className="relative pt-3 pr-3 sm:pt-4 sm:pr-4">
+                {/* Back card 2 - furthest back */}
+                <div className="absolute top-0 right-0 left-3 bottom-3 sm:left-4 sm:bottom-4 bg-white/15 rounded-xl sm:rounded-2xl" style={{zIndex: 1}} />
+                {/* Back card 1 - middle */}
+                <div className="absolute top-1.5 right-1.5 left-1.5 bottom-1.5 sm:top-2 sm:right-2 sm:left-2 sm:bottom-2 bg-white/25 rounded-xl sm:rounded-2xl shadow-sm" style={{zIndex: 2}} />
+                
+                {/* Main form card */}
+                <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-5 sm:p-7 lg:p-9 relative overflow-hidden" style={{zIndex: 3}}>
                 {/* Card Background Enhancement */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50/30 to-white opacity-60"></div>
                 <div className="relative z-10">
-                <div className="mb-6 lg:mb-8">
-                  <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-neutral-900 via-primary-700 to-neutral-900 bg-clip-text text-transparent mb-4 text-center lg:text-left leading-tight">
-                    Consulte protestos em<br className="hidden sm:block" /><span className="text-accent-600"> poucos passos</span>
+                <div className="mb-6">
+                  <h3 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-3 text-center lg:text-left">
+                    Consulte <span className="text-primary-600">protestos</span> em<br className="hidden sm:block" /><span className="text-accent-600">poucos passos</span>
                   </h3>
                   
                   {/* Enhanced Step Indicators */}
-                  <div className="flex items-center justify-center lg:justify-start gap-4 sm:gap-6 mb-6 lg:mb-8">
+                  <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-4">
                     <div className="flex items-center gap-2">
-                      <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary-500 to-primary-700 text-white rounded-full text-sm font-bold shadow-md">
+                      <div className="flex items-center justify-center w-9 h-9 bg-primary-600 text-white rounded-full text-sm font-bold">
                         1
                       </div>
-                      <div className="w-8 h-0.5 bg-gradient-to-r from-primary-500 to-neutral-300 hidden sm:block"></div>
+                      <div className="w-6 h-0.5 bg-gradient-to-r from-primary-500 to-neutral-300 hidden sm:block"></div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-neutral-200 text-neutral-500 rounded-full text-sm font-bold">
+                      <div className="flex items-center justify-center w-9 h-9 bg-neutral-200 text-neutral-500 rounded-full text-sm font-bold">
                         2
                       </div>
-                      <div className="w-8 h-0.5 bg-neutral-200 hidden sm:block"></div>
+                      <div className="w-6 h-0.5 bg-neutral-200 hidden sm:block"></div>
                     </div>
-                    <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-neutral-200 text-neutral-500 rounded-full text-sm font-bold">
+                    <div className="flex items-center justify-center w-9 h-9 bg-neutral-200 text-neutral-500 rounded-full text-sm font-bold">
                       3
                     </div>
                   </div>
                 </div>
 
-                <form className="space-y-6 sm:space-y-8" onSubmit={handleSubmit}>
+                <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="relative">
                     <input 
                       type="text"
@@ -260,7 +269,7 @@ export default function Home() {
                       value={formData.name}
                       onChange={(e) => updateField('name', e.target.value)}
                       className={cn(
-                        "input-primary w-full min-h-12 sm:min-h-14",
+                        "w-full h-11 px-4 py-2.5 border border-neutral-300 rounded-lg text-base focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20",
                         errors.name && "border-amber-500 focus:border-amber-500 focus:ring-amber-500/10"
                       )}
                       aria-required="true"
@@ -297,7 +306,7 @@ export default function Home() {
                   <button 
                     type="submit" 
                     disabled={isSubmitting || isValidatingDocument}
-                    className="btn-primary w-full text-lg font-bold flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none min-h-14 sm:min-h-16 py-4 sm:py-5 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full bg-accent-600 hover:bg-accent-700 text-white text-base font-bold flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed h-12 rounded-lg transition-all duration-200"
                   >
                     {isSubmitting ? (
                       <>
@@ -320,7 +329,7 @@ export default function Home() {
                   </button>
                   
                   {/* Enhanced LGPD Compliance Text */}
-                  <p className="text-sm sm:text-base text-neutral-600 text-center mt-6 sm:mt-8 px-4 leading-relaxed">
+                  <p className="text-sm text-neutral-600 text-center mt-4 leading-relaxed">
                     Ao continuar, você concorda com nossos{" "}
                     <a 
                       href="/termos-de-uso" 
@@ -341,24 +350,23 @@ export default function Home() {
                 </form>
 
                 {/* Enhanced Security Badges */}
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-8 pt-8 border-t border-neutral-200/50">
-                  <div className="flex items-center gap-3 px-3 py-2 bg-green-50 rounded-lg border border-green-200/50">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      <Shield className="w-4 h-4 text-green-600" />
-                    </div>
-                    <span className="text-sm font-medium text-green-700">SSL SEGURO</span>
+                <div className="flex items-center justify-between gap-3 mt-5 pt-5 border-t border-neutral-200/50">
+                  <div className="flex items-center gap-1">
+                    <Shield className="w-4 h-4 text-green-600" />
+                    <span className="text-xs font-medium text-neutral-600">SSL<br/>SEGURO</span>
                   </div>
-                  <div className="flex items-center gap-3 px-3 py-2 bg-blue-50 rounded-lg border border-blue-200/50">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-medium text-blue-700">SITE BLINDADO</span>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span className="text-xs font-medium text-neutral-600">SITE<br/>BLINDADO</span>
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-2 bg-neutral-50 rounded-lg border border-neutral-200/50">
+                  <div className="flex items-center gap-1">
                     <CheckCircle2 className="w-4 h-4 text-neutral-600" />
-                    <span className="text-sm font-medium text-neutral-700">100% SEGURO</span>
+                    <span className="text-xs font-medium text-neutral-600">100%<br/>SEGURO</span>
                   </div>
                 </div>
                 
                 </div>
+              </div>
               </div>
             </div>
           </div>

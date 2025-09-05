@@ -115,7 +115,7 @@ export function InputDocument({
           onBlur={handleBlur}
           placeholder={isValidating ? 'Validando...' : props.placeholder}
           className={cn(
-            'input-primary w-full pr-12',
+            'w-full h-11 px-4 py-2.5 pr-12 border border-neutral-300 rounded-lg text-base focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20',
             showError && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10',
             isValid && touched && !isValidating && 'border-green-500 focus:border-green-500 focus:ring-green-500/10',
             isValidating && 'border-blue-400 focus:border-blue-400 focus:ring-blue-400/10',
