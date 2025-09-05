@@ -3,7 +3,7 @@
 // Force dynamic rendering for this page due to searchParams usage in child components
 export const dynamic = 'force-dynamic'
 
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { Metadata } from 'next'
 import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import { ConsultaProtestoForm } from '@/components/forms/ConsultaProtestoForm'
@@ -307,7 +307,18 @@ export default function ConsultaProtestoPage() {
           </div>
 
           {/* Main Form */}
-          <ConsultaProtestoForm onQuerySubmit={handleQuerySubmit} />
+          <Suspense fallback={
+            <div className="max-w-2xl mx-auto">
+              <Card className="p-6 sm:p-8">
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+                  <span className="ml-3 text-neutral-600">Carregando formulário...</span>
+                </div>
+              </Card>
+            </div>
+          }>
+            <ConsultaProtestoForm onQuerySubmit={handleQuerySubmit} />
+          </Suspense>
 
           {/* How it works */}
           <div className="mt-12 sm:mt-14 lg:mt-16">
