@@ -330,7 +330,7 @@ function CertidaoProtestoSuccessContent() {
                     Fale Conosco
                   </Button>
                 </Link>
-                <a href="https://wa.me/5519981806261" target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/5519981806261?text=Tenho%20interesse%20nos%20servi%C3%A7os%20de%20consulta%20de%20protesto" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" size="sm">
                     WhatsApp
                   </Button>

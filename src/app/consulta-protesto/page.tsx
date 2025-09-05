@@ -192,7 +192,7 @@ export default function ConsultaProtestoPage() {
                     Fazer Nova Consulta
                   </Button>
                   <Button 
-                    onClick={() => window.open('https://wa.me/5519981806261', '_blank')} 
+                    onClick={() => window.open('https://wa.me/5519981806261?text=Tenho%20interesse%20nos%20servi%C3%A7os%20de%20consulta%20de%20protesto', '_blank')} 
                     className="w-full sm:w-auto"
                   >
                     Falar no WhatsApp
