@@ -3,7 +3,7 @@
 // Force dynamic rendering for this page due to searchParams usage
 export const dynamic = 'force-dynamic'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import { Button } from '@/components/ui/button'
@@ -29,7 +29,7 @@ interface Order {
   }>
 }
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const orderId = searchParams?.get('orderId')
@@ -259,5 +259,24 @@ export default function PaymentSuccessPage() {
         </div>
       </div>
     </LayoutWrapper>
+  )
+}
+
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={
+      <LayoutWrapper>
+        <div className="min-h-screen bg-neutral-50 py-20">
+          <div className="container-padded">
+            <div className="max-w-2xl mx-auto text-center">
+              <LoadingSpinner size="lg" className="mb-4" />
+              <p className="text-neutral-600">Carregando informações do pagamento...</p>
+            </div>
+          </div>
+        </div>
+      </LayoutWrapper>
+    }>
+      <PaymentSuccessContent />
+    </Suspense>
   )
 }
