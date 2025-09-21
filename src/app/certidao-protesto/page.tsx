@@ -5,7 +5,7 @@ import { CertificateRequestForm } from '@/components/forms/CertificateRequestFor
 export const metadata: Metadata = {
   title: 'Solicitar Certidão de Protesto | QueroDocumento',
   description: 'Solicite sua certidão de protesto oficial de forma rápida e segura. Consulta em cartórios de todo o Brasil.',
-  keywords: 'certidão protesto, certidão negativa, certidão positiva, cartório, protesto, documento oficial'
+  keywords: 'certidão protesto, certidão negativa, certidão positiva, certidão de protesto, cartório, protesto, documento oficial'
 }
 
 export default function CertidaoProtestoPage() {

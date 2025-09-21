@@ -8,7 +8,7 @@
     - Preenche todos os campos do cadastro informados no final desse fluxo clica em “Avançar” 
     - Preenche o CPF/CNPJ e Nome/Razão Social que deseja que saia na NF clica em “Avançar 
     - escolhe a forma de pagamento entre PIX, Cartão de Credito ou Boleto
-    - Recebe um email que o pagamento do pedido foi concluído com sucesso e que o prazo é de ate 24 horas
+    - Recebe um email que o pagamento do pedido foi concluído com sucesso e que o prazo é de ate 24 horas úteis
 
     Com cadastro / logado
     Entra no site e faz o login
@@ -19,7 +19,7 @@
     - Clica em alterar ou ok depois clica em “Avançar 
     - Preenche o CPF/CNPJ e Nome/Razão Social que deseja que saia na NF clica em “Avançar 
     - escolhe a forma de pagamento entre PIX, Cartão de Credito ou Boleto 
-    - Recebe um email que o pagamento do pedido foi concluído com sucesso e que o prazo é de ate 24 horas
+    - Recebe um email que o pagamento do pedido foi concluído com sucesso e que o prazo é de ate 24 horas úteis
 
     Backoffice
     Na area logada do admin, na área de trabalho deve ser apresentado a lista dos pedidos e que eu possa filtrar pelo status
@@ -129,7 +129,7 @@ Bairro
 Emitiremos 2 tipos de documentos:
 Consulta de Protestos por CNPJ ou CPF- não gera nenhum documento apenas informa por email se possui ou não protestos 
 Apos o pedido é gerado a cobrança
-Envio em  ate 24 horas uteis
+Envio em ate 24 horas úteis
 Necessário estar cadastrado no site para solicitar
 Campos no pedido:
 CPF

@@ -116,8 +116,7 @@ export function getWelcomeTemplate(data: EmailTemplateData): EmailTemplate {
     
     Serviços Disponíveis:
     • Consulta de Protesto: Verifique se há protestos em seu CPF/CNPJ
-    • Certidão Negativa: Obtenha certidão comprovando ausência de protestos  
-    • Certidão Positiva: Documento oficial listando protestos encontrados
+    • Certidão de Protesto: Obtenha o Documento oficial com status de protestos  
     • Resultados Expressos: Receba documentos em até 48 horas
     • Suporte Especializado: Atendimento via WhatsApp
     

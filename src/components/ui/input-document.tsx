@@ -84,15 +84,36 @@ export function InputDocument({
   //   return '99.999.999/9999-99'
   // }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
-    setInternalValue(newValue)
+  // Mask helper function
+  const applyMask = (value: string): string => {
+    const clean = value.replace(/[^\d]/g, '')
     
-    // Reset validation state immediately when value changes
-    if (newValue !== internalValue) {
-      setIsValid(false)
-      setDocumentType(null)
+    if (clean.length <= 11) {
+      // CPF mask: 999.999.999-99
+      if (clean.length <= 3) return clean
+      if (clean.length <= 6) return clean.replace(/(\d{3})(\d{1,3})/, '$1.$2')
+      if (clean.length <= 9) return clean.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3')
+      return clean.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4')
+    } else {
+      // CNPJ mask: 99.999.999/9999-99
+      if (clean.length <= 2) return clean
+      if (clean.length <= 5) return clean.replace(/(\d{2})(\d{1,3})/, '$1.$2')
+      if (clean.length <= 8) return clean.replace(/(\d{2})(\d{3})(\d{1,3})/, '$1.$2.$3')
+      if (clean.length <= 12) return clean.replace(/(\d{2})(\d{3})(\d{3})(\d{1,4})/, '$1.$2.$3/$4')
+      return clean.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{1,2})/, '$1.$2.$3/$4-$5')
     }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value
+    const maskedValue = applyMask(inputValue)
+    
+    // Always update with masked value
+    setInternalValue(maskedValue)
+    
+    // Reset validation state when value changes
+    setIsValid(false)
+    setDocumentType(null)
   }
 
   const handleBlur = () => {

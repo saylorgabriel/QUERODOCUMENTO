@@ -7,14 +7,12 @@ import { InputDocument } from '@/components/ui/input-document'
 import { InputPhone } from '@/components/ui/input-phone'
 import { StepIndicator } from './StepIndicator'
 import { PaymentMethodSelector } from './PaymentMethodSelector'
-import { ArrowRight, ArrowLeft, Loader2, Eye, EyeOff } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Loader2, Eye, EyeOff, Smartphone, CreditCard, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface FormData {
-  // Step 1: Document consultation
+  // Step 1: Document consultation & user data
   documentNumber: string
-  
-  // Step 2: User data (registration/login)
   name: string
   email: string
   phone: string
@@ -22,12 +20,12 @@ interface FormData {
   confirmPassword: string
   isLogin: boolean
   
-  // Step 3: Invoice data
+  // Step 2: Payment
+  paymentMethod: 'PIX' | 'CREDIT_CARD' | 'BOLETO' | null
+  
+  // Step 3: Invoice data (Nota Fiscal)
   invoiceName: string
   invoiceDocument: string
-  
-  // Step 4: Payment
-  paymentMethod: 'PIX' | 'CREDIT_CARD' | 'BOLETO' | null
 }
 
 interface ConsultaProtestoFormProps {
@@ -91,23 +89,23 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
   const steps = [
     {
       number: 1,
-      title: 'Consulta',
-      description: 'Documento para consulta'
+      title: 'Dados',
+      description: 'Documento e cadastro'
     },
     {
       number: 2,
-      title: 'Dados',
-      description: 'Login ou cadastro'
+      title: 'Pagamento',
+      description: 'Forma de pagamento'
     },
     {
       number: 3,
-      title: 'Nota Fiscal',
-      description: 'Dados para NF'
+      title: 'Checkout',
+      description: 'Finalizar pagamento'
     },
     {
       number: 4,
-      title: 'Pagamento',
-      description: 'Forma de pagamento'
+      title: 'Nota Fiscal',
+      description: 'Dados para NF'
     }
   ]
 
@@ -122,13 +120,14 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
   const validateStep1 = () => {
     const newErrors: Record<string, string> = {}
     
+    // Document validation
     if (!formData.documentNumber.trim()) {
       newErrors.documentNumber = 'CPF ou CNPJ é obrigatório'
     } else if (!isDocumentValid) {
       newErrors.documentNumber = 'CPF ou CNPJ inválido'
     }
 
-    // If onQuerySubmit is provided, also validate name for direct query
+    // If onQuerySubmit is provided, only validate for direct query
     if (onQuerySubmit) {
       if (!formData.name.trim()) {
         newErrors.name = 'Nome é obrigatório'
@@ -136,6 +135,47 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
       
       if (formData.phone && !isPhoneValid) {
         newErrors.phone = 'Telefone inválido'
+      }
+      
+      setErrors(newErrors)
+      return Object.keys(newErrors).length === 0
+    }
+
+    // Basic validation for step 1 - only basic fields
+    if (!formData.name.trim()) {
+      newErrors.name = 'Nome é obrigatório'
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Telefone é obrigatório'
+    } else if (!isPhoneValid) {
+      newErrors.phone = 'Telefone inválido'
+    }
+
+    // Only validate auth fields if they are visible (!onQuerySubmit)
+    if (!onQuerySubmit) {
+      if (!formData.isLogin) {
+        // Registration validation
+        if (!formData.password.trim()) {
+          newErrors.password = 'Senha é obrigatória'
+        } else if (formData.password.length < 4) {
+          newErrors.password = 'Senha deve ter pelo menos 4 caracteres'
+        }
+        
+        if (formData.password !== formData.confirmPassword) {
+          newErrors.confirmPassword = 'Senhas não conferem'
+        }
+      } else {
+        // Login validation
+        if (!formData.password.trim()) {
+          newErrors.password = 'Senha é obrigatória'
+        }
+      }
+
+      if (!formData.email.trim()) {
+        newErrors.email = 'Email é obrigatório'
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        newErrors.email = 'Email inválido'
       }
     }
 
@@ -146,38 +186,8 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
   const validateStep2 = () => {
     const newErrors: Record<string, string> = {}
     
-    if (!formData.isLogin) {
-      // Registration validation
-      if (!formData.name.trim()) {
-        newErrors.name = 'Nome é obrigatório'
-      }
-      
-      if (!formData.password.trim()) {
-        newErrors.password = 'Senha é obrigatória'
-      } else if (formData.password.length < 6) {
-        newErrors.password = 'Senha deve ter pelo menos 6 caracteres'
-      }
-      
-      if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Senhas não conferem'
-      }
-    } else {
-      // Login validation
-      if (!formData.password.trim()) {
-        newErrors.password = 'Senha é obrigatória'
-      }
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email é obrigatório'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email inválido'
-    }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Telefone é obrigatório'
-    } else if (!isPhoneValid) {
-      newErrors.phone = 'Telefone inválido'
+    if (!formData.paymentMethod) {
+      newErrors.paymentMethod = 'Escolha uma forma de pagamento'
     }
 
     setErrors(newErrors)
@@ -201,41 +211,26 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
     return Object.keys(newErrors).length === 0
   }
 
-  const validateStep4 = () => {
-    const newErrors: Record<string, string> = {}
-    
-    if (!formData.paymentMethod) {
-      newErrors.paymentMethod = 'Escolha uma forma de pagamento'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
   const handleNext = async () => {
     let isValid = false
 
     switch (currentStep) {
       case 1:
         isValid = validateStep1()
-        // If onQuerySubmit is provided, handle direct query
-        if (isValid && onQuerySubmit) {
-          onQuerySubmit(formData.documentNumber, formData.name, formData.phone)
-          return
-        }
-        break
-      case 2:
-        isValid = validateStep2()
         if (isValid) {
           // Handle authentication
           isValid = await handleAuthentication()
         }
         break
+      case 2:
+        isValid = validateStep2()
+        break
       case 3:
-        isValid = validateStep3()
+        // Checkout step - no validation needed, just continue
+        isValid = true
         break
       case 4:
-        isValid = validateStep4()
+        isValid = validateStep3()
         if (isValid) {
           await handleSubmit()
           return
@@ -320,6 +315,12 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
     setIsLoading(true)
     
     try {
+      // If onQuerySubmit is provided, use it instead of the order creation API
+      if (onQuerySubmit) {
+        onQuerySubmit(formData.documentNumber, formData.name, formData.phone)
+        return
+      }
+
       const response = await fetch('/api/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -369,7 +370,7 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
               <p className="text-neutral-600">
                 {onQuerySubmit 
                   ? 'Preencha os dados abaixo para iniciar sua consulta'
-                  : 'Digite o CPF ou CNPJ que deseja consultar'
+                  : 'Informe seus dados para consulta'
                 }
               </p>
               {!onQuerySubmit && (
@@ -380,29 +381,10 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
               )}
             </div>
 
-            {/* Name field - always show when in direct query mode */}
-            {onQuerySubmit && (
-              <div className="relative">
-                <input 
-                  type="text"
-                  placeholder="Nome completo/Razão Social"
-                  value={formData.name}
-                  onChange={(e) => updateFormData('name', e.target.value)}
-                  className={cn(
-                    "input-primary w-full min-h-12 sm:min-h-14",
-                    errors.name && "border-amber-500 focus:border-amber-500 focus:ring-amber-500/10"
-                  )}
-                  aria-required="true"
-                />
-                {errors.name && (
-                  <p className="text-xs text-amber-600 mt-1">{errors.name}</p>
-                )}
-              </div>
-            )}
-
+            {/* Document field */}
             <InputDocument
               value={formData.documentNumber}
-              onChange={(value, isValid, type, isValidating) => {
+              onChange={(value, isValid, _, isValidating) => {
                 updateFormData('documentNumber', value)
                 setIsDocumentValid(isValid)
                 setIsValidatingDocument(!!isValidating)
@@ -413,18 +395,134 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
               validationDelay={600}
             />
 
-            {/* Phone field - show when in direct query mode */}
-            {onQuerySubmit && (
-              <InputPhone
-                value={formData.phone}
-                onChange={(value, isValid) => {
-                  updateFormData('phone', value)
-                  setIsPhoneValid(isValid)
-                }}
-                placeholder="Telefone com DDD (opcional)"
-                error={errors.phone}
-                showValidation={false}
+            {/* Name field */}
+            <div className="relative">
+              <input 
+                type="text"
+                placeholder="Nome completo/Razão Social"
+                value={formData.name}
+                onChange={(e) => updateFormData('name', e.target.value)}
+                className={cn(
+                  "input-primary w-full min-h-12 sm:min-h-14",
+                  errors.name && "border-amber-500 focus:border-amber-500 focus:ring-amber-500/10"
+                )}
+                aria-required="true"
               />
+              {errors.name && (
+                <p className="text-xs text-amber-600 mt-1">{errors.name}</p>
+              )}
+            </div>
+
+            {/* Phone field */}
+            <InputPhone
+              value={formData.phone}
+              onChange={(value, isValid) => {
+                updateFormData('phone', value)
+                setIsPhoneValid(isValid)
+              }}
+              placeholder="Telefone com DDD (opcional)"
+              error={errors.phone}
+              showValidation={false}
+            />
+
+            {/* User registration/login section - only show when not in query mode */}
+            {!onQuerySubmit && (
+              <>
+                {/* Login/Register Toggle */}
+                <div className="flex bg-neutral-100 rounded-lg p-1">
+                  <button
+                    type="button"
+                    onClick={() => updateFormData('isLogin', false)}
+                    className={cn(
+                      'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200',
+                      !formData.isLogin
+                        ? 'bg-white text-neutral-900 shadow-sm'
+                        : 'text-neutral-600 hover:text-neutral-900'
+                    )}
+                  >
+                    Criar Conta
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateFormData('isLogin', true)}
+                    className={cn(
+                      'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200',
+                      formData.isLogin
+                        ? 'bg-white text-neutral-900 shadow-sm'
+                        : 'text-neutral-600 hover:text-neutral-900'
+                    )}
+                  >
+                    Já tenho conta
+                  </button>
+                </div>
+
+                {/* Email field */}
+                <div>
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={(e) => updateFormData('email', e.target.value)}
+                    className={cn(
+                      'input-primary w-full min-h-12 sm:min-h-14',
+                      errors.email && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                    )}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-amber-600 mt-1">{errors.email}</p>
+                  )}
+                </div>
+
+                {/* Password field */}
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Senha"
+                    value={formData.password}
+                    onChange={(e) => updateFormData('password', e.target.value)}
+                    className={cn(
+                      'input-primary w-full pr-10 min-h-12 sm:min-h-14',
+                      errors.password && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                    )}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                  {errors.password && (
+                    <p className="text-sm text-amber-600 mt-1">{errors.password}</p>
+                  )}
+                </div>
+
+                {/* Confirm password field - only for registration */}
+                {!formData.isLogin && (
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="Confirmar senha"
+                      value={formData.confirmPassword}
+                      onChange={(e) => updateFormData('confirmPassword', e.target.value)}
+                      className={cn(
+                        'input-primary w-full pr-10 min-h-12 sm:min-h-14',
+                        errors.confirmPassword && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                      )}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                    {errors.confirmPassword && (
+                      <p className="text-sm text-amber-600 mt-1">{errors.confirmPassword}</p>
+                    )}
+                  </div>
+                )}
+              </>
             )}
           </div>
         )
@@ -434,136 +532,153 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
           <div className="space-y-4 sm:space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                Seus Dados
+                Pagamento
               </h2>
               <p className="text-neutral-600">
-                {formData.isLogin ? 'Faça login para continuar' : 'Crie sua conta para prosseguir'}
+                Escolha como deseja pagar pela consulta
               </p>
-            </div>
-
-            {/* Login/Register Toggle */}
-            <div className="flex bg-neutral-100 rounded-lg p-1">
-              <button
-                type="button"
-                onClick={() => updateFormData('isLogin', false)}
-                className={cn(
-                  'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200',
-                  !formData.isLogin
-                    ? 'bg-white text-neutral-900 shadow-sm'
-                    : 'text-neutral-600 hover:text-neutral-900'
-                )}
-              >
-                Criar Conta
-              </button>
-              <button
-                type="button"
-                onClick={() => updateFormData('isLogin', true)}
-                className={cn(
-                  'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200',
-                  formData.isLogin
-                    ? 'bg-white text-neutral-900 shadow-sm'
-                    : 'text-neutral-600 hover:text-neutral-900'
-                )}
-              >
-                Já tenho conta
-              </button>
-            </div>
-
-            {!formData.isLogin && (
-              <div>
-                <input
-                  type="text"
-                  placeholder="Nome completo"
-                  value={formData.name}
-                  onChange={(e) => updateFormData('name', e.target.value)}
-                  className={cn(
-                    'input-primary w-full min-h-12 sm:min-h-14',
-                    errors.name && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
-                  )}
-                />
-                {errors.name && (
-                  <p className="text-sm text-amber-600 mt-1">{errors.name}</p>
-                )}
+              <div className="mt-4 p-4 bg-accent-50 rounded-lg border border-accent-200">
+                <p className="text-accent-700 font-semibold text-xl">R$ 29,90</p>
+                <p className="text-sm text-accent-600">Consulta de protesto completa</p>
               </div>
-            )}
-
-            <div>
-              <input
-                type="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={(e) => updateFormData('email', e.target.value)}
-                className={cn(
-                  'input-primary w-full min-h-12 sm:min-h-14',
-                  errors.email && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
-                )}
-              />
-              {errors.email && (
-                <p className="text-sm text-amber-600 mt-1">{errors.email}</p>
-              )}
             </div>
 
-            <InputPhone
-              value={formData.phone}
-              onChange={(value, isValid) => {
-                updateFormData('phone', value)
-                setIsPhoneValid(isValid)
-              }}
-              placeholder="(00) 00000-0000"
-              error={errors.phone}
+            <PaymentMethodSelector
+              selectedMethod={formData.paymentMethod}
+              onSelect={(method) => updateFormData('paymentMethod', method)}
             />
 
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Senha"
-                value={formData.password}
-                onChange={(e) => updateFormData('password', e.target.value)}
-                className={cn(
-                  'input-primary w-full pr-10 min-h-12 sm:min-h-14',
-                  errors.password && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
-                )}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
-              >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
-              {errors.password && (
-                <p className="text-sm text-amber-600 mt-1">{errors.password}</p>
-              )}
-            </div>
+            {errors.paymentMethod && (
+              <p className="text-sm text-amber-600">{errors.paymentMethod}</p>
+            )}
 
-            {!formData.isLogin && (
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Confirmar senha"
-                  value={formData.confirmPassword}
-                  onChange={(e) => updateFormData('confirmPassword', e.target.value)}
-                  className={cn(
-                    'input-primary w-full pr-10 min-h-12 sm:min-h-14',
-                    errors.confirmPassword && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
-                  )}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
-                >
-                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-                {errors.confirmPassword && (
-                  <p className="text-sm text-amber-600 mt-1">{errors.confirmPassword}</p>
-                )}
-              </div>
+            {errors.submit && (
+              <p className="text-sm text-amber-600">{errors.submit}</p>
             )}
           </div>
         )
 
       case 3:
+        return (
+          <div className="space-y-4 sm:space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-neutral-900 mb-2">
+                Finalizar Pagamento
+              </h2>
+              <p className="text-neutral-600">
+                Confirme os dados do seu pedido e finalize o pagamento
+              </p>
+            </div>
+
+            {/* Order Summary */}
+            <div className="p-6 bg-neutral-50 rounded-lg border border-neutral-200">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-4">Resumo do Pedido</h3>
+              
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-neutral-600">Consulta de Protesto</span>
+                  <span className="font-semibold text-neutral-900">R$ 29,90</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-neutral-500">Documento:</span>
+                  <span className="text-neutral-700">{formData.documentNumber}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-neutral-500">Nome:</span>
+                  <span className="text-neutral-700">{formData.name}</span>
+                </div>
+                <div className="pt-3 border-t border-neutral-300">
+                  <div className="flex justify-between">
+                    <span className="text-lg font-semibold text-neutral-900">Total</span>
+                    <span className="text-lg font-bold text-accent-600">R$ 29,90</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Method Details */}
+            {formData.paymentMethod === 'PIX' && (
+              <div className="p-6 bg-white rounded-lg border border-neutral-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-success-100 rounded-lg flex items-center justify-center">
+                    <Smartphone className="w-5 h-5 text-success-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-neutral-900">Pagamento via PIX</h4>
+                    <p className="text-sm text-neutral-600">Pagamento instantâneo e seguro</p>
+                  </div>
+                </div>
+                
+                <div className="bg-accent-50 p-4 rounded-lg border border-accent-200">
+                  <p className="text-sm text-accent-700 text-center">
+                    <strong>Após clicar em "Finalizar", você será redirecionado para realizar o pagamento via PIX.</strong>
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {formData.paymentMethod === 'CREDIT_CARD' && (
+              <div className="p-6 bg-white rounded-lg border border-neutral-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                    <CreditCard className="w-5 h-5 text-primary-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-neutral-900">Cartão de Crédito</h4>
+                    <p className="text-sm text-neutral-600">Visa, Mastercard, Elo</p>
+                  </div>
+                </div>
+                
+                <div className="bg-primary-50 p-4 rounded-lg border border-primary-200">
+                  <p className="text-sm text-primary-700 text-center">
+                    <strong>Após clicar em "Finalizar", você será redirecionado para inserir os dados do cartão.</strong>
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {formData.paymentMethod === 'BOLETO' && (
+              <div className="p-6 bg-white rounded-lg border border-neutral-200">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-neutral-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-neutral-900">Boleto Bancário</h4>
+                    <p className="text-sm text-neutral-600">Vencimento em 3 dias úteis</p>
+                  </div>
+                </div>
+                
+                <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                  <p className="text-sm text-amber-700 text-center">
+                    <strong>Após clicar em "Finalizar", o boleto será gerado para pagamento.</strong>
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Security Notice */}
+            <div className="p-4 bg-success-50 rounded-lg border border-success-200">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-success-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <div>
+                  <h5 className="text-sm font-medium text-success-900 mb-1">
+                    Ambiente 100% Seguro
+                  </h5>
+                  <p className="text-xs text-success-700">
+                    Suas informações são protegidas com criptografia SSL de ponta a ponta.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+
+      case 4:
         return (
           <div className="space-y-4 sm:space-y-6">
             <div className="text-center mb-8">
@@ -610,36 +725,6 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
           </div>
         )
 
-      case 4:
-        return (
-          <div className="space-y-4 sm:space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                Pagamento
-              </h2>
-              <p className="text-neutral-600">
-                Escolha como deseja pagar pela consulta
-              </p>
-              <div className="mt-4 p-4 bg-accent-50 rounded-lg border border-accent-200">
-                <p className="text-accent-700 font-semibold text-xl">R$ 29,90</p>
-                <p className="text-sm text-accent-600">Consulta de protesto completa</p>
-              </div>
-            </div>
-
-            <PaymentMethodSelector
-              selectedMethod={formData.paymentMethod}
-              onSelect={(method) => updateFormData('paymentMethod', method)}
-            />
-
-            {errors.paymentMethod && (
-              <p className="text-sm text-amber-600">{errors.paymentMethod}</p>
-            )}
-
-            {errors.submit && (
-              <p className="text-sm text-amber-600">{errors.submit}</p>
-            )}
-          </div>
-        )
 
       default:
         return null
@@ -679,6 +764,8 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
                 <Loader2 className="w-4 h-4 animate-spin" />
                 <span className="text-sm sm:text-base">Validando...</span>
               </>
+            ) : currentStep === 3 ? (
+              <span className="text-sm sm:text-base">Continuar para Nota Fiscal</span>
             ) : currentStep === 4 ? (
               <span className="text-sm sm:text-base">Finalizar Pedido</span>
             ) : currentStep === 1 && onQuerySubmit ? (

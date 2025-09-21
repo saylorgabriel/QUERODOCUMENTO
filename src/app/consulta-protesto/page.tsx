@@ -66,11 +66,24 @@ export default function ConsultaProtestoPage() {
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Erro ao realizar consulta')
+        let errorMessage = 'Erro ao realizar consulta'
+        try {
+          const errorData = await response.json()
+          errorMessage = errorData.error || errorMessage
+        } catch (parseError) {
+          // Se não conseguir fazer parse do JSON do erro, usar a mensagem padrão
+          console.error('Error parsing error response:', parseError)
+        }
+        throw new Error(errorMessage)
       }
 
-      const data = await response.json()
+      try {
+        await response.json()
+      } catch (parseError) {
+        console.error('Error parsing success response:', parseError)
+        throw new Error('Erro ao processar resposta do servidor')
+      }
+      
       // Ao invés de mostrar o resultado, mostra mensagem de confirmação
       setConsultationSubmitted({ documentNumber, name, phone })
 
@@ -165,7 +178,7 @@ export default function ConsultaProtestoPage() {
                     <div>
                       <h3 className="font-semibold text-neutral-900 mb-1">Resultado da Consulta</h3>
                       <p className="text-sm text-neutral-600">
-                        <strong>Prazo:</strong> Até 24 horas para receber outro email com a atualização e resultado completo da sua consulta de protesto.
+                        <strong>Prazo:</strong> Até 24 horas úteis para receber outro email com a atualização e resultado completo da sua consulta de protesto.
                       </p>
                     </div>
                   </div>
@@ -289,7 +302,7 @@ export default function ConsultaProtestoPage() {
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
                 <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
               </div>
-              <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">Resultado em até 24h</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">Resultado em até 24 horas úteis</h3>
               <p className="text-xs sm:text-sm text-neutral-600">
                 Consulta completa em cartórios de todo o Brasil
               </p>
@@ -347,9 +360,9 @@ export default function ConsultaProtestoPage() {
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-sm">
                     <span className="text-base sm:text-lg font-bold text-primary-600">2</span>
                   </div>
-                  <p className="font-medium text-neutral-900 mb-1 text-sm sm:text-base">Consulta</p>
+                  <p className="font-medium text-neutral-900 mb-1 text-sm sm:text-base">Pagamento</p>
                   <p className="text-xs sm:text-sm text-neutral-600">
-                    Veja se há protestos registrados
+                    Forma de pagamento para consulta
                   </p>
                 </div>
                 
@@ -357,7 +370,7 @@ export default function ConsultaProtestoPage() {
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-sm">
                     <span className="text-base sm:text-lg font-bold text-primary-600">3</span>
                   </div>
-                  <p className="font-medium text-neutral-900 mb-1 text-sm sm:text-base">Resultado em até 24h</p>
+                  <p className="font-medium text-neutral-900 mb-1 text-sm sm:text-base">Resultado em até 24 horas úteis</p>
                   <p className="text-xs sm:text-sm text-neutral-600">
                     Informações básicas por email
                   </p>
@@ -369,7 +382,7 @@ export default function ConsultaProtestoPage() {
                   </div>
                   <p className="font-medium text-neutral-900 mb-1 text-sm sm:text-base">Certidão Oficial</p>
                   <p className="text-xs sm:text-sm text-neutral-600">
-                    Solicite se necessário (pago)
+                    Solicite se necessário (adicional)
                   </p>
                 </div>
               </div>
@@ -387,7 +400,7 @@ export default function ConsultaProtestoPage() {
                   <h4 className="font-semibold text-success-800 mb-2">Consulta Básica</h4>
                   <ul className="text-sm text-success-700 space-y-1">
                     <li>• Informações básicas sobre protestos</li>
-                    <li>• Resultado instantâneo</li>
+                    <li>• Resultado em ate 24 horas úteis</li>
                     <li>• A partir de R$ 29,90</li>
                     <li>• Não tem validade jurídica</li>
                   </ul>
@@ -415,17 +428,16 @@ export default function ConsultaProtestoPage() {
                     A consulta básica é confiável?
                   </h4>
                   <p className="text-sm text-neutral-600">
-                    Sim, consultamos os mesmos cartórios. A diferença é que na versão básica 
-                    algumas informações detalhadas ficam ocultas.
+                    Sim, a consulta é feita em todos os cartórios do Brasil.
                   </p>
                 </div>
                 
                 <div>
                   <h4 className="font-medium text-neutral-900 mb-1">
-                    Quando preciso da certidão oficial?
+                    Quando preciso da certidão oficial? (Certidão de Protesto)
                   </h4>
                   <p className="text-sm text-neutral-600">
-                    Para processos judiciais, licitações, análise de crédito bancário, 
+                    Para processos judiciais, licitações, análise de crédito bancário,
                     contratações e outras situações que exigem documento com validade legal.
                   </p>
                 </div>

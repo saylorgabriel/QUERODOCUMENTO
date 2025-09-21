@@ -288,7 +288,7 @@ export function ProtestResults({ result, onRequestCertificate, onNewQuery }: Pro
               className="flex items-center gap-2"
             >
               <FileText className="w-4 h-4" />
-              {hasProtests ? 'Solicitar Certidão Positiva' : 'Solicitar Certidão Negativa'}
+              {'Certidão de Protesto'}
             </Button>
             
             <Button 

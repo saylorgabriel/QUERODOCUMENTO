@@ -187,8 +187,8 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
         
         if (!formData.password.trim()) {
           newErrors.password = 'Senha é obrigatória'
-        } else if (formData.password.length < 6) {
-          newErrors.password = 'Senha deve ter pelo menos 6 caracteres'
+        } else if (formData.password.length < 4) {
+          newErrors.password = 'Senha deve ter pelo menos 4 caracteres'
         }
         
         if (formData.password !== formData.confirmPassword) {

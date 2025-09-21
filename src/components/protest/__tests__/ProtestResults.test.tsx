@@ -180,7 +180,7 @@ describe('ProtestResults', () => {
         />
       )
 
-      expect(screen.getByText('Solicitar Certidão Positiva')).toBeInTheDocument()
+      expect(screen.getByText('Solicitar Certidão de Protesto')).toBeInTheDocument()
       expect(screen.getByText('Solicite uma certidão oficial para ter um documento com validade jurídica.')).toBeInTheDocument()
     })
   })
@@ -232,7 +232,7 @@ describe('ProtestResults', () => {
         />
       )
 
-      const certificateButton = screen.getByText('Solicitar Certidão Positiva')
+      const certificateButton = screen.getByText('Solicitar Certidão de Protesto')
       fireEvent.click(certificateButton)
 
       expect(mockOnRequestCertificate).toHaveBeenCalledTimes(1)

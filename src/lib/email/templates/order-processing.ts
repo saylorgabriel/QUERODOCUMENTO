@@ -121,11 +121,7 @@ export function getOrderProcessingTemplate(data: EmailTemplateData): EmailTempla
             <td class="value">30 minutos a 2 horas</td>
           </tr>
           <tr>
-            <td class="label">Certidão Negativa:</td>
-            <td class="value">2 a 24 horas</td>
-          </tr>
-          <tr>
-            <td class="label">Certidão Positiva:</td>
+            <td class="label">Certidão de Protesto:</td>
             <td class="value">4 a 48 horas</td>
           </tr>
           <tr>
@@ -222,9 +218,8 @@ export function getOrderProcessingTemplate(data: EmailTemplateData): EmailTempla
     
     ⏰ TEMPO ESTIMADO:
     • Consulta: 30min a 2h
-    • Certidão Negativa: 2 a 24h
-    • Certidão Positiva: 4 a 48h
-    • Casos Complexos: Até 72h
+    • Certidão de Protesto: 4 a 48 horas úteis
+    • Casos Complexos: Até 72 horas úteis
     
     🎯 GARANTIA DE QUALIDADE:
     • Precisão 100% - revisão por especialistas

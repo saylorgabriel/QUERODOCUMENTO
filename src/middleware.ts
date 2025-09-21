@@ -7,7 +7,6 @@ const protectedPaths = [
   '/profile',
   '/certificates',
   '/payments',
-  '/api/protest-query',
   '/api/certificates',
   '/api/payments',
 ]

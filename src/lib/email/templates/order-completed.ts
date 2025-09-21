@@ -64,7 +64,7 @@ export function getOrderCompletedTemplate(data: EmailTemplateData): EmailTemplat
       
       {{#if hasProtests}}
       <div class="alert alert-warning">
-        <div class="alert-title">📊 Certidão Positiva Gerada</div>
+        <div class="alert-title">📊 Certidão de Protesto Gerada</div>
         <div class="alert-text">
           Foram encontrados protestos registrados. Sua certidão contém todos os detalhes dos registros oficiais.
         </div>
@@ -256,7 +256,7 @@ export function getOrderCompletedTemplate(data: EmailTemplateData): EmailTemplat
     {{/if}}
     
     {{#if hasProtests}}
-    📊 CERTIDÃO POSITIVA
+    📊 CERTIDÃO DE PROTESTO
     Protestos encontrados. Certidão contém todos os detalhes oficiais.
     
     {{#if protests}}

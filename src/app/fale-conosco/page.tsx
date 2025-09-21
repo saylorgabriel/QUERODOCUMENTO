@@ -107,7 +107,7 @@ export default function FaleConosco() {
                     Chat On-line
                   </h3>
                   <p className="text-neutral-600">
-                    Seg a Sex das 9:00 às 17:00
+                    Seg a Sex das 9:00 às 12:00 e 13:00 às 17:00
                   </p>
                 </div>
               </div>
@@ -141,7 +141,7 @@ export default function FaleConosco() {
                     Atendimento via WhatsApp
                   </h3>
                   <p className="text-green-100 mb-3">
-                    Tenha a resposta da sua consulta em até 24h!
+                    Tenha a resposta da sua consulta em até 24 horas úteis!
                   </p>
                   <p className="text-green-100 text-sm mb-4">
                     Nossa equipe de especialistas garante rapidez e qualidade.
@@ -170,8 +170,8 @@ export default function FaleConosco() {
                     Horário de Atendimento
                   </h3>
                   <div className="space-y-2 text-sm text-neutral-600">
-                    <p><strong>Segunda a Sexta:</strong> 9:00 às 18:00</p>
-                    <p><strong>Sábado:</strong> 9:00 às 12:00</p>
+                    <p><strong>Segunda a Sexta:</strong> 9:00 às 12:00 e 13:00 às 18:00</p>
+                    <p><strong>Sábado:</strong> Fechado</p>
                     <p><strong>Domingo:</strong> Fechado</p>
                   </div>
                 </div>
@@ -198,7 +198,8 @@ export default function FaleConosco() {
               </h3>
               <p className="text-neutral-600">
                 As certidões são emitidas em até 48 horas úteis após a confirmação do pagamento. 
-                Em casos urgentes, oferecemos processamento expresso em até 24 horas.
+                Em casos urgentes, oferecemos processamento expresso em até 24 horas úteis.
+                **Nesse caso o prazo é de ate 5 dias uteis apos a confirmação do pagamento
               </p>
             </div>
 
@@ -217,8 +218,9 @@ export default function FaleConosco() {
                 A consulta tem validade jurídica?
               </h3>
               <p className="text-neutral-600">
-                Sim, todas as certidões emitidas têm validade jurídica e são aceitas em todos 
-                os órgãos públicos e instituições financeiras do Brasil.
+                Sim, todas as certidões emitidas têm validade jurídica 
+                e são aceitas em todos os órgãos públicos e instituições financeiras do Brasil.
+                **A consulta de protestos não tem validade jurídica. O que tem validade jurídica é a Certidão de Protesto
               </p>
             </div>
 

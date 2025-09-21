@@ -155,11 +155,11 @@ export default function RegisterPage() {
                 id="password"
                 type="password"
                 required
-                minLength={8}
+                minLength={4}
                 value={formData.password}
                 onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                 className="input-primary w-full min-h-12 sm:min-h-14"
-                placeholder="Mínimo 8 caracteres"
+                placeholder="Mínimo 4 caracteres"
                 disabled={isLoading}
               />
             </div>

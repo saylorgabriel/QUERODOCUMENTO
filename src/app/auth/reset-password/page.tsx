@@ -164,11 +164,11 @@ function ResetPasswordContent() {
                 id="newPassword"
                 type="password"
                 required
-                minLength={6}
+                minLength={4}
                 value={formData.newPassword}
                 onChange={(e) => setFormData(prev => ({ ...prev, newPassword: e.target.value }))}
                 className="input-primary w-full"
-                placeholder="Mínimo 6 caracteres"
+                placeholder="Mínimo 4 caracteres"
                 disabled={isLoading}
               />
             </div>

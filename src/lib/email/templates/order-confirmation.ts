@@ -84,8 +84,7 @@ export function getOrderConfirmationTemplate(data: EmailTemplateData): EmailTemp
         <h3>🕒 Prazos de Entrega</h3>
         <ul>
           <li><strong>Consulta de Protesto:</strong> Resultado em até 2 horas úteis</li>
-          <li><strong>Certidão Negativa:</strong> Documento em até 24 horas úteis</li>
-          <li><strong>Certidão Positiva:</strong> Documento em até 48 horas úteis</li>
+          <li><strong>Certidão de Protesto:</strong> Documento em até 48 horas úteis</li>
           <li><strong>Serviços Expressos:</strong> Consulte prazos especiais</li>
         </ul>
       </div>
@@ -166,8 +165,7 @@ export function getOrderConfirmationTemplate(data: EmailTemplateData): EmailTemp
     
     🕒 PRAZOS DE ENTREGA:
     • Consulta de Protesto: até 2 horas úteis
-    • Certidão Negativa: até 24 horas úteis  
-    • Certidão Positiva: até 48 horas úteis
+    • Certidão de Protesto: até 48 horas úteis
     
     {{#if documents}}
     📄 DOCUMENTOS SOLICITADOS:

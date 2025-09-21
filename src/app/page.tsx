@@ -217,7 +217,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-xs sm:text-sm font-semibold mb-1 text-white">Atendimento via WhatsApp</p>
-                  <p className="text-xs sm:text-sm text-blue-200 leading-relaxed">Resposta em até <span className="font-semibold text-accent-300">24h</span> com nossa equipe especializada</p>
+                  <p className="text-xs sm:text-sm text-blue-200 leading-relaxed">Resposta em até <span className="font-semibold text-accent-300">24 horas úteis</span> com nossa equipe especializada</p>
                 </div>
               </div>
             </div>
@@ -392,7 +392,7 @@ export default function Home() {
             </div>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-neutral-900 via-primary-700 to-neutral-900 bg-clip-text text-transparent mb-6 leading-tight">Como Funciona</h2>
             <p className="text-xl sm:text-2xl text-neutral-600 max-w-3xl mx-auto leading-relaxed">
-              Processo <span className="font-semibold text-primary-700">simples e profissional</span> com resultado garantido em até 24h
+              Processo <span className="font-semibold text-primary-700">simples e profissional</span> com resultado garantido em até 24 horas úteis
             </p>
           </div>
           
@@ -442,7 +442,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">Receba o resultado</h3>
               <p className="text-base sm:text-lg text-neutral-600 leading-relaxed max-w-sm mx-auto">
-                Resultado em <span className="font-semibold text-accent-700">até 24 horas</span> por email com relatório completo
+                Resultado em <span className="font-semibold text-accent-700">até 24 horas úteis</span> por email com relatório completo
               </p>
             </div>
           </div>
@@ -498,7 +498,7 @@ export default function Home() {
                     <Users className="w-4 h-4 sm:w-5 sm:h-5 text-success-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-neutral-900 mb-1 text-sm sm:text-base">Resposta em até 24h</h4>
+                    <h4 className="font-semibold text-neutral-900 mb-1 text-sm sm:text-base">Resposta em até 24 horas úteis</h4>
                     <p className="text-xs sm:text-sm text-neutral-600">Atendimento via WhatsApp com especialistas</p>
                   </div>
                 </div>
@@ -569,7 +569,7 @@ export default function Home() {
               </svg>
               <div className="text-left">
                 <p className="font-semibold text-neutral-900 text-sm sm:text-base">WhatsApp</p>
-                <p className="text-neutral-600 text-sm sm:text-base">Resposta em até 24h</p>
+                <p className="text-neutral-600 text-sm sm:text-base">Resposta em até 24 horas úteis</p>
               </div>
             </a>
           </div>

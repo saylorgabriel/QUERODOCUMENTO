@@ -268,7 +268,7 @@ Há um tempo você utilizou nossos serviços de consulta de protesto.
 Como sua situação pode ter mudado, que tal fazer uma nova consulta?
 
 ✨ Consulta rápida e confiável
-⚡ Resultado instantâneo
+⚡ Resultado em ate 24 horas úteis
 📱 Acesse de qualquer dispositivo
 
 [FAZER NOVA CONSULTA]

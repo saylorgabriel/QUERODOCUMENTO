@@ -176,7 +176,7 @@ function wrapTemplate(content: string, title: string = 'QueroDocumento'): string
         ${content}
         <div class="footer">
           <p><strong>QueroDocumento</strong> - Consulta e Certidão de Protesto</p>
-          <p>Atendimento via WhatsApp - Resposta em até 24h</p>
+          <p>Atendimento via WhatsApp - Resposta em até 24 horas úteis</p>
           <p>Nossa equipe de especialistas garante rapidez e qualidade</p>
           <hr style="border: none; border-top: 1px solid #d1d5db; margin: 16px 0;">
           <p style="font-size: 12px;">© ${new Date().getFullYear()} QueroDocumento. Todos os direitos reservados.</p>

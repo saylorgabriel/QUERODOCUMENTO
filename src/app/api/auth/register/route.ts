@@ -20,9 +20,9 @@ export async function POST(request: Request) {
     }
 
     // Validate password strength
-    if (password.length < 6) {
+    if (password.length < 4) {
       return NextResponse.json(
-        { error: 'A senha deve ter pelo menos 6 caracteres' },
+        { error: 'A senha deve ter pelo menos 4 caracteres' },
         { status: 400 }
       )
     }

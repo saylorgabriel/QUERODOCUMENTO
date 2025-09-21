@@ -248,7 +248,7 @@ export function getQuoteReadyTemplate(data: EmailTemplateData): EmailTemplate {
     
     ⏰ IMPORTANTE:
     • Orçamento válido por 7 dias
-    • Certidão pronta em 24h após aprovação
+    • Certidão pronta em 24 horas úteis após aprovação
     • Opções de prazo reduzido disponíveis
     
     Ver orçamento: {{dashboardUrl}}/pedidos/{{orderNumber}}
@@ -266,7 +266,7 @@ export function getQuoteReadyTemplate(data: EmailTemplateData): EmailTemplate {
     ✅ Suporte Completo - Ajuda durante processo
     
     Pronto para prosseguir?
-    Aprove seu orçamento e receba sua certidão oficial em 24h úteis.
+    Aprove seu orçamento e receba sua certidão oficial em 24 horas úteis.
   `
 
   const processedHtml = createEmailTemplate(
