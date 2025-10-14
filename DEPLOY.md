@@ -63,9 +63,14 @@ SMTP_USER=your-email
 SMTP_PASSWORD=your-password
 ```
 
-### Redis (Opcional)
+### Redis (Opcional - Recomendado para produção)
 ```bash
-REDIS_URL=redis://...  # Para cache e sessões
+REDIS_URL=redis://...  # Para cache e processamento assíncrono de webhooks
+
+# Se não configurado, webhooks serão processados sincronamente
+# Para adicionar Redis na Vercel:
+# 1. Vá em Storage → Connect → Redis (Upstash)
+# 2. A variável REDIS_URL será criada automaticamente
 ```
 
 ### Pagamento (Opcional - Mock funciona sem)

@@ -1,8 +1,114 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Redis from 'ioredis'
+import { prisma } from '@/lib/db'
 
-// Redis client for webhook queue
-const redis = new Redis(process.env.REDIS_URL || 'redis://redis:6379')
+// Redis client for webhook queue (optional)
+let redis: Redis | null = null
+
+// Initialize Redis only if REDIS_URL is configured
+if (process.env.REDIS_URL) {
+  try {
+    redis = new Redis(process.env.REDIS_URL, {
+      maxRetriesPerRequest: 3,
+      retryStrategy: (times) => {
+        if (times > 3) {
+          console.warn('⚠️ Redis connection failed, webhooks will be processed synchronously')
+          return null // Stop retrying
+        }
+        return Math.min(times * 100, 3000)
+      },
+      lazyConnect: true
+    })
+
+    redis.on('error', (err) => {
+      console.warn('⚠️ Redis error (webhooks will process synchronously):', err.message)
+    })
+  } catch (error) {
+    console.warn('⚠️ Redis initialization failed, webhooks will be processed synchronously')
+    redis = null
+  }
+}
+
+async function processWebhookDirectly(event: string, payment: any) {
+  // Direct processing without Redis queue
+  try {
+    const order = await prisma.order.findFirst({
+      where: { asaasPaymentId: payment.id }
+    })
+
+    if (!order) {
+      console.log(`❌ Order not found for payment ${payment.id}`)
+      return { success: false, message: 'Order not found' }
+    }
+
+    console.log(`📋 Found order ${order.orderNumber} for payment ${payment.id}`)
+
+    // Map ASAAS payment status
+    let newPaymentStatus = order.paymentStatus
+    let newOrderStatus = order.status
+
+    switch (payment.status) {
+      case 'RECEIVED':
+      case 'CONFIRMED':
+        newPaymentStatus = 'COMPLETED'
+        newOrderStatus = 'PAYMENT_CONFIRMED'
+        break
+      case 'PENDING':
+        newPaymentStatus = 'PENDING'
+        newOrderStatus = 'AWAITING_PAYMENT'
+        break
+      case 'OVERDUE':
+        newPaymentStatus = 'FAILED'
+        newOrderStatus = 'PAYMENT_REFUSED'
+        break
+      case 'REFUNDED':
+        newPaymentStatus = 'REFUNDED'
+        newOrderStatus = 'CANCELLED'
+        break
+    }
+
+    // Update order
+    if (newPaymentStatus !== order.paymentStatus || newOrderStatus !== order.status) {
+      await prisma.order.update({
+        where: { id: order.id },
+        data: {
+          paymentStatus: newPaymentStatus,
+          status: newOrderStatus,
+          paidAt: (payment.status === 'RECEIVED' || payment.status === 'CONFIRMED')
+            ? new Date()
+            : order.paidAt,
+          metadata: {
+            ...(order.metadata as any || {}),
+            lastWebhook: {
+              event,
+              payment,
+              receivedAt: new Date().toISOString(),
+              processedAt: new Date().toISOString()
+            }
+          }
+        }
+      })
+
+      await prisma.orderHistory.create({
+        data: {
+          orderId: order.id,
+          previousStatus: order.status,
+          newStatus: newOrderStatus,
+          notes: `Webhook: ${event} - Payment: ${payment.status}`,
+          metadata: { webhook: { event, paymentId: payment.id, paymentStatus: payment.status } }
+        }
+      })
+
+      console.log(`✅ Order ${order.orderNumber} updated (direct processing)`)
+      return { success: true, message: 'Order updated' }
+    }
+
+    return { success: true, message: 'No status change needed' }
+  } catch (error) {
+    console.error('💥 Direct webhook processing error:', error)
+    throw error
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,28 +123,42 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No payment ID' }, { status: 400 })
     }
 
-    // Save webhook to Redis queue for async processing
-    const webhookId = `webhook:${payment.id}:${Date.now()}`
-    const webhookData = {
-      id: webhookId,
-      event,
-      payment,
-      receivedAt: new Date().toISOString()
+    // Check if Redis is available
+    if (redis) {
+      try {
+        // Try to use Redis queue
+        const webhookId = `webhook:${payment.id}:${Date.now()}`
+        const webhookData = {
+          id: webhookId,
+          event,
+          payment,
+          receivedAt: new Date().toISOString()
+        }
+
+        await redis.setex(webhookId, 86400, JSON.stringify(webhookData))
+        await redis.lpush('webhook:queue:asaas', webhookId)
+
+        console.log(`✅ Webhook queued: ${webhookId}`)
+
+        return NextResponse.json({
+          success: true,
+          message: 'Webhook received and queued for processing',
+          webhookId
+        })
+      } catch (redisError) {
+        console.warn('⚠️ Redis operation failed, falling back to direct processing:', redisError)
+        // Fall through to direct processing
+      }
     }
 
-    // Store webhook data in Redis (expires in 24 hours)
-    await redis.setex(webhookId, 86400, JSON.stringify(webhookData))
+    // Direct processing (no Redis or Redis failed)
+    console.log('ℹ️ Processing webhook directly (Redis not available)')
+    const result = await processWebhookDirectly(event, payment)
 
-    // Add to processing queue
-    await redis.lpush('webhook:queue:asaas', webhookId)
-
-    console.log(`✅ Webhook queued: ${webhookId}`)
-
-    // Return 200 immediately to ASAAS
     return NextResponse.json({
-      success: true,
-      message: 'Webhook received and queued for processing',
-      webhookId
+      success: result.success,
+      message: result.message,
+      mode: 'direct'
     })
 
   } catch (error) {
@@ -47,9 +167,9 @@ export async function POST(request: NextRequest) {
     // Still return 200 to avoid blocking ASAAS queue
     return NextResponse.json({
       success: false,
-      message: 'Webhook received but failed to queue',
+      message: 'Webhook processing failed',
       error: error instanceof Error ? error.message : 'Unknown error'
-    })
+    }, { status: 200 }) // Return 200 to prevent ASAAS from retrying
   }
 }
 
