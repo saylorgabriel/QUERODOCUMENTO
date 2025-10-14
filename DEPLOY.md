@@ -187,6 +187,30 @@ DATABASE_URL="$(grep DATABASE_URL .env.production | cut -d '=' -f2)" \
 
 ## 7. Troubleshooting
 
+### ⚠️ Erro: "The table public.User does not exist" (COMUM)
+
+**Causa**: As migrations não foram aplicadas no banco de produção.
+
+**Solução**: Execute as migrations manualmente:
+
+```bash
+# 1. Baixar variáveis de ambiente da Vercel
+vercel env pull .env.production
+
+# 2. Exportar DATABASE_URL
+export DATABASE_URL=$(grep DATABASE_URL .env.production | cut -d '=' -f2-)
+
+# 3. Executar o script de migration
+./scripts/run-production-migration.sh
+
+# OU rodar diretamente:
+bunx prisma migrate deploy
+```
+
+Após aplicar as migrations, o erro desaparecerá.
+
+---
+
 ### Erro: "Can't reach database server"
 ```bash
 # Verificar se DATABASE_URL está configurada
@@ -205,14 +229,15 @@ vercel env ls
 vercel --prod --force
 ```
 
-### Erro: "Migration failed"
+### Erro: "Migration failed" durante build
 ```bash
 # Ver logs de build
 vercel logs
 
 # Rodar migration manualmente
 vercel env pull .env.production
-DATABASE_URL="..." bunx prisma migrate deploy
+export DATABASE_URL=$(grep DATABASE_URL .env.production | cut -d '=' -f2-)
+bunx prisma migrate deploy
 ```
 
 ### Connection Pool Limits

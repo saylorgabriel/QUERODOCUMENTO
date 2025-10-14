@@ -2,6 +2,44 @@
 
 Scripts auxiliares para deploy e manutenção do QUERODOCUMENTO.
 
+## run-production-migration.sh
+
+Script para executar migrations no banco de dados de produção.
+
+### Uso
+
+```bash
+# 1. Obter DATABASE_URL da Vercel
+vercel env pull .env.production
+
+# 2. Exportar a variável
+export DATABASE_URL=$(grep DATABASE_URL .env.production | cut -d '=' -f2-)
+
+# 3. Executar o script
+./scripts/run-production-migration.sh
+```
+
+### O que faz
+
+- Executa `prisma migrate deploy` no banco de produção
+- Cria todas as tabelas, índices e foreign keys
+- Aplica todas as migrations pendentes
+- Verifica se a DATABASE_URL está configurada
+
+### Quando usar
+
+- **Primeira vez**: Após conectar o banco na Vercel
+- **Após mudanças no schema**: Quando criar novas migrations
+- **Se o build falhar**: Para aplicar migrations manualmente
+
+### Requisitos
+
+- `bunx` ou `npx` instalado
+- DATABASE_URL do Neon/PostgreSQL
+- Acesso ao banco de produção
+
+---
+
 ## seed-production.sh
 
 Script para fazer seed do banco de dados em produção via API endpoint.
