@@ -23,22 +23,9 @@ export async function GET() {
 
     // Get dashboard statistics from real database
     const [
-      protestQueries,
-      certificates, 
-      orders,
-      totalProtests
+      orders
     ] = await Promise.all([
-      // Count total protest queries
-      prisma.protestQuery.count({
-        where: { userId }
-      }),
-      
-      // Count certificates requested
-      prisma.certificate.count({
-        where: { userId }
-      }),
-      
-      // Get orders with their status
+      // Get orders with their status and documents
       prisma.order.findMany({
         where: { userId },
         select: {
@@ -46,50 +33,40 @@ export async function GET() {
           status: true,
           serviceType: true,
           amount: true,
-          createdAt: true
-        }
-      }),
-      
-      // Count total protests found (from query results)
-      prisma.protestQuery.findMany({
-        where: { 
-          userId,
-          status: 'COMPLETED',
-          result: { not: null }
-        },
-        select: {
-          result: true
+          createdAt: true,
+          resultText: true,
+          documents: {
+            where: { isActive: true },
+            select: {
+              id: true
+            }
+          }
         }
       })
     ])
 
-    // Calculate protests found from query results
+    // Count different types of services
+    const protestQueryOrders = orders.filter(o => o.serviceType === 'PROTEST_QUERY').length
+    const certificateOrders = orders.filter(o => o.serviceType === 'CERTIFICATE_REQUEST').length
+
+    // Count completed documents (status COMPLETED AND has attached document)
+    const completedOrders = orders.filter(order =>
+      order.status === 'COMPLETED' && order.documents.length > 0
+    ).length
+
+    // Count protests found from resultText (mock data shows if protests were found)
     let protestsFound = 0
-    totalProtests.forEach(query => {
-      if (query.result && typeof query.result === 'object') {
-        // Assuming the result JSON has a structure like { protests: [...] }
-        const result = query.result as any
-        if (result.protests && Array.isArray(result.protests)) {
-          protestsFound += result.protests.length
-        }
+    orders.forEach(order => {
+      if (order.resultText && order.resultText.includes('protesto')) {
+        protestsFound++
       }
     })
-
-    // Count ready documents (certificates and completed orders)
-    const readyCertificates = await prisma.certificate.count({
-      where: {
-        userId,
-        status: 'READY'
-      }
-    })
-
-    const completedOrders = orders.filter(order => order.status === 'COMPLETED').length
 
     const stats = {
-      consultasRealizadas: protestQueries,
-      certidoesSolicitadas: certificates, 
+      consultasRealizadas: protestQueryOrders,
+      certidoesSolicitadas: certificateOrders,
       protestosEncontrados: protestsFound,
-      documentosProntos: readyCertificates + completedOrders,
+      documentosProntos: completedOrders,
       pedidosTotal: orders.length,
       pedidosCompletos: completedOrders
     }

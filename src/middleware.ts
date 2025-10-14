@@ -74,28 +74,40 @@ export async function middleware(request: NextRequest) {
     
     // Handle admin paths
     if (isAdminPath && !isAdminAuthPath) {
+      console.log('🔐 Admin path check:', {
+        pathname,
+        isAuthenticated,
+        userRole: user?.role,
+        userEmail: user?.email
+      })
+
       if (!isAuthenticated) {
+        console.log('❌ Not authenticated, redirecting to /admin/login')
         const loginUrl = new URL('/admin/login', request.url)
         loginUrl.searchParams.set('callbackUrl', pathname)
         return NextResponse.redirect(loginUrl)
       }
-      
+
       if (user?.role !== 'ADMIN') {
+        console.log('❌ User is not ADMIN, redirecting to /dashboard. User role:', user?.role)
         // Redirect non-admin users to regular dashboard
         return NextResponse.redirect(new URL('/dashboard', request.url))
       }
+
+      console.log('✅ Admin access granted')
     }
     
     // Handle admin login page
     if (isAdminAuthPath) {
       if (isAuthenticated && user?.role === 'ADMIN') {
+        // Admin already logged in, redirect to admin dashboard
         return NextResponse.redirect(new URL('/admin', request.url))
       }
-      if (isAuthenticated && user?.role !== 'ADMIN') {
-        return NextResponse.redirect(new URL('/dashboard', request.url))
-      }
+      // Allow access to admin login page for non-authenticated or non-admin users
+      // They will be validated by the login page itself
+      return NextResponse.next()
     }
-    
+
     // Redirect unauthenticated users away from protected paths
     if (isProtectedPath && !isAuthenticated) {
       const loginUrl = new URL('/auth/login', request.url)
@@ -103,8 +115,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl)
     }
     
-    // Redirect authenticated users away from auth pages
-    if (isAuthPath && isAuthenticated) {
+    // Redirect authenticated users away from auth pages (but not admin auth pages)
+    if (isAuthPath && !isAdminAuthPath && isAuthenticated) {
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }
     

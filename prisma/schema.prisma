@@ -53,6 +53,7 @@ model User {
   cnpj          String?   @unique
   phone         String?
   role          UserRole  @default(USER)
+  asaasCustomerId String? @unique // ASAAS customer ID
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -189,6 +190,8 @@ model Order {
   paymentMethod   PaymentMethod
   paymentStatus   PaymentStatus @default(PENDING)
   paidAt          DateTime?
+  asaasPaymentId  String?       // ASAAS payment ID
+  metadata        Json?         // For storing additional payment and processing data
   
   // File attachments
   attachmentUrl   String?       // For uploaded PDFs
@@ -226,14 +229,15 @@ model OrderHistory {
   orderId        String
   previousStatus OrderStatus?
   newStatus      OrderStatus
-  changedById    String
+  changedById    String?
   notes          String?     @db.Text
+  metadata       Json?       // For storing additional change data
   changedAt      DateTime    @default(now())
-  
+
   // Relations
   order          Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  changedBy      User        @relation(fields: [changedById], references: [id])
-  
+  changedBy      User?       @relation(fields: [changedById], references: [id])
+
   @@index([orderId])
   @@index([changedAt])
   @@index([changedById])
@@ -278,6 +282,17 @@ enum PaymentStatus {
   COMPLETED
   FAILED
   REFUNDED
+  RECEIVED              // ASAAS status
+  CONFIRMED             // ASAAS status
+  OVERDUE              // ASAAS status
+  RECEIVED_IN_CASH     // ASAAS status
+  REFUND_REQUESTED     // ASAAS status
+  CHARGEBACK_REQUESTED // ASAAS status
+  CHARGEBACK_DISPUTE   // ASAAS status
+  AWAITING_CHARGEBACK_REVERSAL // ASAAS status
+  DUNNING_REQUESTED    // ASAAS status
+  DUNNING_RECEIVED     // ASAAS status
+  AWAITING_RISK_ANALYSIS // ASAAS status
 }
 
 // New enums for Order system

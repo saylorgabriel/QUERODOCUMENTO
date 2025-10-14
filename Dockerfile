@@ -1,46 +1,22 @@
-# Multi-stage Dockerfile para Bun com Next.js
-FROM oven/bun:1 as base
+# Dockerfile para desenvolvimento com hot-reload
+FROM oven/bun:1
+
 WORKDIR /app
 
-# Instalar dependências apenas
-FROM base AS deps
+# Instalar ferramentas de desenvolvimento
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar arquivos de dependências
 COPY package.json bun.lockb* ./
-RUN bun install --frozen-lockfile
 
-# Build da aplicação
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+# Instalar dependências
+RUN bun install
 
-# Gerar Prisma Client
-RUN bunx prisma generate
-
-# Build Next.js
-ENV NEXT_TELEMETRY_DISABLED 1
-RUN bun run build
-
-# Runner - imagem final otimizada
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-
-# Criar usuário não-root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Copiar arquivos necessários
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
+# Expor porta de desenvolvimento
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-CMD ["bun", "server.js"]
+# Comando padrão (será sobrescrito pelo docker-compose)
+CMD ["bun", "run", "dev"]

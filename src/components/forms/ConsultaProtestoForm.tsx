@@ -41,13 +41,16 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
   const router = useRouter()
   const searchParams = useSearchParams()
   const [currentStep, setCurrentStep] = useState(1)
-  
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [sessionLoading, setSessionLoading] = useState(true)
+  const [userSession, setUserSession] = useState<any>(null)
+
   // Initialize form data from URL params or props
   const getInitialFormData = (): FormData => {
     const urlDocument = searchParams?.get('documentNumber') || ''
     const urlName = searchParams?.get('name') || ''
     const urlPhone = searchParams?.get('phone') || ''
-    
+
     return {
       documentNumber: initialData?.documentNumber || urlDocument,
       name: initialData?.name || urlName,
@@ -71,6 +74,37 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
   const [isValidatingDocument, setIsValidatingDocument] = useState(false)
 
   const [formData, setFormData] = useState<FormData>(getInitialFormData())
+
+  // Check if user is logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await fetch('/api/auth/simple-session')
+        if (response.ok) {
+          const data = await response.json()
+          if (data.user) {
+            setIsLoggedIn(true)
+            setUserSession(data.user)
+            // Pre-fill form with user data (except document - allow new consultations)
+            setFormData(prev => ({
+              ...prev,
+              name: data.user.name || prev.name,
+              email: data.user.email || prev.email,
+              phone: data.user.phone || prev.phone,
+              // Don't pre-fill documentNumber - user may want to consult a different document
+              invoiceName: data.user.name || prev.invoiceName,
+              invoiceDocument: data.user.cpf || data.user.cnpj || prev.invoiceDocument
+            }))
+          }
+        }
+      } catch (error) {
+        console.error('Session check error:', error)
+      } finally {
+        setSessionLoading(false)
+      }
+    }
+    checkSession()
+  }, [])
 
   // Effect to validate initial data
   useEffect(() => {
@@ -101,16 +135,23 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
       number: 3,
       title: 'Checkout',
       description: 'Finalizar pagamento'
-    },
-    {
-      number: 4,
-      title: 'Nota Fiscal',
-      description: 'Dados para NF'
     }
   ]
 
   const updateFormData = (field: keyof FormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
+    setFormData(prev => {
+      const updated = { ...prev, [field]: value }
+
+      // Auto-fill invoice fields when main fields are updated
+      if (field === 'name' && !prev.invoiceName) {
+        updated.invoiceName = value
+      }
+      if (field === 'documentNumber' && !prev.invoiceDocument) {
+        updated.invoiceDocument = value
+      }
+
+      return updated
+    })
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }))
@@ -119,7 +160,7 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
 
   const validateStep1 = () => {
     const newErrors: Record<string, string> = {}
-    
+
     // Document validation
     if (!formData.documentNumber.trim()) {
       newErrors.documentNumber = 'CPF ou CNPJ é obrigatório'
@@ -132,11 +173,11 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
       if (!formData.name.trim()) {
         newErrors.name = 'Nome é obrigatório'
       }
-      
+
       if (formData.phone && !isPhoneValid) {
         newErrors.phone = 'Telefone inválido'
       }
-      
+
       setErrors(newErrors)
       return Object.keys(newErrors).length === 0
     }
@@ -152,30 +193,35 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
       newErrors.phone = 'Telefone inválido'
     }
 
-    // Only validate auth fields if they are visible (!onQuerySubmit)
-    if (!onQuerySubmit) {
-      if (!formData.isLogin) {
-        // Registration validation
-        if (!formData.password.trim()) {
-          newErrors.password = 'Senha é obrigatória'
-        } else if (formData.password.length < 4) {
-          newErrors.password = 'Senha deve ter pelo menos 4 caracteres'
-        }
-        
-        if (formData.password !== formData.confirmPassword) {
-          newErrors.confirmPassword = 'Senhas não conferem'
-        }
-      } else {
-        // Login validation
-        if (!formData.password.trim()) {
-          newErrors.password = 'Senha é obrigatória'
-        }
+    // If user is already logged in, skip auth validation
+    if (isLoggedIn) {
+      setErrors(newErrors)
+      return Object.keys(newErrors).length === 0
+    }
+
+    // Email validation - only if not logged in
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email é obrigatório'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Email inválido'
+    }
+
+    // Only validate auth fields if user is not logged in
+    if (!formData.isLogin) {
+      // Registration validation
+      if (!formData.password.trim()) {
+        newErrors.password = 'Senha é obrigatória'
+      } else if (formData.password.length < 4) {
+        newErrors.password = 'Senha deve ter pelo menos 4 caracteres'
       }
 
-      if (!formData.email.trim()) {
-        newErrors.email = 'Email é obrigatório'
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        newErrors.email = 'Email inválido'
+      if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Senhas não conferem'
+      }
+    } else {
+      // Login validation
+      if (!formData.password.trim()) {
+        newErrors.password = 'Senha é obrigatória'
       }
     }
 
@@ -226,10 +272,7 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
         isValid = validateStep2()
         break
       case 3:
-        // Checkout step - no validation needed, just continue
-        isValid = true
-        break
-      case 4:
+        // Checkout step - validate invoice data and submit
         isValid = validateStep3()
         if (isValid) {
           await handleSubmit()
@@ -238,15 +281,20 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
         break
     }
 
-    if (isValid && currentStep < 4) {
+    if (isValid && currentStep < 3) {
       setCurrentStep(currentStep + 1)
     }
   }
 
   const handleAuthentication = async () => {
     setIsLoading(true)
-    
+
     try {
+      // If onQuerySubmit is provided OR user is already logged in, skip authentication
+      if (onQuerySubmit || isLoggedIn) {
+        return true
+      }
+
       if (formData.isLogin) {
         // Login
         const response = await fetch('/api/auth/simple-login', {
@@ -266,16 +314,20 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
         }
       } else {
         // Registration
+        const registrationData = {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          document: formData.documentNumber,
+          phone: formData.phone
+        }
+
+        console.log('Sending registration data:', registrationData)
+
         const response = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            document: formData.documentNumber,
-            phone: formData.phone
-          })
+          body: JSON.stringify(registrationData)
         })
 
         const data = await response.json()
@@ -313,7 +365,7 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
 
   const handleSubmit = async () => {
     setIsLoading(true)
-    
+
     try {
       // If onQuerySubmit is provided, use it instead of the order creation API
       if (onQuerySubmit) {
@@ -335,15 +387,15 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         setErrors({ submit: data.error || 'Erro ao criar pedido' })
         return
       }
 
-      // Redirect to success page
-      router.push(`/consulta-protesto/sucesso?orderId=${data.order.id}`)
-      
+      // Redirect to checkout page
+      router.push(`/consulta-protesto/checkout?orderId=${data.order.id}`)
+
     } catch (error) {
       console.error('Order creation error:', error)
       setErrors({ submit: 'Erro de conexão' })
@@ -368,17 +420,12 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
                 Consulta de Protesto
               </h2>
               <p className="text-neutral-600">
-                {onQuerySubmit 
-                  ? 'Preencha os dados abaixo para iniciar sua consulta'
-                  : 'Informe seus dados para consulta'
-                }
+                Informe seus dados para consulta
               </p>
-              {!onQuerySubmit && (
-                <div className="mt-4 p-4 bg-accent-50 rounded-lg border border-accent-200">
-                  <p className="text-accent-700 font-semibold text-lg">R$ 29,90</p>
-                  <p className="text-sm text-accent-600">Consulta completa em todo o Brasil</p>
-                </div>
-              )}
+              <div className="mt-4 p-4 bg-accent-50 rounded-lg border border-accent-200">
+                <p className="text-accent-700 font-semibold text-lg">R$ 29,90</p>
+                <p className="text-sm text-accent-600">Consulta completa em todo o Brasil</p>
+              </div>
             </div>
 
             {/* Document field */}
@@ -425,9 +472,26 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
               showValidation={false}
             />
 
-            {/* User registration/login section - only show when not in query mode */}
-            {!onQuerySubmit && (
+            {/* Show auth fields only if user is NOT logged in */}
+            {!isLoggedIn && (
               <>
+                {/* Email field */}
+                <div>
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={(e) => updateFormData('email', e.target.value)}
+                    className={cn(
+                      'input-primary w-full min-h-12 sm:min-h-14',
+                      errors.email && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                    )}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-amber-600 mt-1">{errors.email}</p>
+                  )}
+                </div>
+
                 {/* Login/Register Toggle */}
                 <div className="flex bg-neutral-100 rounded-lg p-1">
                   <button
@@ -454,23 +518,6 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
                   >
                     Já tenho conta
                   </button>
-                </div>
-
-                {/* Email field */}
-                <div>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={(e) => updateFormData('email', e.target.value)}
-                    className={cn(
-                      'input-primary w-full min-h-12 sm:min-h-14',
-                      errors.email && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
-                    )}
-                  />
-                  {errors.email && (
-                    <p className="text-sm text-amber-600 mt-1">{errors.email}</p>
-                  )}
                 </div>
 
                 {/* Password field */}
@@ -523,6 +570,21 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
                   </div>
                 )}
               </>
+            )}
+
+            {/* Show logged in message */}
+            {isLoggedIn && userSession && (
+              <div className="p-4 bg-success-50 border border-success-200 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="font-medium text-success-800">Você já está logado</p>
+                </div>
+                <p className="text-sm text-success-700">
+                  Logado como: <strong>{userSession.email}</strong>
+                </p>
+              </div>
             )}
           </div>
         )
@@ -657,6 +719,47 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
               </div>
             )}
 
+            {/* Invoice Data */}
+            <div className="p-6 bg-white rounded-lg border border-neutral-200">
+              <h3 className="text-lg font-semibold text-neutral-900 mb-4">Dados para Nota Fiscal</h3>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
+                    Nome/Razão Social para NF
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Nome ou Razão Social para NF"
+                    value={formData.invoiceName}
+                    onChange={(e) => updateFormData('invoiceName', e.target.value)}
+                    className={cn(
+                      'input-primary w-full min-h-12 sm:min-h-14',
+                      errors.invoiceName && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                    )}
+                  />
+                  {errors.invoiceName && (
+                    <p className="text-sm text-amber-600 mt-1">{errors.invoiceName}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">
+                    CPF/CNPJ para NF
+                  </label>
+                  <InputDocument
+                    value={formData.invoiceDocument}
+                    onChange={(value, isValid) => {
+                      updateFormData('invoiceDocument', value)
+                      setIsInvoiceDocumentValid(isValid)
+                    }}
+                    placeholder="CPF ou CNPJ para NF"
+                    error={errors.invoiceDocument}
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Security Notice */}
             <div className="p-4 bg-success-50 rounded-lg border border-success-200">
               <div className="flex items-start gap-3">
@@ -677,54 +780,6 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
             </div>
           </div>
         )
-
-      case 4:
-        return (
-          <div className="space-y-4 sm:space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                Dados da Nota Fiscal
-              </h2>
-              <p className="text-neutral-600">
-                Informe os dados para emissão da nota fiscal
-              </p>
-            </div>
-
-            <div>
-              <input
-                type="text"
-                placeholder="Nome ou Razão Social para NF"
-                value={formData.invoiceName}
-                onChange={(e) => updateFormData('invoiceName', e.target.value)}
-                className={cn(
-                  'input-primary w-full min-h-12 sm:min-h-14',
-                  errors.invoiceName && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
-                )}
-              />
-              {errors.invoiceName && (
-                <p className="text-sm text-amber-600 mt-1">{errors.invoiceName}</p>
-              )}
-            </div>
-
-            <InputDocument
-              value={formData.invoiceDocument}
-              onChange={(value, isValid) => {
-                updateFormData('invoiceDocument', value)
-                setIsInvoiceDocumentValid(isValid)
-              }}
-              placeholder="CPF ou CNPJ para NF"
-              error={errors.invoiceDocument}
-            />
-
-            <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
-              <p className="text-sm text-neutral-600">
-                <strong>Importante:</strong> Os dados informados serão utilizados para emissão da nota fiscal. 
-                Certifique-se de que estão corretos.
-              </p>
-            </div>
-          </div>
-        )
-
 
       default:
         return null
@@ -765,11 +820,7 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
                 <span className="text-sm sm:text-base">Validando...</span>
               </>
             ) : currentStep === 3 ? (
-              <span className="text-sm sm:text-base">Continuar para Nota Fiscal</span>
-            ) : currentStep === 4 ? (
-              <span className="text-sm sm:text-base">Finalizar Pedido</span>
-            ) : currentStep === 1 && onQuerySubmit ? (
-              <span className="text-sm sm:text-base">Consultar Protestos</span>
+              <span className="text-sm sm:text-base">Finalizar Pagamento</span>
             ) : (
               <>
                 <span className="text-sm sm:text-base">Continuar</span>

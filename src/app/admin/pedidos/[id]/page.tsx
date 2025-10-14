@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Printer, AlertTriangle } from 'lucide-react'
 import OrderHeader from '@/components/admin/OrderHeader'
@@ -89,25 +89,22 @@ interface ApiResponse {
   order: OrderDetails
 }
 
-export default function AdminOrderDetails({ params }: { params: { id: string } }) {
+export default function AdminOrderDetails({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params)
   const [order, setOrder] = useState<OrderDetails | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [updating, setUpdating] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    loadOrderDetails()
-  }, [params.id])
-
   const loadOrderDetails = async () => {
     try {
       setLoading(true)
       setError(null)
-      
-      const response = await fetch(`/api/admin/orders/${params.id}`)
+
+      const response = await fetch(`/api/admin/orders/${resolvedParams.id}`)
       const data: ApiResponse = await response.json()
-      
+
       if (data.success) {
         setOrder(data.order)
       } else {
@@ -124,6 +121,11 @@ export default function AdminOrderDetails({ params }: { params: { id: string } }
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadOrderDetails()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resolvedParams.id])
 
   const handleStatusUpdate = async (newStatus: string, notes?: string) => {
     if (!order) return

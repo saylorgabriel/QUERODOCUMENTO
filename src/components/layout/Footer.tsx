@@ -64,6 +64,9 @@ export default function Footer() {
           <p className="text-sm text-neutral-500">
             © 2025 QueroDocumento. Todos os direitos reservados.
           </p>
+          <p className="text-xs text-neutral-600 mt-2">
+            CNPJ: 62.757.039/0001-05
+          </p>
         </div>
       </div>
     </footer>

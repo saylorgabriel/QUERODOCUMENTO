@@ -740,6 +740,7 @@ export function createEmailTemplate(content: string, title: string = 'QueroDocum
           
           <div class="footer-copyright">
             © ${new Date().getFullYear()} QueroDocumento. Todos os direitos reservados.<br>
+            CNPJ: 62.757.039/0001-05<br>
             Esta é uma comunicação automática. Em caso de dúvidas, entre em contato conosco.
           </div>
         </div>
@@ -779,6 +780,7 @@ QueroDocumento - Consulta e Certidão de Protesto
 Acesse: ${process.env.NEXTAUTH_URL}
 
 © ${new Date().getFullYear()} QueroDocumento. Todos os direitos reservados.
+CNPJ: 62.757.039/0001-05
 Esta é uma comunicação automática. Em caso de dúvidas, entre em contato.
   `.trim()
 }

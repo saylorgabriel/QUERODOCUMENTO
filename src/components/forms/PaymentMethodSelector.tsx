@@ -26,15 +26,16 @@ export function PaymentMethodSelector({ selectedMethod, onSelect }: PaymentMetho
       icon: CreditCard,
       badge: 'Parcelado',
       badgeColor: 'bg-accent-100 text-accent-700'
-    },
-    {
-      id: 'BOLETO' as const,
-      name: 'Boleto Bancário',
-      description: 'Vencimento em 3 dias úteis',
-      icon: FileText,
-      badge: null,
-      badgeColor: ''
     }
+    // ,
+    // {
+    //   id: 'BOLETO' as const,
+    //   name: 'Boleto Bancário',
+    //   description: 'Vencimento em 3 dias úteis',
+    //   icon: FileText,
+    //   badge: null,
+    //   badgeColor: ''
+    // }
   ]
 
   return (

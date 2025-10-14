@@ -18,6 +18,25 @@ function AdminLoginContent() {
   const callbackUrl = searchParams.get('callbackUrl') || '/admin'
 
   useEffect(() => {
+    // Auto logout if there's a non-admin session
+    const checkAndClearSession = async () => {
+      try {
+        const response = await fetch('/api/auth/simple-session')
+        if (response.ok) {
+          const sessionData = await response.json()
+          if (sessionData.user?.role !== 'ADMIN') {
+            // Logout non-admin user automatically
+            await fetch('/api/auth/simple-logout', { method: 'POST' })
+          }
+        }
+      } catch (error) {
+        console.error('Session check failed:', error)
+      }
+    }
+    checkAndClearSession()
+  }, [])
+
+  useEffect(() => {
     // Clear any previous error when user starts typing
     if (error) {
       setError('')
@@ -61,8 +80,8 @@ function AdminLoginContent() {
         return
       }
 
-      // Redirect to admin area
-      router.replace(callbackUrl)
+      // Force redirect to admin area
+      window.location.href = callbackUrl
     } catch (err) {
       setErrorType('network')
       setError('Não foi possível conectar ao sistema')

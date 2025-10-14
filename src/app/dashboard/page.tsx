@@ -47,6 +47,8 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
     orders: []
   })
   const [dataLoading, setDataLoading] = useState(true)
+  const [searchDocument, setSearchDocument] = useState('')
+  const [filteredQueries, setFilteredQueries] = useState<any[]>([])
 
 
   useEffect(() => {
@@ -57,6 +59,11 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
         const cachedSession = localStorage.getItem('dashboard-session')
         if (cachedSession) {
           const parsedSession = JSON.parse(cachedSession)
+          // Redirect admins to admin panel
+          if (parsedSession.user?.role === 'ADMIN') {
+            router.push('/admin')
+            return
+          }
           // Check if cached session is still valid (within 1 hour)
           const cacheTime = localStorage.getItem('dashboard-session-time')
           if (cacheTime && Date.now() - parseInt(cacheTime) < 3600000) {
@@ -77,6 +84,11 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
         const response = await fetch('/api/auth/simple-session')
         if (response.ok) {
           const sessionData = await response.json()
+          // Redirect admins to admin panel
+          if (sessionData.user?.role === 'ADMIN') {
+            router.push('/admin')
+            return
+          }
           // If session is missing user data, refresh it
           if (sessionData.user && (!sessionData.user.phone && !sessionData.user.cpf && !sessionData.user.cnpj)) {
             console.log('Session missing user data, refreshing...')
@@ -159,6 +171,43 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
     }
   }, [session, loading])
 
+  // Filter queries when search or data changes
+  useEffect(() => {
+    if (searchDocument.trim() === '') {
+      setFilteredQueries(dashboardData.protestQueries)
+    } else {
+      const cleanSearch = searchDocument.replace(/\D/g, '')
+      const filtered = dashboardData.protestQueries.filter((query: any) => {
+        const cleanDocument = query.document.replace(/\D/g, '')
+        return cleanDocument.includes(cleanSearch)
+      })
+      setFilteredQueries(filtered)
+    }
+  }, [searchDocument, dashboardData.protestQueries])
+
+  const handleSearchDocument = () => {
+    // Filter is already applied via useEffect
+    // This function just provides feedback
+    if (searchDocument.trim() === '') {
+      setFilteredQueries(dashboardData.protestQueries)
+    }
+  }
+
+  // Format CPF/CNPJ for display
+  const formatDocument = (doc: string) => {
+    const cleanDoc = doc.replace(/\D/g, '')
+
+    if (cleanDoc.length === 11) {
+      // CPF: 000.000.000-00
+      return cleanDoc.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+    } else if (cleanDoc.length === 14) {
+      // CNPJ: 00.000.000/0000-00
+      return cleanDoc.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')
+    }
+
+    return doc // Return original if not CPF or CNPJ
+  }
+
   // Initialize tab from URL on first load only
   useEffect(() => {
     if (initialLoad) {
@@ -192,7 +241,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
     { id: 'orders', name: 'Meus Pedidos', icon: FileText },
     { id: 'queries', name: 'Consultas de Protesto', icon: Search },
     { id: 'certificates', name: 'Certidões', icon: FileText },
-    { id: 'history', name: 'Histórico', icon: Clock },
+    // { id: 'history', name: 'Histórico', icon: Clock },
   ]
 
   const stats = [
@@ -420,20 +469,28 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                             </div>
                             <div>
                               <p className="font-semibold text-neutral-900 text-sm sm:text-base mb-1">Consulta de Protesto</p>
-                              <p className="text-sm text-neutral-600">{query.documentType}: {query.document} • {new Date(query.date).toLocaleDateString('pt-BR')}</p>
+                              <p className="text-sm text-neutral-600">{query.documentType}: {formatDocument(query.document)} • {new Date(query.date).toLocaleDateString('pt-BR')}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
                             <span className={`status-indicator ${
-                              query.protests === 0 
-                                ? 'status-success' 
+                              query.protests === null || query.protests === undefined
+                                ? 'status-info'
+                                : query.protests === 0
+                                ? 'status-success'
                                 : 'status-warning'
                             }`}>
-                              {query.protests === 0 ? 'Sem protestos' : `${query.protests} protesto(s)`}
+                              {query.protests === null || query.protests === undefined
+                                ? 'Em andamento'
+                                : query.protests === 0
+                                ? 'Sem protestos'
+                                : `${query.protests} protesto(s)`}
                             </span>
-                            <button className="p-2 sm:p-3 hover:bg-neutral-100 rounded-xl transition-colors duration-200 group-hover:scale-110">
-                              <Download className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-600" />
-                            </button>
+                            {query.protests !== null && query.protests !== undefined && (
+                              <button className="p-2 sm:p-3 hover:bg-neutral-100 rounded-xl transition-colors duration-200 group-hover:scale-110">
+                                <Download className="w-4 h-4 sm:w-5 sm:h-5 text-neutral-600" />
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -509,7 +566,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                     </label>
                   </div>
                   
-                  <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg">
+                  {/* <div className="flex items-center justify-between p-4 border border-neutral-200 rounded-lg">
                     <div>
                       <h3 className="font-medium text-neutral-900">Notificações por WhatsApp</h3>
                       <p className="text-sm text-neutral-600">Receber atualizações via WhatsApp</p>
@@ -518,7 +575,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                       <input type="checkbox" className="sr-only peer" />
                       <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
                     </label>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -532,44 +589,79 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
               </div>
 
               <div className="card-elevated">
-                <h3 className="text-lg font-semibold text-neutral-900 mb-4">Consultar CPF/CNPJ</h3>
+                <h3 className="text-lg font-semibold text-neutral-900 mb-4">Filtrar por CPF/CNPJ</h3>
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="md:col-span-2">
-                    <input 
-                      type="text" 
-                      className="input-primary w-full" 
-                      placeholder="Digite o CPF ou CNPJ" 
+                    <input
+                      type="text"
+                      className="input-primary w-full"
+                      placeholder="Digite o CPF ou CNPJ para filtrar"
+                      value={searchDocument}
+                      onChange={(e) => setSearchDocument(e.target.value)}
                     />
                   </div>
-                  <button className="btn-primary">Consultar</button>
+                  <button
+                    className="btn-primary"
+                    onClick={handleSearchDocument}
+                  >
+                    Filtrar
+                  </button>
                 </div>
+                {searchDocument && filteredQueries.length === 0 && dashboardData.protestQueries.length > 0 && (
+                  <p className="text-sm text-orange-600 mt-2">Nenhuma consulta encontrada para este documento</p>
+                )}
+                {searchDocument && filteredQueries.length > 0 && (
+                  <p className="text-sm text-blue-600 mt-2">
+                    {filteredQueries.length} consulta{filteredQueries.length > 1 ? 's' : ''} encontrada{filteredQueries.length > 1 ? 's' : ''}
+                  </p>
+                )}
               </div>
 
               <div className="card-elevated">
-                <h3 className="text-lg font-semibold text-neutral-900 mb-6">Consultas Realizadas</h3>
-                {dashboardData.protestQueries.length > 0 ? (
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-lg font-semibold text-neutral-900">Consultas Realizadas</h3>
+                  {searchDocument && (
+                    <button
+                      onClick={() => setSearchDocument('')}
+                      className="text-sm text-neutral-600 hover:text-neutral-900"
+                    >
+                      Limpar filtro
+                    </button>
+                  )}
+                </div>
+                {filteredQueries.length > 0 ? (
                   <div className="space-y-4">
-                    {dashboardData.protestQueries.map((query) => (
+                    {filteredQueries.map((query: any) => (
                       <div key={query.id} className="p-4 border border-neutral-200 rounded-lg">
                         <div className="flex items-center justify-between mb-3">
                           <div>
-                            <h4 className="font-medium text-neutral-900">{query.documentType}: {query.document}</h4>
+                            <h4 className="font-medium text-neutral-900">{query.documentType}: {formatDocument(query.document)}</h4>
                             <p className="text-sm text-neutral-600">{new Date(query.date).toLocaleDateString('pt-BR')}</p>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              query.protests === 0 
-                                ? 'bg-green-100 text-green-800' 
+                              query.protests === null || query.protests === undefined
+                                ? 'bg-blue-100 text-blue-800'
+                                : query.protests === 0
+                                ? 'bg-green-100 text-green-800'
                                 : 'bg-orange-100 text-orange-800'
                             }`}>
-                              {query.protests === 0 ? 'Sem protestos' : `${query.protests} protesto(s) encontrado(s)`}
+                              {query.protests === null || query.protests === undefined
+                                ? 'Em andamento'
+                                : query.protests === 0
+                                ? 'Sem protestos'
+                                : `${query.protests} protesto(s) encontrado(s)`}
                             </span>
-                            <button className="p-2 hover:bg-neutral-100 rounded-lg" title="Ver detalhes">
-                              <Eye className="w-4 h-4 text-neutral-600" />
-                            </button>
-                            <button className="p-2 hover:bg-neutral-100 rounded-lg" title="Baixar PDF">
-                              <Download className="w-4 h-4 text-neutral-600" />
-                            </button>
+                            {query.protests !== null && query.protests !== undefined && (
+                              <>
+                                <button className="p-2 hover:bg-neutral-100 rounded-lg" title="Ver detalhes">
+                                  <Eye className="w-4 h-4 text-neutral-600" />
+                                </button>
+                                <button className="p-2 hover:bg-neutral-100 rounded-lg" title="Baixar PDF">
+                                  <Download className="w-4 h-4 text-neutral-600" />
+                                </button>
+                              </>
+                            )}
                           </div>
                         </div>
                         {query.protests > 0 && (
@@ -712,7 +804,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                                 {item.type === 'query' ? 'Consulta de Protesto' : (item as any).type}
                               </h4>
                               <p className="text-sm text-neutral-600">
-                                CPF: {item.cpf} • {new Date((item as any).date || (item as any).requestDate).toLocaleDateString('pt-BR')}
+                                {(item as any).documentType}: {formatDocument((item as any).document)} • {new Date((item as any).date || (item as any).requestDate).toLocaleDateString('pt-BR')}
                               </p>
                               {item.type === 'certificate' && (
                                 <p className="text-sm font-medium text-neutral-900 mt-1">R$ {(item as any).price.toFixed(2)}</p>
@@ -722,11 +814,17 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                           <div className="flex items-center gap-2">
                             {item.type === 'query' ? (
                               <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                (item as any).protests === 0 
-                                  ? 'bg-green-100 text-green-800' 
+                                (item as any).protests === null || (item as any).protests === undefined
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : (item as any).protests === 0
+                                  ? 'bg-green-100 text-green-800'
                                   : 'bg-orange-100 text-orange-800'
                               }`}>
-                                {(item as any).protests === 0 ? 'Sem protestos' : `${(item as any).protests} protesto(s)`}
+                                {(item as any).protests === null || (item as any).protests === undefined
+                                  ? 'Em andamento'
+                                  : (item as any).protests === 0
+                                  ? 'Sem protestos'
+                                  : `${(item as any).protests} protesto(s)`}
                               </span>
                             ) : (
                               <span className={`px-3 py-1 rounded-full text-xs font-medium ${

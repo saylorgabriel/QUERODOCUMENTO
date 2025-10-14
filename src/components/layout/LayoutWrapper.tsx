@@ -11,8 +11,9 @@ interface LayoutWrapperProps {
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const pathname = usePathname()
   const isDashboard = pathname?.startsWith('/dashboard')
+  const isAdmin = pathname?.startsWith('/admin')
 
-  if (isDashboard) {
+  if (isDashboard || isAdmin) {
     return <>{children}</>
   }
 

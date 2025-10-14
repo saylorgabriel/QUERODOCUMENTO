@@ -22,102 +22,87 @@ export async function GET() {
     const userId = sessionData.user.id
 
     // Get real data from database
-    const [protestQueries, certificates, orders] = await Promise.all([
-      // Get protest queries with their results
-      prisma.protestQuery.findMany({
-        where: { userId },
-        select: {
-          id: true,
-          document: true,
-          documentType: true,
-          status: true,
-          result: true,
-          createdAt: true,
-          updatedAt: true
-        },
-        orderBy: {
-          createdAt: 'desc'
-        }
-      }),
-      
-      // Get certificates 
-      prisma.certificate.findMany({
-        where: { userId },
-        include: {
-          query: {
-            select: {
-              document: true,
-              documentType: true
-            }
+    const orders = await prisma.order.findMany({
+      where: { userId },
+      select: {
+        id: true,
+        orderNumber: true,
+        serviceType: true,
+        status: true,
+        documentNumber: true,
+        documentType: true,
+        amount: true,
+        paymentStatus: true,
+        resultText: true,
+        createdAt: true,
+        updatedAt: true,
+        documents: {
+          where: { isActive: true },
+          select: {
+            id: true,
+            filename: true,
+            documentType: true,
+            downloadToken: true
           }
-        },
-        orderBy: {
-          createdAt: 'desc'
         }
-      }),
-      
-      // Get orders
-      prisma.order.findMany({
-        where: { userId },
-        select: {
-          id: true,
-          orderNumber: true,
-          serviceType: true,
-          status: true,
-          documentNumber: true,
-          documentType: true,
-          amount: true,
-          paymentStatus: true,
-          createdAt: true,
-          updatedAt: true,
-          documents: {
-            where: { isActive: true },
-            select: {
-              id: true,
-              filename: true,
-              documentType: true,
-              downloadToken: true
-            }
-          }
-        },
-        orderBy: {
-          createdAt: 'desc'
-        }
-      })
-    ])
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
 
-    // Transform data for frontend consumption
-    const transformedQueries = protestQueries.map(query => {
-      let protestsCount = 0
-      
-      // Extract protest count from result JSON
-      if (query.result && typeof query.result === 'object') {
-        const result = query.result as any
-        if (result.protests && Array.isArray(result.protests)) {
-          protestsCount = result.protests.length
+    // Separate orders by type
+    const protestQueryOrders = orders.filter(o => o.serviceType === 'PROTEST_QUERY')
+    const certificateOrders = orders.filter(o => o.serviceType === 'CERTIFICATE')
+
+    // Transform protest query orders for frontend
+    const transformedQueries = protestQueryOrders.map(order => {
+      // Only show protests count if order is COMPLETED
+      // Otherwise it's still being processed
+      let protestsCount = null // null means "processing" or "not ready yet"
+
+      if (order.status === 'COMPLETED') {
+        // Default to 0 (no protests) if completed
+        protestsCount = 0
+
+        // Check if result text indicates protests found
+        if (order.resultText) {
+          const resultLower = order.resultText.toLowerCase()
+
+          // Try to extract number of protests from result text
+          const protestMatch = resultLower.match(/(\d+)\s*protesto/i)
+          if (protestMatch) {
+            protestsCount = parseInt(protestMatch[1])
+          } else if (resultLower.includes('protesto') && !resultLower.includes('sem protesto')) {
+            protestsCount = 1 // At least one protest found
+          }
         }
       }
 
       return {
-        id: query.id,
-        document: query.document,
-        documentType: query.documentType,
-        date: query.createdAt.toISOString().split('T')[0],
-        status: query.status.toLowerCase(),
-        protests: protestsCount,
-        documentUrl: null // Will be null until we implement PDF generation
+        id: order.id,
+        document: order.documentNumber,
+        documentType: order.documentType,
+        date: order.createdAt.toISOString().split('T')[0],
+        status: order.status.toLowerCase(),
+        protests: protestsCount, // null = processing, number = result
+        documentUrl: order.documents[0]?.downloadToken
+          ? `/api/download/${order.documents[0].downloadToken}`
+          : null
       }
     })
 
-    const transformedCertificates = certificates.map(cert => ({
-      id: cert.id,
-      type: cert.type === 'NEGATIVE' ? 'Certidão Negativa' : 
-            cert.type === 'POSITIVE' ? 'Certidão Positiva' : 'Certidão Detalhada',
-      document: cert.query.document,
-      documentType: cert.query.documentType,
-      requestDate: cert.createdAt.toISOString().split('T')[0],
-      status: cert.status.toLowerCase(),
-      documentUrl: cert.documentUrl
+    // Transform certificate orders for frontend
+    const transformedCertificates = certificateOrders.map(order => ({
+      id: order.id,
+      type: 'Certidão de Protesto',
+      document: order.documentNumber,
+      documentType: order.documentType,
+      requestDate: order.createdAt.toISOString().split('T')[0],
+      status: order.status.toLowerCase(),
+      documentUrl: order.documents[0]?.downloadToken
+        ? `/api/download/${order.documents[0].downloadToken}`
+        : null
     }))
 
     const transformedOrders = orders.map(order => ({

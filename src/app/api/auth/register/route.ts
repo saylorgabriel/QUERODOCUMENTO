@@ -9,12 +9,19 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { name, email, password, document, phone } = body
 
-    console.log('Registration attempt:', { name, email, document, phone })
+    console.log('Registration attempt:', { name, email, document, phone, password: password ? '[PROVIDED]' : '[MISSING]' })
 
     // Validate required fields
-    if (!name || !email || !password || !document) {
+    const missingFields = []
+    if (!name) missingFields.push('name')
+    if (!email) missingFields.push('email')
+    if (!password) missingFields.push('password')
+    if (!document) missingFields.push('document')
+
+    if (missingFields.length > 0) {
+      console.log('Missing required fields:', missingFields)
       return NextResponse.json(
-        { error: 'Campos obrigatórios faltando' },
+        { error: `Campos obrigatórios faltando: ${missingFields.join(', ')}` },
         { status: 400 }
       )
     }

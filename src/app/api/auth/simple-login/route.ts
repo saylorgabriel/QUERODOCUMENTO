@@ -48,6 +48,7 @@ export async function POST(request: Request) {
         phone: user.phone,
         cpf: user.cpf,
         cnpj: user.cnpj,
+        role: user.role,
       },
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
     }

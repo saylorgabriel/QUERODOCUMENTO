@@ -330,7 +330,7 @@ export default function ConsultaProtestoPage() {
               </Card>
             </div>
           }>
-            <ConsultaProtestoForm onQuerySubmit={handleQuerySubmit} />
+            <ConsultaProtestoForm />
           </Suspense>
 
           {/* How it works */}

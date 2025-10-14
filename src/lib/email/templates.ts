@@ -180,6 +180,7 @@ function wrapTemplate(content: string, title: string = 'QueroDocumento'): string
           <p>Nossa equipe de especialistas garante rapidez e qualidade</p>
           <hr style="border: none; border-top: 1px solid #d1d5db; margin: 16px 0;">
           <p style="font-size: 12px;">© ${new Date().getFullYear()} QueroDocumento. Todos os direitos reservados.</p>
+          <p style="font-size: 11px; color: #9ca3af; margin-top: 8px;">CNPJ: 62.757.039/0001-05</p>
         </div>
       </div>
     </body>
