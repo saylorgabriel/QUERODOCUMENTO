@@ -32,15 +32,15 @@ function getDocumentType(document: string): 'CPF' | 'CNPJ' {
 // Helper function to get user from session
 async function getUserFromSession(): Promise<{ id: string; role: string } | null> {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const sessionCookie = cookieStore.get('simple-session')
-    
+
     if (!sessionCookie) {
       return null
     }
 
     const sessionData = JSON.parse(sessionCookie.value)
-    
+
     // Check if session hasn't expired
     const expires = new Date(sessionData.expires)
     if (expires <= new Date()) {
@@ -58,6 +58,8 @@ export async function POST(request: NextRequest) {
   try {
     // Validate user session
     const user = await getUserFromSession()
+    console.log('🔐 User session:', user ? { id: user.id, role: user.role } : 'No session')
+
     if (!user) {
       return NextResponse.json(
         { error: 'Usuário não autenticado' },
@@ -143,6 +145,21 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    // Verify user exists in database
+    const userExists = await prisma.user.findUnique({
+      where: { id: user.id }
+    })
+
+    if (!userExists) {
+      console.error('❌ User not found in database:', user.id)
+      return NextResponse.json(
+        { error: 'Usuário não encontrado no banco de dados. Por favor, faça login novamente.' },
+        { status: 400 }
+      )
+    }
+
+    console.log('✅ User verified in database:', { id: userExists.id, email: userExists.email })
 
     // Create the order
     const order = await prisma.order.create({

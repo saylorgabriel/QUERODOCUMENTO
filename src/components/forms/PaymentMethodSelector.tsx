@@ -24,7 +24,7 @@ export function PaymentMethodSelector({ selectedMethod, onSelect }: PaymentMetho
       name: 'Cartão de Crédito',
       description: 'Visa, Mastercard, Elo',
       icon: CreditCard,
-      badge: 'Parcelado',
+      badge: 'À vista 1x',
       badgeColor: 'bg-accent-100 text-accent-700'
     }
     // ,

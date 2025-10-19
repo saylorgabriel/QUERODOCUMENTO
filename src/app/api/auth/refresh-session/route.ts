@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function POST() {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const sessionCookie = cookieStore.get('simple-session')
     
     if (!sessionCookie) {

@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
     }
 
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     cookieStore.set('simple-session', JSON.stringify(sessionData), {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

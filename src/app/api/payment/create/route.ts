@@ -6,7 +6,7 @@ import { cookies } from 'next/headers'
 // Helper function to get user from session
 async function getUserFromSession(): Promise<{ id: string; role: string } | null> {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const sessionCookie = cookieStore.get('simple-session')
 
     if (!sessionCookie) {
@@ -48,7 +48,13 @@ export async function POST(request: Request) {
       creditCard
     } = body
 
-    console.log('📋 Payment request:', { orderId, paymentMethod, userId: user.id })
+    console.log('📋 Payment request:', {
+      orderId,
+      paymentMethod,
+      userId: user.id,
+      hasCreditCardData: !!creditCard,
+      creditCardFields: creditCard ? Object.keys(creditCard) : []
+    })
 
     // Validate payment method
     if (!['PIX', 'CREDIT_CARD', 'BOLETO'].includes(paymentMethod)) {
@@ -153,7 +159,7 @@ export async function POST(request: Request) {
         number: creditCard.number.replace(/\s/g, ''),
         expiryMonth: creditCard.expiryMonth,
         expiryYear: creditCard.expiryYear,
-        ccv: creditCard.cvv || creditCard.ccv
+        ccv: creditCard.cvv
       }
 
       paymentData.creditCardHolderInfo = {

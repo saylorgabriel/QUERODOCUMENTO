@@ -10,7 +10,7 @@ import {
 // Helper function to get user from session
 async function getUserFromSession(): Promise<{ id: string; role: string } | null> {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const sessionCookie = cookieStore.get('simple-session')
     
     if (!sessionCookie) {

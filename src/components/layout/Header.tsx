@@ -100,7 +100,7 @@ export default function Header() {
                       href="/dashboard"
                       className="btn-primary-sm"
                     >
-                      Dashboard
+                      Área do cliente
                     </Link>
                     <button
                       onClick={handleLogout}

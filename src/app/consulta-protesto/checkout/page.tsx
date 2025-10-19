@@ -6,6 +6,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { PaymentMethodSelector } from '@/components/forms/PaymentMethodSelector'
+import { CreditCardForm, CreditCardData } from '@/components/forms/CreditCardForm'
 import { CheckCircle2, Clock, FileText, ArrowRight, Copy, Check, CreditCard, Smartphone, AlertCircle, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
@@ -53,6 +54,7 @@ function CheckoutContent() {
   const [paymentResponse, setPaymentResponse] = useState<PaymentResponse | null>(null)
   const [copied, setCopied] = useState(false)
   const [isPaid, setIsPaid] = useState(false)
+  const [creditCardData, setCreditCardData] = useState<CreditCardData | null>(null)
 
   const orderId = searchParams?.get('orderId')
 
@@ -103,16 +105,21 @@ function CheckoutContent() {
 
       setOrder(data.order)
       console.log('📦 Order loaded:', data.order)
-      // If order already has payment method, set it and process payment automatically
+      // If order already has payment method, set it
       if (data.order.paymentMethod) {
         console.log('💳 Payment method found:', data.order.paymentMethod)
         setSelectedPaymentMethod(data.order.paymentMethod)
-        // Process payment automatically after a short delay
-        console.log('⏱️ Starting payment processing in 500ms...')
-        setTimeout(() => {
-          console.log('🚀 Processing payment now...')
-          processPayment(data.order)
-        }, 500)
+
+        // Only auto-process for PIX and BOLETO (not CREDIT_CARD, which needs form data)
+        if (data.order.paymentMethod !== 'CREDIT_CARD') {
+          console.log('⏱️ Starting payment processing in 500ms...')
+          setTimeout(() => {
+            console.log('🚀 Processing payment now...')
+            processPayment(data.order)
+          }, 500)
+        } else {
+          console.log('⏳ Waiting for user to fill credit card form...')
+        }
       } else {
         console.log('❌ No payment method found in order')
       }
@@ -147,16 +154,24 @@ function CheckoutContent() {
     try {
       console.log('📡 Calling payment API with:', {
         orderId: currentOrder.id,
-        paymentMethod: paymentMethod
+        paymentMethod: paymentMethod,
+        hasCreditCardData: !!creditCardData
       })
+
+      const requestBody: any = {
+        orderId: currentOrder.id,
+        paymentMethod: paymentMethod
+      }
+
+      // Add credit card data if payment method is CREDIT_CARD
+      if (paymentMethod === 'CREDIT_CARD' && creditCardData) {
+        requestBody.creditCard = creditCardData
+      }
 
       const response = await fetch('/api/payment/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderId: currentOrder.id,
-          paymentMethod: paymentMethod
-        })
+        body: JSON.stringify(requestBody)
       })
 
       const data = await response.json()
@@ -180,6 +195,30 @@ function CheckoutContent() {
   }
 
   const handlePayment = async () => {
+    // Validate credit card data if payment method is CREDIT_CARD
+    if (selectedPaymentMethod === 'CREDIT_CARD') {
+      if (!creditCardData) {
+        setError('Por favor, preencha os dados do cartão de crédito')
+        return
+      }
+
+      // Validate required fields
+      const requiredFields = ['holderName', 'number', 'expiryMonth', 'expiryYear', 'cvv', 'postalCode', 'addressNumber']
+      const missingFields = requiredFields.filter(field => !creditCardData[field as keyof CreditCardData])
+
+      if (missingFields.length > 0) {
+        setError('Por favor, preencha todos os campos do cartão de crédito')
+        return
+      }
+
+      // Validate card number length
+      const cardNumberCleaned = creditCardData.number.replace(/\s/g, '')
+      if (cardNumberCleaned.length < 13) {
+        setError('Número de cartão inválido')
+        return
+      }
+    }
+
     await processPayment()
   }
 
@@ -441,6 +480,13 @@ function CheckoutContent() {
           onSelect={setSelectedPaymentMethod}
         />
 
+        {/* Credit Card Form */}
+        {selectedPaymentMethod === 'CREDIT_CARD' && (
+          <div className="mt-6">
+            <CreditCardForm onDataChange={setCreditCardData} />
+          </div>
+        )}
+
         {error && (
           <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
             <p className="text-red-800 text-sm">{error}</p>
@@ -455,7 +501,11 @@ function CheckoutContent() {
           </Link>
           <Button
             onClick={handlePayment}
-            disabled={!selectedPaymentMethod || isProcessingPayment}
+            disabled={
+              !selectedPaymentMethod ||
+              isProcessingPayment ||
+              (selectedPaymentMethod === 'CREDIT_CARD' && !creditCardData)
+            }
             className="flex-1 flex items-center justify-center gap-2"
           >
             {isProcessingPayment ? (
