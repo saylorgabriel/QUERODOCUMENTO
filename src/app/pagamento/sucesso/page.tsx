@@ -5,7 +5,6 @@ export const dynamic = 'force-dynamic'
 
 import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
@@ -100,38 +99,33 @@ function PaymentSuccessContent() {
 
   if (loading) {
     return (
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-          <LoadingSpinner size="lg" />
-        </div>
-      </LayoutWrapper>
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
     )
   }
 
   if (error || !order) {
     return (
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 py-8">
-          <div className="container-wrapper">
-            <div className="max-w-2xl mx-auto">
-              <Card className="p-8 text-center">
-                <h1 className="text-2xl font-bold text-neutral-900 mb-4">Erro</h1>
-                <p className="text-neutral-600 mb-6">{error || 'Pedido não encontrado'}</p>
-                <Button onClick={() => router.push('/')} variant="outline">
-                  <Home className="w-4 h-4 mr-2" />
-                  Voltar ao início
-                </Button>
-              </Card>
-            </div>
+      <div className="min-h-screen bg-neutral-50 py-8">
+        <div className="container-wrapper">
+          <div className="max-w-2xl mx-auto">
+            <Card className="p-8 text-center">
+              <h1 className="text-2xl font-bold text-neutral-900 mb-4">Erro</h1>
+              <p className="text-neutral-600 mb-6">{error || 'Pedido não encontrado'}</p>
+              <Button onClick={() => router.push('/')} variant="outline">
+                <Home className="w-4 h-4 mr-2" />
+                Voltar ao início
+              </Button>
+            </Card>
           </div>
         </div>
-      </LayoutWrapper>
+      </div>
     )
   }
 
   return (
-    <LayoutWrapper>
-      <div className="min-h-screen bg-neutral-50 py-8">
+    <div className="min-h-screen bg-neutral-50 py-8">
         <div className="container-wrapper">
           <div className="max-w-3xl mx-auto">
             {/* Success Header */}
@@ -257,24 +251,21 @@ function PaymentSuccessContent() {
             </Card>
           </div>
         </div>
-      </div>
-    </LayoutWrapper>
+    </div>
   )
 }
 
 export default function PaymentSuccessPage() {
   return (
     <Suspense fallback={
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 py-20">
-          <div className="container-padded">
-            <div className="max-w-2xl mx-auto text-center">
-              <LoadingSpinner size="lg" className="mb-4" />
-              <p className="text-neutral-600">Carregando informações do pagamento...</p>
-            </div>
+      <div className="min-h-screen bg-neutral-50 py-20">
+        <div className="container-padded">
+          <div className="max-w-2xl mx-auto text-center">
+            <LoadingSpinner size="lg" className="mb-4" />
+            <p className="text-neutral-600">Carregando informações do pagamento...</p>
           </div>
         </div>
-      </LayoutWrapper>
+      </div>
     }>
       <PaymentSuccessContent />
     </Suspense>

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
@@ -187,59 +186,52 @@ export default function PaymentPage() {
 
   if (loading && !order) {
     return (
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-          <LoadingSpinner size="lg" />
-        </div>
-      </LayoutWrapper>
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
     )
   }
 
   if (error) {
     return (
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 py-8">
-          <div className="container-wrapper">
-            <div className="max-w-2xl mx-auto">
-              <Card className="p-8 text-center">
-                <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
-                <h1 className="text-2xl font-bold text-neutral-900 mb-4">Erro</h1>
-                <p className="text-neutral-600 mb-6">{error}</p>
-                <Button onClick={() => router.push('/')} variant="outline">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Voltar ao início
-                </Button>
-              </Card>
-            </div>
+      <div className="min-h-screen bg-neutral-50 py-8">
+        <div className="container-wrapper">
+          <div className="max-w-2xl mx-auto">
+            <Card className="p-8 text-center">
+              <AlertTriangle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
+              <h1 className="text-2xl font-bold text-neutral-900 mb-4">Erro</h1>
+              <p className="text-neutral-600 mb-6">{error}</p>
+              <Button onClick={() => router.push('/')} variant="outline">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar ao início
+              </Button>
+            </Card>
           </div>
         </div>
-      </LayoutWrapper>
+      </div>
     )
   }
 
   if (!order) {
     return (
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 py-8">
-          <div className="container-wrapper">
-            <div className="max-w-2xl mx-auto">
-              <Card className="p-8 text-center">
-                <h1 className="text-2xl font-bold text-neutral-900 mb-4">Pedido não encontrado</h1>
-                <Button onClick={() => router.push('/')} variant="outline">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Voltar ao início
-                </Button>
-              </Card>
-            </div>
+      <div className="min-h-screen bg-neutral-50 py-8">
+        <div className="container-wrapper">
+          <div className="max-w-2xl mx-auto">
+            <Card className="p-8 text-center">
+              <h1 className="text-2xl font-bold text-neutral-900 mb-4">Pedido não encontrado</h1>
+              <Button onClick={() => router.push('/')} variant="outline">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar ao início
+              </Button>
+            </Card>
           </div>
         </div>
-      </LayoutWrapper>
+      </div>
     )
   }
 
   return (
-    <LayoutWrapper>
-      <div className="min-h-screen bg-neutral-50 py-8">
+    <div className="min-h-screen bg-neutral-50 py-8">
         <div className="container-wrapper">
           <div className="max-w-4xl mx-auto">
             {/* Header */}
@@ -508,7 +500,6 @@ export default function PaymentPage() {
             </div>
           </div>
         </div>
-      </div>
-    </LayoutWrapper>
+    </div>
   )
 }
