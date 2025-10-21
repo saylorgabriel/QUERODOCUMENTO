@@ -142,11 +142,17 @@ export function LocationSelector({
   }
 
   const handleCitySelect = (cityId: string) => {
+    const stateData = locations.find(s => s.id === selectedState)
+    const emolument = emolumentStates.find(emol => emol.state === stateData?.code)
+    const basePrice = emolument?.finalValue || 89.90
+
+    // Reset to base price when selecting a city (useAllNotaries will be false)
     onLocationChange({
       state: selectedState,
       city: cityId,
       notary: null,
-      useAllNotaries: false
+      useAllNotaries: false,
+      statePrice: basePrice
     })
     setCityDropdownOpen(false)
   }
@@ -162,11 +168,23 @@ export function LocationSelector({
   }
 
   const handleAllNotariesToggle = () => {
+    const stateData = locations.find(s => s.id === selectedState)
+    const emolument = emolumentStates.find(emol => emol.state === stateData?.code)
+    const basePrice = emolument?.finalValue || 89.90
+
+    // Calculate price based on number of notaries if toggling to "all notaries"
+    let finalPrice = basePrice
+    if (!useAllNotaries && selectedCity) {
+      const notaryCount = availableNotaries.length || 1
+      finalPrice = basePrice * notaryCount
+    }
+
     onLocationChange({
       state: selectedState,
       city: selectedCity,
       notary: null,
-      useAllNotaries: !useAllNotaries
+      useAllNotaries: !useAllNotaries,
+      statePrice: finalPrice
     })
   }
 
