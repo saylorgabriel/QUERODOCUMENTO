@@ -710,8 +710,8 @@ export default function DashboardClient() {
                         a: 'Informe seu CPF ou CNPJ, nome completo e telefone. A consulta é processada instantaneamente e você receberá um e-mail com o resultado. O pedido ficará disponível na aba "Consultas" do seu dashboard.'
                       },
                       {
-                        q: 'Qual a diferença entre consulta básica e detalhada?',
-                        a: 'A consulta básica informa se há protestos. A consulta detalhada (paga) fornece dados completos: cartório, valor, data, credor e situação de cada protesto encontrado.'
+                        q: 'Quanto custa a consulta de protesto?',
+                        a: 'A consulta de protesto é gratuita e fornece informações sobre a existência de protestos em seu CPF ou CNPJ. O resultado é enviado por e-mail após o processamento.'
                       },
                       {
                         q: 'Quanto tempo leva para processar a consulta?',
