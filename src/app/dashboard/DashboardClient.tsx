@@ -579,7 +579,7 @@ export default function DashboardClient() {
                 </p>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-soft border border-neutral-200 overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-soft border border-neutral-200 overflow-hidden p-6 md:p-8">
                 <OrdersSection orders={dashboardData.orders} loading={dataLoading} />
               </div>
             </div>
