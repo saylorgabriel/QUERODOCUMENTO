@@ -179,7 +179,8 @@ export default function DashboardClient() {
 
   const navigationItems = [
     { id: 'overview', label: 'Visão Geral', icon: FileText },
-    { id: 'consultas', label: 'Consultas de Protesto', icon: Search },
+    // { id: 'consultas', label: 'Consultas de Protesto', icon: Search },
+    { id: 'consultas', label: 'Consultas', icon: Search },
     { id: 'certidoes', label: 'Certidões', icon: FileText },
     { id: 'pedidos', label: 'Todos os Pedidos', icon: Clock },
     { id: 'perfil', label: 'Meu Perfil', icon: User },
@@ -377,7 +378,7 @@ export default function DashboardClient() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                    Consultas de Protesto
+                  Consultas{/* Consultas de Protesto */}
                   </h1>
                   <p className="text-neutral-600">
                     Histórico de consultas realizadas

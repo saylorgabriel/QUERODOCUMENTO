@@ -116,7 +116,7 @@ export async function GET() {
 
     // Separate orders by type
     const protestQueryOrders = orders.filter(o => o.serviceType === 'PROTEST_QUERY')
-    const certificateOrders = orders.filter(o => o.serviceType === 'CERTIFICATE')
+    const certificateOrders = orders.filter(o => o.serviceType === 'CERTIFICATE_REQUEST')
 
     // Transform protest query orders for frontend
     const transformedQueries = protestQueryOrders.map(order => {
@@ -186,9 +186,29 @@ export async function GET() {
       }))
     }))
 
+    // Calculate statistics
+    const stats = {
+      protestQueriesCount: protestQueryOrders.length,
+      certificatesCount: certificateOrders.length,
+      protestsFoundCount: protestQueryOrders.reduce((sum, order) => {
+        if (order.status === 'COMPLETED' && order.resultText) {
+          const resultLower = order.resultText.toLowerCase()
+          const protestMatch = resultLower.match(/(\d+)\s*protesto/i)
+          if (protestMatch) {
+            return sum + parseInt(protestMatch[1])
+          } else if (resultLower.includes('protesto') && !resultLower.includes('sem protesto')) {
+            return sum + 1
+          }
+        }
+        return sum
+      }, 0),
+      completedOrdersCount: orders.filter(o => o.status === 'COMPLETED').length
+    }
+
     return NextResponse.json({
+      stats,
       protestQueries: transformedQueries,
-      certificates: transformedCertificates, 
+      certificates: transformedCertificates,
       orders: transformedOrders
     })
   } catch (error) {
