@@ -97,14 +97,9 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
       try {
         const response = await fetch('/api/auth/simple-session')
         if (response.ok) {
-          const sessionData = await response.json()
+          await response.json()
           setHasActiveSession(true)
-          setFormData(prev => ({
-            ...prev,
-            name: sessionData.user?.name || prev.name,
-            email: sessionData.user?.email || prev.email,
-            document: sessionData.user?.document || prev.document
-          }))
+          // Don't pre-fill any fields - user should enter the searched person's data
         }
       } catch (error) {
         console.error('Session check failed:', error)
@@ -185,6 +180,11 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
       }
       if (!formData.email.trim()) {
         newErrors.email = 'Email é obrigatório'
+      } else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(formData.email)) {
+          newErrors.email = 'Email inválido'
+        }
       }
       if (!formData.document.trim()) {
         newErrors.document = 'CPF/CNPJ é obrigatório'
@@ -532,11 +532,11 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
           <div className="space-y-4 sm:space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                {hasActiveSession ? 'Confirmar Dados' : 'Seus Dados'}
+                {hasActiveSession ? 'Dados do Pesquisado' : 'Seus Dados'}
               </h2>
               <p className="text-neutral-600">
-                {hasActiveSession 
-                  ? 'Confirme seus dados para continuar'
+                {hasActiveSession
+                  ? 'Informe os dados da pessoa ou empresa que constará na certidão de protesto'
                   : (formData.isLogin ? 'Faça login para continuar' : 'Crie sua conta para prosseguir')
                 }
               </p>
@@ -552,6 +552,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
                     type="text"
                     value={formData.name}
                     onChange={(e) => updateFormData('name', e.target.value)}
+                    placeholder="Digite o nome completo do pesquisado"
                     className={cn(
                       'input-primary w-full min-h-12 sm:min-h-14',
                       errors.name && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
@@ -569,9 +570,16 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
                   <input
                     type="email"
                     value={formData.email}
-                    className="input-primary w-full bg-neutral-50 cursor-not-allowed min-h-12 sm:min-h-14"
-                    disabled
+                    onChange={(e) => updateFormData('email', e.target.value)}
+                    placeholder="email@exemplo.com"
+                    className={cn(
+                      'input-primary w-full min-h-12 sm:min-h-14',
+                      errors.email && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                    )}
                   />
+                  {errors.email && (
+                    <p className="text-sm text-amber-600 mt-1">{errors.email}</p>
+                  )}
                 </div>
 
                 <div>
