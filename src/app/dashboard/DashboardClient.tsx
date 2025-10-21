@@ -370,7 +370,7 @@ export default function DashboardClient() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <h1 className="text-3xl font-bold text-neutral-900 mb-2">
-                  Consultas{/* Consultas de Protesto */}
+                  Consultas de Protesto
                   </h1>
                   <p className="text-neutral-600">
                     Histórico de consultas realizadas
