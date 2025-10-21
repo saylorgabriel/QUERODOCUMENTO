@@ -46,6 +46,27 @@ export default function DashboardClient() {
   const [searchDocument, setSearchDocument] = useState('')
   const [filteredQueries, setFilteredQueries] = useState<any[]>([])
 
+  // Format CPF: 000.000.000-00
+  const formatCPF = (cpf: string) => {
+    const cleaned = cpf.replace(/\D/g, '')
+    return cleaned.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+  }
+
+  // Format CNPJ: 00.000.000/0000-00
+  const formatCNPJ = (cnpj: string) => {
+    const cleaned = cnpj.replace(/\D/g, '')
+    return cleaned.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')
+  }
+
+  // Format document (CPF or CNPJ)
+  const formatDocument = (doc: string) => {
+    if (!doc) return 'Não informado'
+    const cleaned = doc.replace(/\D/g, '')
+    if (cleaned.length === 11) return formatCPF(cleaned)
+    if (cleaned.length === 14) return formatCNPJ(cleaned)
+    return doc
+  }
+
   useEffect(() => {
     const tab = searchParams.get('tab')
     if (tab) {
@@ -442,7 +463,7 @@ export default function DashboardClient() {
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                               <h3 className="font-semibold text-neutral-900">
-                                {query.document}
+                                {formatDocument(query.document)}
                               </h3>
                               <span className={`
                                 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
@@ -555,7 +576,7 @@ export default function DashboardClient() {
                               </span>
                               {cert.document && (
                                 <span>
-                                  {cert.documentType}: {cert.document}
+                                  {cert.documentType}: {formatDocument(cert.document)}
                                 </span>
                               )}
                               {cert.state && cert.city && (
@@ -634,7 +655,7 @@ export default function DashboardClient() {
                   <label className="block text-sm font-medium text-neutral-700 mb-2">
                     CPF/CNPJ
                   </label>
-                  <p className="text-neutral-900">{session.user.cpf || session.user.cnpj || 'Não informado'}</p>
+                  <p className="text-neutral-900">{formatDocument(session.user.cpf || session.user.cnpj)}</p>
                 </div>
 
                 <div className="pt-4 border-t border-neutral-200">
@@ -867,7 +888,7 @@ export default function DashboardClient() {
                     Formulário de Contato
                   </a>
                   <a
-                    href="https://wa.me/5511999999999"
+                    href="https://wa.me/5519981806261"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-secondary inline-flex items-center justify-center"

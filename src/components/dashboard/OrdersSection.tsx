@@ -47,6 +47,27 @@ export default function OrdersSection() {
   const [error, setError] = useState<string | null>(null)
   const [downloadingDoc, setDownloadingDoc] = useState<string | null>(null)
 
+  // Format CPF: 000.000.000-00
+  const formatCPF = (cpf: string) => {
+    const cleaned = cpf.replace(/\D/g, '')
+    return cleaned.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+  }
+
+  // Format CNPJ: 00.000.000/0000-00
+  const formatCNPJ = (cnpj: string) => {
+    const cleaned = cnpj.replace(/\D/g, '')
+    return cleaned.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')
+  }
+
+  // Format document (CPF or CNPJ)
+  const formatDocument = (doc: string) => {
+    if (!doc) return 'Não informado'
+    const cleaned = doc.replace(/\D/g, '')
+    if (cleaned.length === 11) return formatCPF(cleaned)
+    if (cleaned.length === 14) return formatCNPJ(cleaned)
+    return doc
+  }
+
   // Service type labels
   const serviceTypeLabels = {
     PROTEST_QUERY: 'Consulta de Protesto',
@@ -266,7 +287,7 @@ export default function OrdersSection() {
                     </div>
                     
                     <p className="text-sm text-neutral-600 mt-1">
-                      {order.documentType}: {order.documentNumber}
+                      {order.documentType}: {formatDocument(order.documentNumber)}
                     </p>
                     
                     <div className="flex items-center space-x-4 text-xs text-neutral-500 mt-2">
