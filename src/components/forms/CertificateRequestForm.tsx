@@ -440,7 +440,18 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
           state: formData.state,
           city: formData.city,
           notaryOffice: formData.useAllNotaries ? 'ALL' : formData.notary,
-          reason: formData.reason === 'other' ? formData.customReason : formData.reason
+          reason: formData.reason === 'other' ? formData.customReason : formData.reason,
+          // Searched person data
+          name: formData.name,
+          email: formData.email,
+          rg: formData.rg,
+          address: formData.address,
+          addressNumber: formData.addressNumber,
+          addressComplement: formData.addressComplement,
+          neighborhood: formData.neighborhood,
+          userCity: formData.userCity,
+          userState: formData.userState,
+          zipCode: formData.zipCode
         })
       })
 

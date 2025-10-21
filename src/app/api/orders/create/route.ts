@@ -78,7 +78,18 @@ export async function POST(request: NextRequest) {
       state,
       city,
       notaryOffice,
-      reason
+      reason,
+      // Searched person data (optional)
+      name,
+      email,
+      rg,
+      address,
+      addressNumber,
+      addressComplement,
+      neighborhood,
+      userCity,
+      userState,
+      zipCode
     } = body
 
     // Validate required fields
@@ -181,7 +192,18 @@ export async function POST(request: NextRequest) {
         ...(state && { state }),
         ...(city && { city }),
         ...(notaryOffice && { notaryOffice }),
-        ...(reason && { reason })
+        ...(reason && { reason }),
+        // Searched person data (only if provided)
+        ...(name && { searchedName: name }),
+        ...(email && { searchedEmail: email }),
+        ...(rg && { searchedRg: rg }),
+        ...(address && { searchedAddress: address }),
+        ...(addressNumber && { searchedAddressNumber: addressNumber }),
+        ...(addressComplement && { searchedAddressComplement: addressComplement }),
+        ...(neighborhood && { searchedNeighborhood: neighborhood }),
+        ...(userCity && { searchedCity: userCity }),
+        ...(userState && { searchedState: userState }),
+        ...(zipCode && { searchedZipCode: zipCode })
       },
       include: {
         user: {

@@ -212,7 +212,19 @@ model Order {
   city            String?       // Município
   notaryOffice    String?       // Cartório
   reason          String?       // Motivo da solicitação
-  
+
+  // Searched person data (pessoa pesquisada na certidão)
+  searchedName    String?       // Nome completo do pesquisado
+  searchedEmail   String?       // Email do pesquisado
+  searchedRg      String?       // RG do pesquisado
+  searchedAddress String?       // Endereço do pesquisado
+  searchedAddressNumber String? // Número do endereço
+  searchedAddressComplement String? // Complemento
+  searchedNeighborhood String?  // Bairro
+  searchedCity    String?       // Cidade do pesquisado
+  searchedState   String?       // Estado do pesquisado (UF)
+  searchedZipCode String?       // CEP do pesquisado
+
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   
