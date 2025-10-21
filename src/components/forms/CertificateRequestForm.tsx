@@ -3,13 +3,12 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { InputDocument } from '@/components/ui/input-document'
 import { InputPhone } from '@/components/ui/input-phone'
 import { StepIndicator } from './StepIndicator'
 import { PaymentMethodSelector } from './PaymentMethodSelector'
 import { LocationSelector } from './LocationSelector'
 import { ReasonSelector } from './ReasonSelector'
-import { ArrowRight, ArrowLeft, Loader2, Eye, EyeOff, MapPin, FileText, AlertCircle } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Loader2, Eye, EyeOff, FileText, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface FormData {
@@ -36,7 +35,7 @@ interface FormData {
   invoiceName: string
   invoiceDocument: string
 
-  // Step 5: Payment method
+  // Step 4: Payment method
   paymentMethod: 'PIX' | 'CREDIT_CARD' | 'BOLETO' | null
 }
 
@@ -55,7 +54,6 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [isInvoiceDocumentValid, setIsInvoiceDocumentValid] = useState(false)
   const [isPhoneValid, setIsPhoneValid] = useState(false)
   const [sessionChecked, setSessionChecked] = useState(false)
   const [hasActiveSession, setHasActiveSession] = useState(false)
@@ -122,11 +120,6 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
     },
     {
       number: 4,
-      title: 'Nota Fiscal',
-      description: 'Dados para NF'
-    },
-    {
-      number: 5,
       title: 'Pagamento',
       description: 'Forma de pagamento'
     }
@@ -237,24 +230,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
 
   const validateStep4 = () => {
     const newErrors: Record<string, string> = {}
-    
-    if (!formData.invoiceName.trim()) {
-      newErrors.invoiceName = 'Nome para nota fiscal é obrigatório'
-    }
-    
-    if (!formData.invoiceDocument.trim()) {
-      newErrors.invoiceDocument = 'CPF/CNPJ para nota fiscal é obrigatório'
-    } else if (!isInvoiceDocumentValid) {
-      newErrors.invoiceDocument = 'CPF/CNPJ inválido'
-    }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const validateStep5 = () => {
-    const newErrors: Record<string, string> = {}
-    
     if (!formData.paymentMethod) {
       newErrors.paymentMethod = 'Escolha uma forma de pagamento'
     }
@@ -282,9 +258,6 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
         break
       case 4:
         isValid = validateStep4()
-        break
-      case 5:
-        isValid = validateStep5()
         if (isValid) {
           await handleSubmit()
           return
@@ -292,7 +265,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
         break
     }
 
-    if (isValid && currentStep < 5) {
+    if (isValid && currentStep < 4) {
       setCurrentStep(currentStep + 1)
     }
   }
@@ -683,52 +656,6 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
           <div className="space-y-4 sm:space-y-6">
             <div className="text-center mb-8">
               <h2 className="text-2xl font-bold text-neutral-900 mb-2">
-                Dados da Nota Fiscal
-              </h2>
-              <p className="text-neutral-600">
-                Informe os dados para emissão da nota fiscal
-              </p>
-            </div>
-
-            <div>
-              <input
-                type="text"
-                placeholder="Nome ou Razão Social para NF"
-                value={formData.invoiceName}
-                onChange={(e) => updateFormData('invoiceName', e.target.value)}
-                className={cn(
-                  'input-primary w-full min-h-12 sm:min-h-14',
-                  errors.invoiceName && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
-                )}
-              />
-              {errors.invoiceName && (
-                <p className="text-sm text-amber-600 mt-1">{errors.invoiceName}</p>
-              )}
-            </div>
-
-            <InputDocument
-              value={formData.invoiceDocument}
-              onChange={(value, isValid) => {
-                updateFormData('invoiceDocument', value)
-                setIsInvoiceDocumentValid(isValid)
-              }}
-              placeholder="CPF ou CNPJ para NF"
-              error={errors.invoiceDocument}
-            />
-
-            <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
-              <p className="text-sm text-neutral-600">
-                <strong>Importante:</strong> Os dados informados serão utilizados para emissão da nota fiscal e também serão o documento consultado na certidão.
-              </p>
-            </div>
-          </div>
-        )
-
-      case 5:
-        return (
-          <div className="space-y-4 sm:space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-2">
                 Pagamento
               </h2>
               <div className="mt-4 p-4 bg-accent-50 rounded-lg border border-accent-200">
@@ -807,7 +734,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Processando...
               </>
-            ) : currentStep === 5 ? (
+            ) : currentStep === 4 ? (
               'Efetuar Pagamento'
             ) : (
               <>
