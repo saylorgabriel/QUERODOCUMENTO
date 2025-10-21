@@ -651,64 +651,230 @@ export default function DashboardClient() {
 
           {/* Ajuda Tab */}
           {activeTab === 'ajuda' && (
-            <div className="space-y-6 animate-fade-in max-w-3xl">
+            <div className="space-y-6 animate-fade-in max-w-4xl">
               <div>
                 <h1 className="text-3xl font-bold text-neutral-900 mb-2">
                   Central de Ajuda
                 </h1>
                 <p className="text-neutral-600">
-                  Encontre respostas para suas dúvidas
+                  Encontre respostas para suas dúvidas sobre o QueroDocumento
                 </p>
               </div>
 
-              <div className="space-y-4">
-                {[
-                  {
-                    q: 'Como consultar protestos?',
-                    a: 'Acesse "Nova Consulta", informe o CPF ou CNPJ e confirme. Você receberá o resultado em instantes.'
-                  },
-                  {
-                    q: 'Como solicitar uma certidão?',
-                    a: 'Clique em "Solicitar Certidão", escolha o tipo (negativa ou positiva), preencha os dados e efetue o pagamento.'
-                  },
-                  {
-                    q: 'Quais formas de pagamento são aceitas?',
-                    a: 'Aceitamos PIX, cartão de crédito e boleto bancário.'
-                  },
-                  {
-                    q: 'Quanto tempo leva para receber a certidão?',
-                    a: 'Após aprovação do pagamento, a certidão é processada em até 24 horas úteis.'
-                  }
-                ].map((faq, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-xl shadow-soft border border-neutral-200 p-6"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <h3 className="font-semibold text-neutral-900 mb-2">
-                      {faq.q}
-                    </h3>
-                    <p className="text-neutral-600">
-                      {faq.a}
-                    </p>
+              {/* Quick Links */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a
+                  href="/consulta-protesto"
+                  className="p-6 bg-white rounded-xl shadow-soft border border-neutral-200 hover:border-primary-300 hover:shadow-md transition-all group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
+                      <Search className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-neutral-900 mb-1">Consultar Protestos</h3>
+                      <p className="text-sm text-neutral-600">Verificar protestos de CPF/CNPJ</p>
+                    </div>
                   </div>
-                ))}
+                </a>
+
+                <a
+                  href="/certidao-protesto"
+                  className="p-6 bg-white rounded-xl shadow-soft border border-neutral-200 hover:border-primary-300 hover:shadow-md transition-all group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors">
+                      <FileText className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-neutral-900 mb-1">Solicitar Certidão</h3>
+                      <p className="text-sm text-neutral-600">Emitir certidão oficial de protesto</p>
+                    </div>
+                  </div>
+                </a>
               </div>
 
+              {/* FAQ Sections */}
+              <div className="space-y-6">
+                {/* Consultas */}
+                <div>
+                  <h2 className="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
+                    <Search className="w-5 h-5 text-primary-600" />
+                    Consultas de Protesto
+                  </h2>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        q: 'Como funciona a consulta de protesto?',
+                        a: 'Informe seu CPF ou CNPJ, nome completo e telefone. A consulta é processada instantaneamente e você receberá um e-mail com o resultado. O pedido ficará disponível na aba "Consultas" do seu dashboard.'
+                      },
+                      {
+                        q: 'Qual a diferença entre consulta básica e detalhada?',
+                        a: 'A consulta básica informa se há protestos. A consulta detalhada (paga) fornece dados completos: cartório, valor, data, credor e situação de cada protesto encontrado.'
+                      },
+                      {
+                        q: 'Quanto tempo leva para processar a consulta?',
+                        a: 'As consultas são processadas manualmente pela nossa equipe. Você receberá o resultado por e-mail assim que o processamento for concluído.'
+                      }
+                    ].map((faq, index) => (
+                      <div
+                        key={index}
+                        className="bg-white rounded-xl shadow-soft border border-neutral-200 p-6"
+                        style={{ animationDelay: `${index * 50}ms` }}
+                      >
+                        <h3 className="font-semibold text-neutral-900 mb-2">
+                          {faq.q}
+                        </h3>
+                        <p className="text-neutral-600 text-sm leading-relaxed">
+                          {faq.a}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Certidões */}
+                <div>
+                  <h2 className="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-primary-600" />
+                    Certidões de Protesto
+                  </h2>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        q: 'O que é uma certidão de protesto?',
+                        a: 'É um documento oficial emitido pelos cartórios que comprova a existência ou inexistência de protestos. Certidão Negativa = sem protestos. Certidão Positiva = lista os protestos existentes.'
+                      },
+                      {
+                        q: 'Como solicitar uma certidão?',
+                        a: 'Acesse "Solicitar Certidão", preencha os dados (CPF/CNPJ, estado, cidade, cartório) e finalize. Você receberá um orçamento em até 3 dias úteis por e-mail. Após aprovação e pagamento, a certidão é emitida em até 5 dias úteis.'
+                      },
+                      {
+                        q: 'Posso solicitar certidão de qualquer estado?',
+                        a: 'Sim! Atendemos todos os 27 estados brasileiros. Selecione o estado e cidade desejados no formulário de solicitação.'
+                      },
+                      {
+                        q: 'A certidão tem validade?',
+                        a: 'Sim. Geralmente as certidões têm validade de 30 dias a partir da data de emissão, mas isso pode variar conforme o cartório e a finalidade.'
+                      }
+                    ].map((faq, index) => (
+                      <div
+                        key={index}
+                        className="bg-white rounded-xl shadow-soft border border-neutral-200 p-6"
+                        style={{ animationDelay: `${index * 50}ms` }}
+                      >
+                        <h3 className="font-semibold text-neutral-900 mb-2">
+                          {faq.q}
+                        </h3>
+                        <p className="text-neutral-600 text-sm leading-relaxed">
+                          {faq.a}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Pagamentos */}
+                <div>
+                  <h2 className="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
+                    <CreditCard className="w-5 h-5 text-primary-600" />
+                    Pagamentos e Valores
+                  </h2>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        q: 'Quais formas de pagamento são aceitas?',
+                        a: 'Aceitamos pagamento via PIX (aprovação instantânea), Cartão de Crédito e Boleto Bancário.'
+                      },
+                      {
+                        q: 'Qual o valor das certidões?',
+                        a: 'O valor varia conforme o estado, município e cartório solicitado. Você receberá um orçamento detalhado por e-mail antes de efetuar o pagamento.'
+                      },
+                      {
+                        q: 'Quando devo pagar?',
+                        a: 'Para consultas detalhadas e certidões, o pagamento é feito após receber o orçamento. Você receberá um link de pagamento por e-mail.'
+                      }
+                    ].map((faq, index) => (
+                      <div
+                        key={index}
+                        className="bg-white rounded-xl shadow-soft border border-neutral-200 p-6"
+                        style={{ animationDelay: `${index * 50}ms` }}
+                      >
+                        <h3 className="font-semibold text-neutral-900 mb-2">
+                          {faq.q}
+                        </h3>
+                        <p className="text-neutral-600 text-sm leading-relaxed">
+                          {faq.a}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Acompanhamento */}
+                <div>
+                  <h2 className="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-primary-600" />
+                    Acompanhamento de Pedidos
+                  </h2>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        q: 'Como acompanhar meus pedidos?',
+                        a: 'Todos os seus pedidos ficam disponíveis no dashboard. Acesse a aba "Consultas" para ver consultas realizadas, "Certidões" para certidões solicitadas, ou "Todos os Pedidos" para o histórico completo.'
+                      },
+                      {
+                        q: 'Vou receber notificações sobre meu pedido?',
+                        a: 'Sim! Você receberá e-mails automáticos sempre que houver atualização no status do seu pedido: confirmação de recebimento, orçamento disponível, pagamento confirmado e documento pronto.'
+                      },
+                      {
+                        q: 'Como baixar meus documentos?',
+                        a: 'Quando seu documento estiver pronto, um botão "Baixar PDF" aparecerá ao lado do pedido. Você também receberá o documento por e-mail.'
+                      }
+                    ].map((faq, index) => (
+                      <div
+                        key={index}
+                        className="bg-white rounded-xl shadow-soft border border-neutral-200 p-6"
+                        style={{ animationDelay: `${index * 50}ms` }}
+                      >
+                        <h3 className="font-semibold text-neutral-900 mb-2">
+                          {faq.q}
+                        </h3>
+                        <p className="text-neutral-600 text-sm leading-relaxed">
+                          {faq.a}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact CTA */}
               <div className="bg-gradient-to-br from-primary-50 to-accent-50 rounded-2xl p-8 border border-primary-200">
                 <h2 className="text-xl font-bold text-neutral-900 mb-2">
-                  Ainda precisa de ajuda?
+                  Não encontrou o que procurava?
                 </h2>
-                <p className="text-neutral-600 mb-4">
-                  Entre em contato com nossa equipe de suporte
+                <p className="text-neutral-600 mb-6">
+                  Nossa equipe está pronta para ajudar! Entre em contato através do WhatsApp ou formulário de contato.
                 </p>
-                <a
-                  href="/fale-conosco"
-                  className="btn-primary inline-flex items-center"
-                >
-                  <HelpCircle className="w-4 h-4 mr-2" />
-                  Falar com Suporte
-                </a>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <a
+                    href="/fale-conosco"
+                    className="btn-primary inline-flex items-center justify-center"
+                  >
+                    <HelpCircle className="w-4 h-4 mr-2" />
+                    Formulário de Contato
+                  </a>
+                  <a
+                    href="https://wa.me/5511999999999"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary inline-flex items-center justify-center"
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    Falar no WhatsApp
+                  </a>
+                </div>
               </div>
             </div>
           )}
