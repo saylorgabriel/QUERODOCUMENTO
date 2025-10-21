@@ -156,17 +156,27 @@ export async function GET() {
     })
 
     // Transform certificate orders for frontend
-    const transformedCertificates = certificateOrders.map(order => ({
-      id: order.id,
-      type: 'Certidão de Protesto',
-      document: order.documentNumber,
-      documentType: order.documentType,
-      requestDate: order.createdAt.toISOString().split('T')[0],
-      status: order.status.toLowerCase(),
-      documentUrl: order.documents[0]?.downloadToken
-        ? `/api/download/${order.documents[0].downloadToken}`
-        : null
-    }))
+    const transformedCertificates = certificateOrders.map(order => {
+      // Extract certificate info from metadata if available
+      const metadata = order.metadata as any
+      const certificateType = metadata?.certificateType || 'POSITIVE'
+      const state = metadata?.state || ''
+      const city = metadata?.city || ''
+
+      return {
+        id: order.id,
+        type: certificateType === 'NEGATIVE' ? 'Certidão Negativa' : 'Certidão Positiva',
+        document: order.documentNumber || '',
+        documentType: order.documentType || 'CPF',
+        requestDate: order.createdAt.toISOString(),
+        status: order.status.toLowerCase(),
+        state: state,
+        city: city,
+        documentUrl: order.documents[0]?.downloadToken
+          ? `/api/download/${order.documents[0].downloadToken}`
+          : null
+      }
+    })
 
     const transformedOrders = orders.map(order => ({
       id: order.id,

@@ -361,14 +361,6 @@ export default function DashboardClient() {
                   <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500" />
                 </a>
               </div>
-
-              {/* Recent Orders */}
-              <div className="bg-white rounded-2xl shadow-soft border border-neutral-200 overflow-hidden">
-                <div className="p-6 border-b border-neutral-200 bg-gradient-to-r from-neutral-50 to-white">
-                  <h2 className="text-xl font-bold text-neutral-900">Pedidos Recentes</h2>
-                </div>
-                <OrdersSection orders={dashboardData.orders.slice(0, 5)} loading={dataLoading} />
-              </div>
             </div>
           )}
 
@@ -448,19 +440,19 @@ export default function DashboardClient() {
                             <div className="flex items-center gap-4 text-sm text-neutral-600">
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-4 h-4" />
-                                {new Date(query.createdAt).toLocaleDateString('pt-BR')}
+                                {new Date(query.date).toLocaleDateString('pt-BR')}
                               </span>
-                              {query.protestsFound > 0 && (
+                              {query.protests !== null && query.protests > 0 && (
                                 <span className="flex items-center gap-1 text-amber-600">
                                   <AlertCircle className="w-4 h-4" />
-                                  {query.protestsFound} protesto(s) encontrado(s)
+                                  {query.protests} protesto(s) encontrado(s)
                                 </span>
                               )}
                             </div>
                           </div>
-                          {query.pdfUrl && (
+                          {query.documentUrl && (
                             <a
-                              href={query.pdfUrl}
+                              href={query.documentUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="btn-secondary inline-flex items-center justify-center"
@@ -525,32 +517,39 @@ export default function DashboardClient() {
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                               <h3 className="font-semibold text-neutral-900">
-                                {cert.certificateType === 'NEGATIVE' ? 'Certidão Negativa' : 'Certidão Positiva'}
+                                {cert.type}
                               </h3>
                               <span className={`
                                 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                ${cert.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
-                                  cert.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
+                                ${cert.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                  cert.status === 'processing' ? 'bg-blue-100 text-blue-800' :
                                   'bg-yellow-100 text-yellow-800'}
                               `}>
-                                {cert.status === 'COMPLETED' ? 'Pronta' :
-                                 cert.status === 'PROCESSING' ? 'Em processamento' :
+                                {cert.status === 'completed' ? 'Pronta' :
+                                 cert.status === 'processing' ? 'Em processamento' :
                                  'Aguardando'}
                               </span>
                             </div>
                             <div className="flex items-center gap-4 text-sm text-neutral-600">
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-4 h-4" />
-                                {new Date(cert.createdAt).toLocaleDateString('pt-BR')}
+                                {new Date(cert.requestDate).toLocaleDateString('pt-BR')}
                               </span>
-                              <span>
-                                {cert.state} - {cert.city}
-                              </span>
+                              {cert.document && (
+                                <span>
+                                  {cert.documentType}: {cert.document}
+                                </span>
+                              )}
+                              {cert.state && cert.city && (
+                                <span>
+                                  {cert.state} - {cert.city}
+                                </span>
+                              )}
                             </div>
                           </div>
-                          {cert.pdfUrl && (
+                          {cert.documentUrl && (
                             <a
-                              href={cert.pdfUrl}
+                              href={cert.documentUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="btn-secondary inline-flex items-center justify-center"
