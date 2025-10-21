@@ -40,17 +40,24 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/politica-de-privacidade" 
+                <Link
+                  href="/politica-de-privacidade"
                   className="text-neutral-400 hover:text-white transition-colors duration-200"
                 >
                   Política de Privacidade
                 </Link>
               </li>
-              <li className="text-neutral-400">Preços e Prazos</li>
               <li>
-                <Link 
-                  href="/fale-conosco" 
+                <Link
+                  href="/precos-e-prazos"
+                  className="text-neutral-400 hover:text-white transition-colors duration-200"
+                >
+                  Preços e Prazos
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/fale-conosco"
                   className="text-neutral-400 hover:text-white transition-colors duration-200"
                 >
                   Contato
