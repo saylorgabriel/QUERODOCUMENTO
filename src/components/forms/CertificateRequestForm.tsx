@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { InputPhone } from '@/components/ui/input-phone'
+import { InputDocument } from '@/components/ui/input-document'
 import { StepIndicator } from './StepIndicator'
 import { PaymentMethodSelector } from './PaymentMethodSelector'
 import { LocationSelector } from './LocationSelector'
@@ -23,6 +24,15 @@ interface FormData {
   name: string
   email: string
   phone: string
+  document: string
+  rg: string
+  address: string
+  addressNumber: string
+  addressComplement: string
+  neighborhood: string
+  userCity: string
+  userState: string
+  zipCode: string
   password: string
   confirmPassword: string
   isLogin: boolean
@@ -30,10 +40,6 @@ interface FormData {
   // Step 3: Certificate reason
   reason: string | null
   customReason: string
-
-  // Step 4: Invoice data
-  invoiceName: string
-  invoiceDocument: string
 
   // Step 4: Payment method
   paymentMethod: 'PIX' | 'CREDIT_CARD' | 'BOLETO' | null
@@ -55,6 +61,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPhoneValid, setIsPhoneValid] = useState(false)
+  const [isDocumentValid, setIsDocumentValid] = useState(false)
   const [sessionChecked, setSessionChecked] = useState(false)
   const [hasActiveSession, setHasActiveSession] = useState(false)
 
@@ -67,13 +74,20 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
     name: initialUserData?.name || '',
     email: initialUserData?.email || '',
     phone: initialUserData?.phone || '',
+    document: '',
+    rg: '',
+    address: '',
+    addressNumber: '',
+    addressComplement: '',
+    neighborhood: '',
+    userCity: '',
+    userState: '',
+    zipCode: '',
     password: '',
     confirmPassword: '',
     isLogin: false,
     reason: null,
     customReason: '',
-    invoiceName: initialUserData?.name || '',
-    invoiceDocument: '',
     paymentMethod: null
   })
 
@@ -89,7 +103,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
             ...prev,
             name: sessionData.user?.name || prev.name,
             email: sessionData.user?.email || prev.email,
-            invoiceName: sessionData.user?.name || prev.invoiceName
+            document: sessionData.user?.document || prev.document
           }))
         }
       } catch (error) {
@@ -163,7 +177,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
 
   const validateStep2 = () => {
     const newErrors: Record<string, string> = {}
-    
+
     if (hasActiveSession) {
       // Just validate that we have the required data
       if (!formData.name.trim()) {
@@ -172,6 +186,34 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
       if (!formData.email.trim()) {
         newErrors.email = 'Email é obrigatório'
       }
+      if (!formData.document.trim()) {
+        newErrors.document = 'CPF/CNPJ é obrigatório'
+      } else if (!isDocumentValid) {
+        newErrors.document = 'CPF/CNPJ inválido'
+      }
+      if (!formData.rg.trim()) {
+        newErrors.rg = 'RG é obrigatório'
+      }
+      if (!formData.zipCode.trim()) {
+        newErrors.zipCode = 'CEP é obrigatório'
+      }
+      if (!formData.address.trim()) {
+        newErrors.address = 'Endereço é obrigatório'
+      }
+      if (!formData.addressNumber.trim()) {
+        newErrors.addressNumber = 'Número é obrigatório'
+      }
+      if (!formData.neighborhood.trim()) {
+        newErrors.neighborhood = 'Bairro é obrigatório'
+      }
+      if (!formData.userCity.trim()) {
+        newErrors.userCity = 'Cidade é obrigatória'
+      }
+      if (!formData.userState.trim()) {
+        newErrors.userState = 'Estado é obrigatório'
+      } else if (formData.userState.length !== 2) {
+        newErrors.userState = 'Estado deve ter 2 letras (UF)'
+      }
     } else {
       // Full authentication validation
       if (!formData.isLogin) {
@@ -179,13 +221,49 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
         if (!formData.name.trim()) {
           newErrors.name = 'Nome é obrigatório'
         }
-        
+
+        if (!formData.document.trim()) {
+          newErrors.document = 'CPF/CNPJ é obrigatório'
+        } else if (!isDocumentValid) {
+          newErrors.document = 'CPF/CNPJ inválido'
+        }
+
+        if (!formData.rg.trim()) {
+          newErrors.rg = 'RG é obrigatório'
+        }
+
+        if (!formData.zipCode.trim()) {
+          newErrors.zipCode = 'CEP é obrigatório'
+        }
+
+        if (!formData.address.trim()) {
+          newErrors.address = 'Endereço é obrigatório'
+        }
+
+        if (!formData.addressNumber.trim()) {
+          newErrors.addressNumber = 'Número é obrigatório'
+        }
+
+        if (!formData.neighborhood.trim()) {
+          newErrors.neighborhood = 'Bairro é obrigatório'
+        }
+
+        if (!formData.userCity.trim()) {
+          newErrors.userCity = 'Cidade é obrigatória'
+        }
+
+        if (!formData.userState.trim()) {
+          newErrors.userState = 'Estado é obrigatório'
+        } else if (formData.userState.length !== 2) {
+          newErrors.userState = 'Estado deve ter 2 letras (UF)'
+        }
+
         if (!formData.password.trim()) {
           newErrors.password = 'Senha é obrigatória'
         } else if (formData.password.length < 4) {
           newErrors.password = 'Senha deve ter pelo menos 4 caracteres'
         }
-        
+
         if (formData.password !== formData.confirmPassword) {
           newErrors.confirmPassword = 'Senhas não conferem'
         }
@@ -300,8 +378,16 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
             name: formData.name,
             email: formData.email,
             password: formData.password,
-            document: formData.invoiceDocument, // Use invoice document as user document
-            phone: formData.phone
+            document: formData.document,
+            phone: formData.phone,
+            rg: formData.rg,
+            address: formData.address,
+            addressNumber: formData.addressNumber,
+            addressComplement: formData.addressComplement,
+            neighborhood: formData.neighborhood,
+            city: formData.userCity,
+            state: formData.userState,
+            zipCode: formData.zipCode
           })
         })
 
@@ -347,9 +433,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           serviceType: 'CERTIFICATE_REQUEST',
-          documentNumber: formData.invoiceDocument, // Document being consulted
-          invoiceName: formData.invoiceName,
-          invoiceDocument: formData.invoiceDocument,
+          documentNumber: formData.document, // Document being consulted
           amount: formData.statePrice, // Price based on selected state
           paymentMethod: formData.paymentMethod,
           // Certificate specific fields
@@ -489,6 +573,173 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
                     disabled
                   />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    CPF/CNPJ
+                  </label>
+                  <InputDocument
+                    value={formData.document}
+                    onChange={(value, isValid) => {
+                      updateFormData('document', value)
+                      setIsDocumentValid(isValid)
+                    }}
+                    placeholder="CPF ou CNPJ"
+                    error={errors.document}
+                    className="min-h-12 sm:min-h-14"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    RG
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.rg}
+                    onChange={(e) => updateFormData('rg', e.target.value)}
+                    placeholder="Número do RG"
+                    className={cn(
+                      'input-primary w-full min-h-12 sm:min-h-14',
+                      errors.rg && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                    )}
+                  />
+                  {errors.rg && (
+                    <p className="text-sm text-amber-600 mt-1">{errors.rg}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    CEP
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.zipCode}
+                    onChange={(e) => updateFormData('zipCode', e.target.value)}
+                    placeholder="00000-000"
+                    className={cn(
+                      'input-primary w-full min-h-12 sm:min-h-14',
+                      errors.zipCode && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                    )}
+                  />
+                  {errors.zipCode && (
+                    <p className="text-sm text-amber-600 mt-1">{errors.zipCode}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      Endereço
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.address}
+                      onChange={(e) => updateFormData('address', e.target.value)}
+                      placeholder="Rua, Avenida, etc"
+                      className={cn(
+                        'input-primary w-full min-h-12 sm:min-h-14',
+                        errors.address && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                      )}
+                    />
+                    {errors.address && (
+                      <p className="text-sm text-amber-600 mt-1">{errors.address}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      Número
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.addressNumber}
+                      onChange={(e) => updateFormData('addressNumber', e.target.value)}
+                      placeholder="Nº"
+                      className={cn(
+                        'input-primary w-full min-h-12 sm:min-h-14',
+                        errors.addressNumber && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                      )}
+                    />
+                    {errors.addressNumber && (
+                      <p className="text-sm text-amber-600 mt-1">{errors.addressNumber}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    Complemento
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.addressComplement}
+                    onChange={(e) => updateFormData('addressComplement', e.target.value)}
+                    placeholder="Apt, Bloco, etc (opcional)"
+                    className="input-primary w-full min-h-12 sm:min-h-14"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    Bairro
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.neighborhood}
+                    onChange={(e) => updateFormData('neighborhood', e.target.value)}
+                    placeholder="Bairro"
+                    className={cn(
+                      'input-primary w-full min-h-12 sm:min-h-14',
+                      errors.neighborhood && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                    )}
+                  />
+                  {errors.neighborhood && (
+                    <p className="text-sm text-amber-600 mt-1">{errors.neighborhood}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      Cidade
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.userCity}
+                      onChange={(e) => updateFormData('userCity', e.target.value)}
+                      placeholder="Cidade"
+                      className={cn(
+                        'input-primary w-full min-h-12 sm:min-h-14',
+                        errors.userCity && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                      )}
+                    />
+                    {errors.userCity && (
+                      <p className="text-sm text-amber-600 mt-1">{errors.userCity}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                      Estado
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.userState}
+                      onChange={(e) => updateFormData('userState', e.target.value)}
+                      placeholder="UF"
+                      maxLength={2}
+                      className={cn(
+                        'input-primary w-full min-h-12 sm:min-h-14 uppercase',
+                        errors.userState && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                      )}
+                    />
+                    {errors.userState && (
+                      <p className="text-sm text-amber-600 mt-1">{errors.userState}</p>
+                    )}
+                  </div>
+                </div>
               </>
             ) : (
               <>
@@ -554,6 +805,19 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
                   )}
                 </div>
 
+                {!formData.isLogin && (
+                  <InputDocument
+                    value={formData.document}
+                    onChange={(value, isValid) => {
+                      updateFormData('document', value)
+                      setIsDocumentValid(isValid)
+                    }}
+                    placeholder="CPF ou CNPJ"
+                    error={errors.document}
+                    className="min-h-12 sm:min-h-14"
+                  />
+                )}
+
                 <InputPhone
                   value={formData.phone}
                   onChange={(value, isValid) => {
@@ -563,6 +827,137 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
                   placeholder="(00) 00000-0000"
                   error={errors.phone}
                 />
+
+                {!formData.isLogin && (
+                  <>
+                    <div>
+                      <input
+                        type="text"
+                        value={formData.rg}
+                        onChange={(e) => updateFormData('rg', e.target.value)}
+                        placeholder="RG"
+                        className={cn(
+                          'input-primary w-full min-h-12 sm:min-h-14',
+                          errors.rg && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                        )}
+                      />
+                      {errors.rg && (
+                        <p className="text-sm text-amber-600 mt-1">{errors.rg}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <input
+                        type="text"
+                        value={formData.zipCode}
+                        onChange={(e) => updateFormData('zipCode', e.target.value)}
+                        placeholder="CEP"
+                        className={cn(
+                          'input-primary w-full min-h-12 sm:min-h-14',
+                          errors.zipCode && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                        )}
+                      />
+                      {errors.zipCode && (
+                        <p className="text-sm text-amber-600 mt-1">{errors.zipCode}</p>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="sm:col-span-2">
+                        <input
+                          type="text"
+                          value={formData.address}
+                          onChange={(e) => updateFormData('address', e.target.value)}
+                          placeholder="Endereço"
+                          className={cn(
+                            'input-primary w-full min-h-12 sm:min-h-14',
+                            errors.address && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                          )}
+                        />
+                        {errors.address && (
+                          <p className="text-sm text-amber-600 mt-1">{errors.address}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <input
+                          type="text"
+                          value={formData.addressNumber}
+                          onChange={(e) => updateFormData('addressNumber', e.target.value)}
+                          placeholder="Número"
+                          className={cn(
+                            'input-primary w-full min-h-12 sm:min-h-14',
+                            errors.addressNumber && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                          )}
+                        />
+                        {errors.addressNumber && (
+                          <p className="text-sm text-amber-600 mt-1">{errors.addressNumber}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <input
+                        type="text"
+                        value={formData.addressComplement}
+                        onChange={(e) => updateFormData('addressComplement', e.target.value)}
+                        placeholder="Complemento (opcional)"
+                        className="input-primary w-full min-h-12 sm:min-h-14"
+                      />
+                    </div>
+
+                    <div>
+                      <input
+                        type="text"
+                        value={formData.neighborhood}
+                        onChange={(e) => updateFormData('neighborhood', e.target.value)}
+                        placeholder="Bairro"
+                        className={cn(
+                          'input-primary w-full min-h-12 sm:min-h-14',
+                          errors.neighborhood && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                        )}
+                      />
+                      {errors.neighborhood && (
+                        <p className="text-sm text-amber-600 mt-1">{errors.neighborhood}</p>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <input
+                          type="text"
+                          value={formData.userCity}
+                          onChange={(e) => updateFormData('userCity', e.target.value)}
+                          placeholder="Cidade"
+                          className={cn(
+                            'input-primary w-full min-h-12 sm:min-h-14',
+                            errors.userCity && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                          )}
+                        />
+                        {errors.userCity && (
+                          <p className="text-sm text-amber-600 mt-1">{errors.userCity}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <input
+                          type="text"
+                          value={formData.userState}
+                          onChange={(e) => updateFormData('userState', e.target.value)}
+                          placeholder="Estado (UF)"
+                          maxLength={2}
+                          className={cn(
+                            'input-primary w-full min-h-12 sm:min-h-14 uppercase',
+                            errors.userState && 'border-amber-500 focus:border-amber-500 focus:ring-amber-500/10'
+                          )}
+                        />
+                        {errors.userState && (
+                          <p className="text-sm text-amber-600 mt-1">{errors.userState}</p>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 <div className="relative">
                   <input

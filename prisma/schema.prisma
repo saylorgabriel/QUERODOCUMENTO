@@ -52,6 +52,14 @@ model User {
   cpf           String?   @unique
   cnpj          String?   @unique
   phone         String?
+  rg            String?
+  address       String?
+  addressNumber String?
+  addressComplement String?
+  neighborhood  String?
+  city          String?
+  state         String?
+  zipCode       String?
   role          UserRole  @default(USER)
   asaasCustomerId String? @unique // ASAAS customer ID
   createdAt     DateTime  @default(now())

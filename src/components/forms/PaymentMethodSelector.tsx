@@ -22,9 +22,9 @@ export function PaymentMethodSelector({ selectedMethod, onSelect }: PaymentMetho
     {
       id: 'CREDIT_CARD' as const,
       name: 'Cartão de Crédito',
-      description: 'Visa, Mastercard, Elo',
+      description: 'À vista em 1x',
       icon: CreditCard,
-      badge: 'À vista 1x',
+      badge: 'Visa, Master, Elo',
       badgeColor: 'bg-accent-100 text-accent-700'
     }
     // ,
@@ -48,7 +48,7 @@ export function PaymentMethodSelector({ selectedMethod, onSelect }: PaymentMetho
         {paymentMethods.map((method) => {
           const isSelected = selectedMethod === method.id
           const Icon = method.icon
-          
+
           return (
             <button
               key={method.id}
@@ -64,13 +64,13 @@ export function PaymentMethodSelector({ selectedMethod, onSelect }: PaymentMetho
               <div className="flex items-center gap-4">
                 <div className={cn(
                   "w-12 h-12 rounded-lg flex items-center justify-center",
-                  isSelected 
-                    ? "bg-primary-600 text-white" 
+                  isSelected
+                    ? "bg-primary-600 text-white"
                     : "bg-neutral-100 text-neutral-600 group-hover:bg-neutral-200"
                 )}>
                   <Icon className="w-6 h-6" />
                 </div>
-                
+
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className={cn(
@@ -92,11 +92,11 @@ export function PaymentMethodSelector({ selectedMethod, onSelect }: PaymentMetho
                     {method.description}
                   </p>
                 </div>
-                
+
                 <div className={cn(
                   "w-5 h-5 rounded-full border-2 flex items-center justify-center",
-                  isSelected 
-                    ? "border-primary-600 bg-primary-600" 
+                  isSelected
+                    ? "border-primary-600 bg-primary-600"
                     : "border-neutral-300"
                 )}>
                   {isSelected && (

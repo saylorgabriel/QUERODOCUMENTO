@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { name, email, password, document, phone } = body
+    const { name, email, password, document, phone, rg, address, addressNumber, addressComplement, neighborhood, city, state, zipCode } = body
 
     console.log('Registration attempt:', { name, email, document, phone, password: password ? '[PROVIDED]' : '[MISSING]' })
 
@@ -118,6 +118,14 @@ export async function POST(request: Request) {
         password: hashedPassword,
         phone: phone || null,
         ...(documentType === 'CPF' ? { cpf: cleanDocument } : { cnpj: cleanDocument }),
+        rg: rg || null,
+        address: address || null,
+        addressNumber: addressNumber || null,
+        addressComplement: addressComplement || null,
+        neighborhood: neighborhood || null,
+        city: city || null,
+        state: state || null,
+        zipCode: zipCode || null,
         role: 'USER'
       }
     })

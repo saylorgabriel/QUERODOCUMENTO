@@ -72,8 +72,6 @@ export async function POST(request: NextRequest) {
     const {
       serviceType,
       documentNumber,
-      invoiceName,
-      invoiceDocument,
       amount,
       paymentMethod,
       // Certificate specific fields (optional)
@@ -84,7 +82,7 @@ export async function POST(request: NextRequest) {
     } = body
 
     // Validate required fields
-    if (!serviceType || !documentNumber || !invoiceName || !invoiceDocument || !amount || !paymentMethod) {
+    if (!serviceType || !documentNumber || !amount || !paymentMethod) {
       return NextResponse.json(
         { error: 'Campos obrigatórios não preenchidos' },
         { status: 400 }
@@ -99,8 +97,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate document numbers
-    if (!isValidDocument(documentNumber) || !isValidDocument(invoiceDocument)) {
+    // Validate document number
+    if (!isValidDocument(documentNumber)) {
       return NextResponse.json(
         { error: 'CPF/CNPJ inválido' },
         { status: 400 }
@@ -160,6 +158,10 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('✅ User verified in database:', { id: userExists.id, email: userExists.email })
+
+    // Use user data for invoice information
+    const invoiceName = userExists.name || 'Nome não informado'
+    const invoiceDocument = userExists.cpf || userExists.cnpj || documentNumber
 
     // Create the order
     const order = await prisma.order.create({
