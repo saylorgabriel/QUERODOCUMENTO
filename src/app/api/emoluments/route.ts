@@ -38,7 +38,7 @@ export async function GET(request: Request) {
         success: true,
         emolument: {
           state: emolument.state,
-          value3Years: Number(emolument.value3Years),
+          value5Years: Number(emolument.value5Years),
           boletoFee: Number(emolument.boletoFee),
           lucroFee: Number(emolument.lucroFee),
           taxPercentage: Number(emolument.taxPercentage),
@@ -59,7 +59,7 @@ export async function GET(request: Request) {
       count: emoluments.length,
       emoluments: emoluments.map(e => ({
         state: e.state,
-        value3Years: Number(e.value3Years),
+        value5Years: Number(e.value5Years),
         boletoFee: Number(e.boletoFee),
         lucroFee: Number(e.lucroFee),
         taxPercentage: Number(e.taxPercentage),

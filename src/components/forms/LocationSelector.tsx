@@ -7,7 +7,7 @@ import { locations, type State, type City, type Notary } from '@/data/locations'
 
 interface EmolumentState {
   state: string
-  value3Years: number
+  value5Years: number
   boletoFee: number
   lucroFee: number
   taxPercentage: number

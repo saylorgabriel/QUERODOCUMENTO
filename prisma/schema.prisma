@@ -647,12 +647,13 @@ model CertificateEmolument {
   state     String   @unique // Sigla do estado (AC, AL, AM, etc.)
 
   // Valores para diferentes períodos
-  value3Years   Decimal  @default(0) @db.Decimal(10, 2) // Valor para 3 anos
+  value5Years   Decimal  @default(0) @db.Decimal(10, 2) // Valor para 5 anos
 
   // Taxas adicionais
-  boletoFee     Decimal  @default(5.087) @db.Decimal(10, 3) // Taxa do boleto (padrão R$ 5,087)
-  lucroFee      Decimal  @default(5.087) @db.Decimal(10, 3) // Taxa de lucro (padrão R$ 5,087)
-  taxPercentage Decimal  @default(30.6) @db.Decimal(5, 2)   // Percentual de imposto (padrão 30,6%)
+  boletoFee     Decimal  @default(0.87) @db.Decimal(10, 3)  // Taxa do boleto (padrão R$ 0,87)
+  lucroFee      Decimal  @default(30.00) @db.Decimal(10, 3) // Taxa de lucro (padrão R$ 30,00)
+  serviceValue  Decimal  @default(5.09) @db.Decimal(10, 3)  // Valor do serviço (padrão R$ 5,09)
+  taxPercentage Decimal  @default(6.00) @db.Decimal(5, 2)   // Percentual de imposto (padrão 6%)
 
   // Valores calculados (armazenados para performance)
   taxValue      Decimal  @default(0) @db.Decimal(10, 2) // Valor do imposto
