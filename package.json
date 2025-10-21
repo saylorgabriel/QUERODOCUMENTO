@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "prisma generate && prisma migrate deploy && next build",
-    "vercel-build": "node scripts/inject-analytics.js && prisma generate && next build",
+    "vercel-build": "node scripts/inject-analytics.js && prisma generate && prisma migrate deploy && next build",
     "postinstall": "prisma generate",
     "start": "next start",
     "worker:webhook": "bun src/lib/workers/webhook-processor.ts",
