@@ -163,7 +163,8 @@ function CheckoutContent() {
 
   const processPayment = async (orderToProcess?: Order) => {
     const currentOrder = orderToProcess || order
-    const paymentMethod = currentOrder?.paymentMethod || selectedPaymentMethod
+    // Use selectedPaymentMethod first (user's current choice) instead of saved order.paymentMethod
+    const paymentMethod = selectedPaymentMethod || currentOrder?.paymentMethod
 
     console.log('💰 processPayment called with:', {
       orderToProcess: orderToProcess?.id,
