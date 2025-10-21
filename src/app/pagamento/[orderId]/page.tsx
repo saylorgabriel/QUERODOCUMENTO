@@ -326,7 +326,7 @@ export default function PaymentPage() {
                           <CreditCard className="w-5 h-5 text-neutral-600" />
                           <div>
                             <p className="font-semibold text-neutral-900">Cartão de Crédito</p>
-                            <p className="text-sm text-neutral-600">Em até 12x sem juros</p>
+                            <p className="text-sm text-neutral-600">À vista em 1x</p>
                           </div>
                         </div>
                       </div>

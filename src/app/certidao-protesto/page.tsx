@@ -123,7 +123,7 @@ export default function CertidaoProtestoPage() {
           </div>
 
           {/* Pricing Information */}
-          <div className="mt-12">
+          {/* <div className="mt-12">
             <div className="card-elevated bg-gradient-to-r from-primary-50 to-accent-50 border-primary-200">
               <div className="text-center">
                 <h3 className="text-xl font-semibold text-neutral-900 mb-4">
@@ -166,7 +166,7 @@ export default function CertidaoProtestoPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
     </main>
   )

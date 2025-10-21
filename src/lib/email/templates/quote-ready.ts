@@ -126,7 +126,7 @@ export function getQuoteReadyTemplate(data: EmailTemplateData): EmailTemplate {
           <h4 style="margin: 0 0 8px 0; color: #374151;">Cartão</h4>
           <p style="margin: 0; font-size: 14px; color: #6b7280;">
             Débito ou Crédito<br>
-            <strong>Até 12x sem juros</strong>
+            <strong>À vista em 1x</strong>
           </p>
         </div>
       </div>
@@ -234,11 +234,11 @@ export function getQuoteReadyTemplate(data: EmailTemplateData): EmailTemplate {
     💳 APROVAR ORÇAMENTO - {{amount|currency}}:
     
     🏦 PIX (Desconto 5%): {{dashboardUrl}}/pedidos/{{orderNumber}}/aprovar?method=pix
-    💳 Cartão (12x sem juros): {{dashboardUrl}}/pedidos/{{orderNumber}}/aprovar?method=card
+    💳 Cartão (À vista em 1x): {{dashboardUrl}}/pedidos/{{orderNumber}}/aprovar?method=card
     
     ⚡ FORMAS DE PAGAMENTO:
     • PIX: Pagamento instantâneo + desconto 5%
-    • Cartão: Débito/Crédito até 12x sem juros
+    • Cartão: À vista em 1x
     
     PROGRESSO:
     1. ✅ Consulta

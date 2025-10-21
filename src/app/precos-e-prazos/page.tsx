@@ -164,7 +164,7 @@ export default function PrecosPrazosPage() {
                 </li>
                 <li className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
-                  <span><strong>Cartão de Crédito:</strong> Em até 12x sem juros</span>
+                  <span><strong>Cartão de Crédito:</strong> À vista em 1x</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
