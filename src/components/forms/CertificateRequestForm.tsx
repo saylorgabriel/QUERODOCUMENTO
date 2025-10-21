@@ -91,6 +91,11 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
     paymentMethod: null
   })
 
+  // Scroll to top when step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentStep])
+
   // Check for existing session
   useEffect(() => {
     const checkSession = async () => {

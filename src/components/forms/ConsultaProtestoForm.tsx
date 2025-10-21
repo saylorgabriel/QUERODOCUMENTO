@@ -75,6 +75,11 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
 
   const [formData, setFormData] = useState<FormData>(getInitialFormData())
 
+  // Scroll to top when step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentStep])
+
   // Check if user is logged in
   useEffect(() => {
     const checkSession = async () => {
