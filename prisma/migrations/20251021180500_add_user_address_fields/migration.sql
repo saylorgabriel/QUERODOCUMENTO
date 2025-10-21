@@ -1,0 +1,8 @@
+-- AlterTable: Add address-related columns to User table
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "address" TEXT;
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "addressNumber" TEXT;
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "addressComplement" TEXT;
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "neighborhood" TEXT;
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "city" TEXT;
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "state" TEXT;
+ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "zipCode" TEXT;
