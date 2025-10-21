@@ -1,10 +1,14 @@
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
+import { seedEmoluments } from './seeds/emoluments'
 
 const prisma = new PrismaClient()
 
 async function main() {
   console.log('🌱 Seeding database...')
+
+  // Seed Certificate Emoluments
+  await seedEmoluments()
 
   // Check if demo user already exists
   const existingUser = await prisma.user.findUnique({
