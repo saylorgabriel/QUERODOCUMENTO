@@ -1,16 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Redis from 'ioredis'
 import { prisma } from '@/lib/db'
 
 // Redis client for webhook queue (optional)
-let redis: Redis | null = null
+let redis: any = null
 
-// Initialize Redis only if REDIS_URL is configured
-if (process.env.REDIS_URL) {
+// Initialize Redis only if REDIS_URL is configured and ioredis is available
+async function initRedis() {
+  if (!process.env.REDIS_URL) return null
+
   try {
-    redis = new Redis(process.env.REDIS_URL, {
+    // Dynamic import to make ioredis optional
+    const Redis = (await import('ioredis')).default
+
+    const client = new Redis(process.env.REDIS_URL, {
       maxRetriesPerRequest: 3,
-      retryStrategy: (times) => {
+      retryStrategy: (times: number) => {
         if (times > 3) {
           console.warn('⚠️ Redis connection failed, webhooks will be processed synchronously')
           return null // Stop retrying
@@ -20,12 +24,14 @@ if (process.env.REDIS_URL) {
       lazyConnect: true
     })
 
-    redis.on('error', (err) => {
+    client.on('error', (err: Error) => {
       console.warn('⚠️ Redis error (webhooks will process synchronously):', err.message)
     })
+
+    return client
   } catch (error) {
-    console.warn('⚠️ Redis initialization failed, webhooks will be processed synchronously')
-    redis = null
+    console.warn('⚠️ Redis not available, webhooks will be processed synchronously')
+    return null
   }
 }
 
@@ -121,6 +127,11 @@ export async function POST(request: NextRequest) {
     if (!payment?.id) {
       console.log('❌ Webhook: No payment ID found')
       return NextResponse.json({ error: 'No payment ID' }, { status: 400 })
+    }
+
+    // Initialize Redis if not already done (lazy loading)
+    if (!redis && process.env.REDIS_URL) {
+      redis = await initRedis()
     }
 
     // Check if Redis is available
