@@ -5,7 +5,6 @@ export const dynamic = 'force-dynamic'
 
 import React, { useState, Suspense } from 'react'
 import { Metadata } from 'next'
-import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import { ConsultaProtestoForm } from '@/components/forms/ConsultaProtestoForm'
 import { ProtestResults } from '@/components/forms/ProtestResults'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
@@ -103,25 +102,22 @@ export default function ConsultaProtestoPage() {
 
   if (isLoading) {
     return (
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-          <div className="text-center">
-            <LoadingSpinner size="lg" className="mb-4" />
-            <h3 className="text-lg font-semibold text-neutral-900 mb-2">Processando sua consulta...</h3>
-            <p className="text-neutral-600">
-              Aguarde enquanto processamos seu pagamento e enviamos sua solicitação
-            </p>
-          </div>
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="text-center">
+          <LoadingSpinner size="lg" className="mb-4" />
+          <h3 className="text-lg font-semibold text-neutral-900 mb-2">Processando sua consulta...</h3>
+          <p className="text-neutral-600">
+            Aguarde enquanto processamos seu pagamento e enviamos sua solicitação
+          </p>
         </div>
-      </LayoutWrapper>
+      </div>
     )
   }
 
   // Mostra mensagem de confirmação após envio da consulta
   if (consultationSubmitted) {
     return (
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 py-4 sm:py-6 lg:py-8">
+      <div className="min-h-screen bg-neutral-50 py-4 sm:py-6 lg:py-8">
           <div className="container-padded">
             <div className="max-w-2xl mx-auto">
               {/* Header with back button */}
@@ -214,16 +210,14 @@ export default function ConsultaProtestoPage() {
               </Card>
             </div>
           </div>
-        </div>
-      </LayoutWrapper>
+      </div>
     )
   }
 
   // Esta seção é mantida para casos onde o resultado é mostrado imediatamente (futura automação)
   if (consultationResult) {
     return (
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 py-4 sm:py-6 lg:py-8">
+      <div className="min-h-screen bg-neutral-50 py-4 sm:py-6 lg:py-8">
           <div className="container-padded">
             <div className="max-w-4xl mx-auto">
               {/* Header with back button */}
@@ -242,15 +236,13 @@ export default function ConsultaProtestoPage() {
               <ProtestResults data={consultationResult} />
             </div>
           </div>
-        </div>
-      </LayoutWrapper>
+      </div>
     )
   }
 
   if (error) {
     return (
-      <LayoutWrapper>
-        <div className="min-h-screen bg-neutral-50 py-4 sm:py-6 lg:py-8">
+      <div className="min-h-screen bg-neutral-50 py-4 sm:py-6 lg:py-8">
           <div className="container-padded">
             <div className="max-w-2xl mx-auto">
               <Card className="p-6 sm:p-8 text-center">
@@ -265,15 +257,13 @@ export default function ConsultaProtestoPage() {
               </Card>
             </div>
           </div>
-        </div>
-      </LayoutWrapper>
+      </div>
     )
   }
 
   // Default consultation form view
   return (
-    <LayoutWrapper>
-      <main className="min-h-screen bg-neutral-50 py-6 sm:py-8">
+    <main className="min-h-screen bg-neutral-50 py-6 sm:py-8">
         <div className="container-padded">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-10 lg:mb-12">
@@ -455,7 +445,6 @@ export default function ConsultaProtestoPage() {
             </div>
           </div>
         </div>
-      </main>
-    </LayoutWrapper>
+    </main>
   )
 }

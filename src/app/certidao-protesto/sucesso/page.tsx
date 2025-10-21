@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import { CheckCircle, Calendar, CreditCard, FileText, Clock, ArrowRight, Copy, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -76,39 +75,34 @@ function CertidaoProtestoSuccessContent() {
 
   if (loading) {
     return (
-      <LayoutWrapper>
-        <main className="min-h-screen bg-neutral-50 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-            <p className="text-neutral-600">Carregando dados do pedido...</p>
-          </div>
-        </main>
-      </LayoutWrapper>
+      <main className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <p className="text-neutral-600">Carregando dados do pedido...</p>
+        </div>
+      </main>
     )
   }
 
   if (error || !orderData) {
     return (
-      <LayoutWrapper>
-        <main className="min-h-screen bg-neutral-50 flex items-center justify-center">
-          <div className="text-center max-w-md">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <FileText className="w-8 h-8 text-red-600" />
-            </div>
-            <h1 className="text-2xl font-bold text-neutral-900 mb-4">Pedido não encontrado</h1>
-            <p className="text-neutral-600 mb-6">{error || 'Não foi possível encontrar os dados do pedido.'}</p>
-            <Link href="/dashboard">
-              <Button>Ir para o Dashboard</Button>
-            </Link>
+      <main className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FileText className="w-8 h-8 text-red-600" />
           </div>
-        </main>
-      </LayoutWrapper>
+          <h1 className="text-2xl font-bold text-neutral-900 mb-4">Pedido não encontrado</h1>
+          <p className="text-neutral-600 mb-6">{error || 'Não foi possível encontrar os dados do pedido.'}</p>
+          <Link href="/dashboard">
+            <Button>Ir para o Dashboard</Button>
+          </Link>
+        </div>
+      </main>
     )
   }
 
   return (
-    <LayoutWrapper>
-      <main className="min-h-screen bg-neutral-50 py-8">
+    <main className="min-h-screen bg-neutral-50 py-8">
         <div className="container-wrapper">
           {/* Success Header */}
           <div className="text-center mb-12">
@@ -339,24 +333,21 @@ function CertidaoProtestoSuccessContent() {
             </div>
           </div>
         </div>
-      </main>
-    </LayoutWrapper>
+    </main>
   )
 }
 
 export default function CertidaoProtestoSuccessPage() {
   return (
     <Suspense fallback={
-      <LayoutWrapper>
-        <main className="min-h-screen bg-gradient-to-br from-primary-50 to-white">
-          <div className="max-w-4xl mx-auto px-4 py-20">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
-              <p className="text-neutral-600">Carregando...</p>
-            </div>
+      <main className="min-h-screen bg-gradient-to-br from-primary-50 to-white">
+        <div className="max-w-4xl mx-auto px-4 py-20">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-neutral-600">Carregando...</p>
           </div>
-        </main>
-      </LayoutWrapper>
+        </div>
+      </main>
     }>
       <CertidaoProtestoSuccessContent />
     </Suspense>

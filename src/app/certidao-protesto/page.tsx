@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import { CertificateRequestForm } from '@/components/forms/CertificateRequestForm'
 
 export const metadata: Metadata = {
@@ -10,8 +9,7 @@ export const metadata: Metadata = {
 
 export default function CertidaoProtestoPage() {
   return (
-    <LayoutWrapper>
-      <main className="min-h-screen bg-neutral-50 py-6 sm:py-8">
+    <main className="min-h-screen bg-neutral-50 py-6 sm:py-8">
         <div className="container-padded">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-10 lg:mb-12">
@@ -170,7 +168,6 @@ export default function CertidaoProtestoPage() {
             </div>
           </div>
         </div>
-      </main>
-    </LayoutWrapper>
+    </main>
   )
 }
