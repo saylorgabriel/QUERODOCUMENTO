@@ -152,28 +152,34 @@ export default function DashboardClient() {
       value: dashboardStats.consultasRealizadas,
       icon: Search,
       gradient: 'from-blue-500 to-blue-600',
-      bgGradient: 'from-blue-50 to-blue-100'
+      bgGradient: 'from-blue-50 to-blue-100',
+      tab: 'consultas',
+      clickable: true
     },
     {
       title: 'Certidões Solicitadas',
       value: dashboardStats.certidoesSolicitadas,
       icon: FileText,
       gradient: 'from-purple-500 to-purple-600',
-      bgGradient: 'from-purple-50 to-purple-100'
+      bgGradient: 'from-purple-50 to-purple-100',
+      tab: 'certidoes',
+      clickable: true
     },
     {
       title: 'Protestos Encontrados',
       value: dashboardStats.protestosEncontrados,
       icon: AlertCircle,
       gradient: 'from-amber-500 to-amber-600',
-      bgGradient: 'from-amber-50 to-amber-100'
+      bgGradient: 'from-amber-50 to-amber-100',
+      clickable: false
     },
     {
       title: 'Documentos Prontos',
       value: dashboardStats.documentosProntos,
       icon: CheckCircle,
       gradient: 'from-green-500 to-green-600',
-      bgGradient: 'from-green-50 to-green-100'
+      bgGradient: 'from-green-50 to-green-100',
+      clickable: false
     }
   ]
 
@@ -280,47 +286,58 @@ export default function DashboardClient() {
 
               {/* Stats Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {statCards.map((stat, index) => (
-                  <div
-                    key={index}
-                    className={`
-                      relative overflow-hidden rounded-2xl
-                      bg-gradient-to-br ${stat.bgGradient}
-                      border border-white/50
-                      p-6 shadow-soft hover:shadow-lg
-                      transition-all duration-300 hover:scale-105
-                      group
-                    `}
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`
-                        p-3 rounded-xl bg-gradient-to-br ${stat.gradient}
-                        shadow-md group-hover:scale-110 transition-transform duration-300
-                      `}>
-                        <stat.icon className="w-6 h-6 text-white" />
+                {statCards.map((stat, index) => {
+                  const CardWrapper = stat.clickable ? 'button' : 'div'
+                  return (
+                    <CardWrapper
+                      key={index}
+                      onClick={stat.clickable ? () => setActiveTab(stat.tab!) : undefined}
+                      className={`
+                        relative overflow-hidden rounded-2xl
+                        bg-gradient-to-br ${stat.bgGradient}
+                        border border-white/50
+                        p-6 shadow-soft hover:shadow-lg
+                        transition-all duration-300 hover:scale-105
+                        group
+                        ${stat.clickable ? 'cursor-pointer hover:shadow-xl active:scale-100' : ''}
+                        w-full text-left
+                      `}
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className={`
+                          p-3 rounded-xl bg-gradient-to-br ${stat.gradient}
+                          shadow-md group-hover:scale-110 transition-transform duration-300
+                        `}>
+                          <stat.icon className="w-6 h-6 text-white" />
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-neutral-600 mb-1">
-                        {stat.title}
-                      </p>
-                      <p className="text-3xl font-bold text-neutral-900">
-                        {dataLoading ? (
-                          <span className="inline-block w-16 h-8 bg-neutral-200 rounded animate-pulse" />
-                        ) : (
-                          stat.value
-                        )}
-                      </p>
-                    </div>
-                    <div className={`
-                      absolute -bottom-6 -right-6 w-24 h-24
-                      bg-gradient-to-br ${stat.gradient}
-                      rounded-full opacity-10
-                      group-hover:scale-150 transition-transform duration-500
-                    `} />
-                  </div>
-                ))}
+                      <div>
+                        <p className="text-sm font-medium text-neutral-600 mb-1">
+                          {stat.title}
+                        </p>
+                        <p className="text-3xl font-bold text-neutral-900">
+                          {dataLoading ? (
+                            <span className="inline-block w-16 h-8 bg-neutral-200 rounded animate-pulse" />
+                          ) : (
+                            stat.value
+                          )}
+                        </p>
+                      </div>
+                      <div className={`
+                        absolute -bottom-6 -right-6 w-24 h-24
+                        bg-gradient-to-br ${stat.gradient}
+                        rounded-full opacity-10
+                        group-hover:scale-150 transition-transform duration-500
+                      `} />
+                      {stat.clickable && (
+                        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <Eye className="w-5 h-5 text-neutral-400" />
+                        </div>
+                      )}
+                    </CardWrapper>
+                  )
+                })}
               </div>
 
               {/* Quick Actions */}
