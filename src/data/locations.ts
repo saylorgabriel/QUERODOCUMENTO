@@ -183,6 +183,295 @@ export const locations: State[] = [
         ]
       }
     ]
+  },
+  // Estados adicionais (sem cartórios específicos - usar opção "Todos os cartórios")
+  {
+    id: 'ac',
+    name: 'Acre',
+    code: 'AC',
+    cities: [
+      {
+        id: 'rio-branco',
+        name: 'Rio Branco',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'al',
+    name: 'Alagoas',
+    code: 'AL',
+    cities: [
+      {
+        id: 'maceio',
+        name: 'Maceió',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'ap',
+    name: 'Amapá',
+    code: 'AP',
+    cities: [
+      {
+        id: 'macapa',
+        name: 'Macapá',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'am',
+    name: 'Amazonas',
+    code: 'AM',
+    cities: [
+      {
+        id: 'manaus',
+        name: 'Manaus',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'ba',
+    name: 'Bahia',
+    code: 'BA',
+    cities: [
+      {
+        id: 'salvador',
+        name: 'Salvador',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'ce',
+    name: 'Ceará',
+    code: 'CE',
+    cities: [
+      {
+        id: 'fortaleza',
+        name: 'Fortaleza',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'df',
+    name: 'Distrito Federal',
+    code: 'DF',
+    cities: [
+      {
+        id: 'brasilia',
+        name: 'Brasília',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'es',
+    name: 'Espírito Santo',
+    code: 'ES',
+    cities: [
+      {
+        id: 'vitoria',
+        name: 'Vitória',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'go',
+    name: 'Goiás',
+    code: 'GO',
+    cities: [
+      {
+        id: 'goiania',
+        name: 'Goiânia',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'ma',
+    name: 'Maranhão',
+    code: 'MA',
+    cities: [
+      {
+        id: 'sao-luis',
+        name: 'São Luís',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'mt',
+    name: 'Mato Grosso',
+    code: 'MT',
+    cities: [
+      {
+        id: 'cuiaba',
+        name: 'Cuiabá',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'ms',
+    name: 'Mato Grosso do Sul',
+    code: 'MS',
+    cities: [
+      {
+        id: 'campo-grande',
+        name: 'Campo Grande',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'pa',
+    name: 'Pará',
+    code: 'PA',
+    cities: [
+      {
+        id: 'belem',
+        name: 'Belém',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'pb',
+    name: 'Paraíba',
+    code: 'PB',
+    cities: [
+      {
+        id: 'joao-pessoa',
+        name: 'João Pessoa',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'pr',
+    name: 'Paraná',
+    code: 'PR',
+    cities: [
+      {
+        id: 'curitiba',
+        name: 'Curitiba',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'pe',
+    name: 'Pernambuco',
+    code: 'PE',
+    cities: [
+      {
+        id: 'recife',
+        name: 'Recife',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'pi',
+    name: 'Piauí',
+    code: 'PI',
+    cities: [
+      {
+        id: 'teresina',
+        name: 'Teresina',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'rn',
+    name: 'Rio Grande do Norte',
+    code: 'RN',
+    cities: [
+      {
+        id: 'natal',
+        name: 'Natal',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'rs',
+    name: 'Rio Grande do Sul',
+    code: 'RS',
+    cities: [
+      {
+        id: 'porto-alegre',
+        name: 'Porto Alegre',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'ro',
+    name: 'Rondônia',
+    code: 'RO',
+    cities: [
+      {
+        id: 'porto-velho',
+        name: 'Porto Velho',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'rr',
+    name: 'Roraima',
+    code: 'RR',
+    cities: [
+      {
+        id: 'boa-vista',
+        name: 'Boa Vista',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'sc',
+    name: 'Santa Catarina',
+    code: 'SC',
+    cities: [
+      {
+        id: 'florianopolis',
+        name: 'Florianópolis',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'se',
+    name: 'Sergipe',
+    code: 'SE',
+    cities: [
+      {
+        id: 'aracaju',
+        name: 'Aracaju',
+        notaries: []
+      }
+    ]
+  },
+  {
+    id: 'to',
+    name: 'Tocantins',
+    code: 'TO',
+    cities: [
+      {
+        id: 'palmas',
+        name: 'Palmas',
+        notaries: []
+      }
+    ]
   }
 ]
 

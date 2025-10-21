@@ -11,54 +11,54 @@ export const metadata: Metadata = {
 export default function CertidaoProtestoPage() {
   return (
     <LayoutWrapper>
-      <main className="min-h-screen bg-neutral-50 py-8">
-        <div className="container-wrapper">
+      <main className="min-h-screen bg-neutral-50 py-6 sm:py-8">
+        <div className="container-padded">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-neutral-900 mb-4">
+          <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <h1 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-3 sm:mb-4">
               Certidão de Protesto
             </h1>
-            <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              Solicite sua certidão de protesto oficial emitida pelos cartórios competentes. 
+            <p className="text-base sm:text-lg text-neutral-600 max-w-3xl mx-auto px-4">
+              Solicite sua certidão de protesto oficial emitida pelos cartórios competentes.
               Documento reconhecido nacionalmente para comprovação de existência ou inexistência de protestos.
             </p>
           </div>
 
           {/* Features */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <div className="card-elevated text-center">
-              <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10 lg:mb-12">
+            <div className="p-4 sm:p-6 lg:p-8 bg-white rounded-card shadow-card text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Documento Oficial</h3>
-              <p className="text-sm text-neutral-600">
+              <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">Documento Oficial</h3>
+              <p className="text-xs sm:text-sm text-neutral-600">
                 Certidão emitida diretamente pelos cartórios de protesto competentes
               </p>
             </div>
 
-            <div className="card-elevated text-center">
-              <div className="w-12 h-12 bg-success-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-4 sm:p-6 lg:p-8 bg-white rounded-card shadow-card text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-success-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Processo Rápido</h3>
-              <p className="text-sm text-neutral-600">
+              <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">Processo Rápido</h3>
+              <p className="text-xs sm:text-sm text-neutral-600">
                 Orçamento em até 3 dias úteis, emissão em até 5 dias após pagamento
               </p>
             </div>
 
-            <div className="card-elevated text-center">
-              <div className="w-12 h-12 bg-accent-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="p-4 sm:p-6 lg:p-8 bg-white rounded-card shadow-card text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-accent-100 rounded-lg flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-accent-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-2">Abrangência Nacional</h3>
-              <p className="text-sm text-neutral-600">
+              <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">Abrangência Nacional</h3>
+              <p className="text-xs sm:text-sm text-neutral-600">
                 Consulta em cartórios de todos os estados do Brasil
               </p>
             </div>

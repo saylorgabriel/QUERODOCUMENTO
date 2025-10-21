@@ -175,6 +175,12 @@ export async function POST(request: Request) {
     // Create payment in ASAAS
     const asaasPayment = await asaasService.createPayment(paymentData)
 
+    console.log('💳 ASAAS Payment Response:', {
+      id: asaasPayment.id,
+      status: asaasPayment.status,
+      billingType: asaasPayment.billingType
+    })
+
     // Get PIX QR Code if payment method is PIX
     let pixQrCode = null
     if (paymentMethod === 'PIX' && asaasPayment.id) {
@@ -185,13 +191,26 @@ export async function POST(request: Request) {
       }
     }
 
+    // Determine payment status based on ASAAS response
+    // Credit cards in sandbox are usually approved immediately (CONFIRMED)
+    const paymentStatus = asaasPayment.status
+    const isPaid = paymentStatus === 'CONFIRMED' || paymentStatus === 'RECEIVED'
+
+    console.log('📊 Payment Status:', {
+      asaasStatus: paymentStatus,
+      isPaid,
+      willUpdateOrderStatus: isPaid
+    })
+
     // Update order with payment information
     await prisma.order.update({
       where: { id: order.id },
       data: {
         asaasPaymentId: asaasPayment.id,
         paymentMethod: paymentMethod,
-        paymentStatus: 'PENDING',
+        paymentStatus: paymentStatus,
+        paidAt: isPaid ? new Date() : null,
+        status: isPaid ? 'PROCESSING' : order.status,
         metadata: {
           ...(order.metadata as any || {}),
           asaasCustomerId: asaasCustomer.id,
@@ -242,8 +261,8 @@ export async function POST(request: Request) {
       order: {
         id: order.id,
         orderNumber: order.orderNumber,
-        status: order.status,
-        paymentStatus: 'PENDING',
+        status: isPaid ? 'PROCESSING' : order.status,
+        paymentStatus: paymentStatus,
         paymentMethod: paymentMethod,
         amount: order.amount
       },
@@ -259,10 +278,13 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Payment creation error:', error)
 
+    // Return the specific error message from ASAAS (user-friendly)
+    const errorMessage = (error as any).message || 'Erro ao criar pagamento'
+
     return NextResponse.json(
       {
-        error: 'Erro ao criar pagamento',
-        details: (error as any).message
+        error: errorMessage,
+        details: errorMessage
       },
       { status: 500 }
     )

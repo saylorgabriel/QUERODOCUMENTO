@@ -170,7 +170,7 @@ export default function FaleConosco() {
                     Horário de Atendimento
                   </h3>
                   <div className="space-y-2 text-sm text-neutral-600">
-                    <p><strong>Segunda a Sexta:</strong> 9:00 às 12:00 e 13:00 às 18:00</p>
+                    <p><strong>Segunda a Sexta:</strong> 9:00 às 12:00 e 13:00 às 17:00</p>
                     <p><strong>Sábado:</strong> Fechado</p>
                     <p><strong>Domingo:</strong> Fechado</p>
                   </div>

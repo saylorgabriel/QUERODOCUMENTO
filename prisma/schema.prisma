@@ -640,3 +640,29 @@ enum LeadStage {
   PAYMENT_STARTED  // Started payment process
   CUSTOMER         // Completed purchase
 }
+
+// Tabela de Emolumentos por Estado
+model CertificateEmolument {
+  id        String   @id @default(cuid())
+  state     String   @unique // Sigla do estado (AC, AL, AM, etc.)
+
+  // Valores para diferentes períodos
+  value3Years   Decimal  @default(0) @db.Decimal(10, 2) // Valor para 3 anos
+
+  // Taxas adicionais
+  boletoFee     Decimal  @default(5.087) @db.Decimal(10, 3) // Taxa do boleto (padrão R$ 5,087)
+  lucroFee      Decimal  @default(5.087) @db.Decimal(10, 3) // Taxa de lucro (padrão R$ 5,087)
+  taxPercentage Decimal  @default(30.6) @db.Decimal(5, 2)   // Percentual de imposto (padrão 30,6%)
+
+  // Valores calculados (armazenados para performance)
+  taxValue      Decimal  @default(0) @db.Decimal(10, 2) // Valor do imposto
+  finalValue    Decimal  @default(0) @db.Decimal(10, 2) // Valor final com todas as taxas
+
+  // Metadados
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([state])
+  @@index([active])
+}

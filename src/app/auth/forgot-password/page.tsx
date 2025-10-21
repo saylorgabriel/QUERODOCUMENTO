@@ -93,20 +93,20 @@ export default function ForgotPasswordPage() {
               </div>
             )}
 
-            {resetToken && (
-              <div className="bg-blue-50 text-blue-600 p-3 rounded-lg text-sm">
-                <p className="font-medium mb-2">Token para redefinir senha (apenas para desenvolvimento):</p>
-                <code className="bg-blue-100 px-2 py-1 rounded text-xs break-all">{resetToken}</code>
-                <p className="mt-2 text-xs">
+            {/* {resetToken && ( */}
+               {/* <div className="bg-blue-50 text-blue-600 p-3 rounded-lg text-sm"> */}
+                {/* <p className="font-medium mb-2">Token para redefinir senha (apenas para desenvolvimento):</p>
+                <code className="bg-blue-100 px-2 py-1 rounded text-xs break-all">{resetToken}</code> */}
+                {/* <p className="mt-2 text-xs">
                   <Link 
                     href={`/auth/reset-password?email=${email}&token=${resetToken}`}
                     className="text-blue-700 underline"
                   >
                     Clique aqui para redefinir sua senha
                   </Link>
-                </p>
-              </div>
-            )}
+                </p> */}
+              {/* </div> */}
+            {/* )} */}
 
             <button
               type="submit"

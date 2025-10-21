@@ -63,8 +63,8 @@ export default function Header() {
           {/* Enhanced Logo */}
           <div className="flex items-center">
             <a href="/" className="flex items-center group">
-              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center mr-3 shadow-md group-hover:scale-110 transition-transform duration-300">
-                <span className="text-white font-bold text-base lg:text-lg">Q</span>
+              <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center mr-3 shadow-md group-hover:scale-110 transition-transform duration-300 overflow-hidden">
+                <img src="/iconeqdm.jpg" alt="QueroDocumento" className="w-full h-full object-contain" />
               </div>
               <span className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-neutral-900 to-primary-700 bg-clip-text text-transparent group-hover:from-primary-700 group-hover:to-accent-600 transition-all duration-300">
                 QueroDocumento

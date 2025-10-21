@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { 
   FileText, 
   Search, 
@@ -24,12 +24,9 @@ import OrdersSection from '@/components/dashboard/OrdersSection'
 
 // Real data will be fetched from API
 
-interface DashboardPageProps {
-  searchParams: { [key: string]: string | string[] | undefined }
-}
-
-export default function DashboardPage({ searchParams }: DashboardPageProps) {
+export default function DashboardPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState('overview')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [session, setSession] = useState<any>(null)
@@ -211,7 +208,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
   // Initialize tab from URL on first load only
   useEffect(() => {
     if (initialLoad) {
-      const tab = searchParams?.tab as string
+      const tab = searchParams.get('tab')
       if (tab && ['overview', 'orders', 'profile'].includes(tab)) {
         setActiveTab(tab)
       }
@@ -382,9 +379,9 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
               <div className="card-modern bg-gradient-to-br from-white to-neutral-50/30">
                 <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-neutral-900 to-primary-700 bg-clip-text text-transparent mb-6 sm:mb-8">Ações Rápidas</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                  <button 
-                    onClick={() => setActiveTab('queries')}
-                    className="group p-4 sm:p-6 bg-gradient-to-br from-primary-50 to-primary-100/50 border border-primary-200/50 rounded-2xl hover:shadow-md hover:-translate-y-1 transition-all duration-300 text-left min-h-28 sm:min-h-32 relative overflow-hidden"
+                  <a
+                    href="/consulta-protesto"
+                    className="group p-4 sm:p-6 bg-gradient-to-br from-primary-50 to-primary-100/50 border border-primary-200/50 rounded-2xl hover:shadow-md hover:-translate-y-1 transition-all duration-300 text-left block min-h-28 sm:min-h-32 relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div className="relative z-10">
@@ -394,7 +391,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                       <h3 className="font-bold text-neutral-900 mb-2 text-sm sm:text-base group-hover:text-primary-700 transition-colors duration-200">Nova Consulta</h3>
                       <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">Consultar protestos por CPF/CNPJ</p>
                     </div>
-                  </button>
+                  </a>
                   
                   <a 
                     href="/certidao-protesto"
@@ -503,13 +500,13 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                     </div>
                     <p className="text-lg font-medium text-neutral-500 mb-2">Nenhuma atividade recente</p>
                     <p className="text-neutral-400 mb-6">Faça sua primeira consulta para começar</p>
-                    <button 
-                      onClick={() => setActiveTab('queries')}
+                    <a
+                      href="/consulta-protesto"
                       className="btn-primary-sm inline-flex items-center gap-2"
                     >
                       <Search className="w-4 h-4" />
                       Nova Consulta
-                    </button>
+                    </a>
                   </div>
                 )}
               </div>
@@ -548,7 +545,12 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
                 </div>
                 <div className="flex gap-4 mt-6">
                   <button className="btn-primary">Salvar Alterações</button>
-                  <button className="btn-secondary">Alterar Senha</button>
+                  <button
+                    className="btn-secondary"
+                    onClick={() => router.push('/auth/forgot-password')}
+                  >
+                    Alterar Senha
+                  </button>
                 </div>
               </div>
 
@@ -585,7 +587,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-neutral-900">Consultas de Protesto</h2>
-                <button className="btn-primary">Nova Consulta</button>
+                <a href="/consulta-protesto" className="btn-primary">Nova Consulta</a>
               </div>
 
               <div className="card-elevated">

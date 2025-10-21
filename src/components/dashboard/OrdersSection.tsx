@@ -53,6 +53,14 @@ export default function OrdersSection() {
     CERTIFICATE_REQUEST: 'Certidão de Protesto'
   }
 
+  // Payment method labels
+  const paymentMethodLabels: { [key: string]: string } = {
+    'CREDIT_CARD': 'Cartão de Crédito',
+    'PIX': 'PIX',
+    'BOLETO': 'Boleto Bancário',
+    'BANK_SLIP': 'Boleto Bancário'
+  }
+
   // Status labels and colors
   const statusConfig = {
     AWAITING_PAYMENT: { label: 'Aguardando Pagamento', color: 'bg-yellow-100 text-yellow-800' },
@@ -270,28 +278,46 @@ export default function OrdersSection() {
                         <CreditCard className="h-3 w-3 mr-1" />
                         R$ {order.amount.toFixed(2)}
                       </span>
-                      <span>{order.paymentMethod}</span>
+                      <span>{paymentMethodLabels[order.paymentMethod] || order.paymentMethod}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Status Badges */}
                 <div className="flex flex-col items-end space-y-2">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    statusConfig[order.status as keyof typeof statusConfig]?.color || 'bg-gray-100 text-gray-800'
-                  }`}>
-                    {statusConfig[order.status as keyof typeof statusConfig]?.label || order.status}
-                  </span>
-                  
-                  {order.paymentStatus !== 'COMPLETED' && (
+                  {/* Only show status badge if payment is not CONFIRMED */}
+                  {!(order.paymentStatus === 'CONFIRMED' || order.paymentStatus === 'RECEIVED') && (
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      order.paymentStatus === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                      order.paymentStatus === 'FAILED' ? 'bg-red-100 text-red-800' :
-                      'bg-gray-100 text-gray-800'
+                      statusConfig[order.status as keyof typeof statusConfig]?.color || 'bg-gray-100 text-gray-800'
                     }`}>
-                      Pagamento: {order.paymentStatus}
+                      {statusConfig[order.status as keyof typeof statusConfig]?.label || order.status}
                     </span>
                   )}
+
+                  {/* Payment Status Badge */}
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    order.paymentStatus === 'CONFIRMED' || order.paymentStatus === 'RECEIVED'
+                      ? 'bg-green-100 text-green-800' :
+                    order.paymentStatus === 'PENDING'
+                      ? 'bg-yellow-100 text-yellow-800' :
+                    order.paymentStatus === 'FAILED'
+                      ? 'bg-red-100 text-red-800' :
+                    order.paymentStatus === 'COMPLETED'
+                      ? 'bg-green-100 text-green-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    Pagamento: {
+                      order.paymentStatus === 'CONFIRMED' || order.paymentStatus === 'RECEIVED'
+                        ? 'CONFIRMADO' :
+                      order.paymentStatus === 'PENDING'
+                        ? 'PENDENTE' :
+                      order.paymentStatus === 'FAILED'
+                        ? 'FALHOU' :
+                      order.paymentStatus === 'COMPLETED'
+                        ? 'CONCLUÍDO' :
+                      order.paymentStatus
+                    }
+                  </span>
                 </div>
               </div>
 

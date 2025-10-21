@@ -209,7 +209,7 @@ export default function TermosDeUso() {
               <ul className="list-disc pl-6 mb-4 space-y-2">
                 <li>E-mail: contato@querodocumento.com.br</li>
                 <li>WhatsApp: +55 11 9999-9999</li>
-                <li>Horário de atendimento: Segunda a sexta, 9h às 18h</li>
+                <li>Horário de atendimento: Segunda a sexta, 9h às 17h</li>
               </ul>
             </section>
 

@@ -18,7 +18,8 @@ interface FormData {
   city: string | null
   notary: string | null
   useAllNotaries: boolean
-  
+  statePrice: number
+
   // Step 2: User authentication (using existing session or login)
   name: string
   email: string
@@ -26,15 +27,15 @@ interface FormData {
   password: string
   confirmPassword: string
   isLogin: boolean
-  
+
   // Step 3: Certificate reason
   reason: string | null
   customReason: string
-  
+
   // Step 4: Invoice data
   invoiceName: string
   invoiceDocument: string
-  
+
   // Step 5: Payment method
   paymentMethod: 'PIX' | 'CREDIT_CARD' | 'BOLETO' | null
 }
@@ -64,6 +65,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
     city: null,
     notary: null,
     useAllNotaries: false,
+    statePrice: 89.90, // Default base price
     name: initialUserData?.name || '',
     email: initialUserData?.email || '',
     phone: initialUserData?.phone || '',
@@ -365,7 +367,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
 
   const handleSubmit = async () => {
     setIsLoading(true)
-    
+
     try {
       const response = await fetch('/api/orders/create', {
         method: 'POST',
@@ -375,7 +377,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
           documentNumber: formData.invoiceDocument, // Document being consulted
           invoiceName: formData.invoiceName,
           invoiceDocument: formData.invoiceDocument,
-          amount: 89.90, // Base price - final price will be quoted
+          amount: formData.statePrice, // Price based on selected state
           paymentMethod: formData.paymentMethod,
           // Certificate specific fields
           state: formData.state,
@@ -386,15 +388,15 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
       })
 
       const data = await response.json()
-      
+
       if (!response.ok) {
         setErrors({ submit: data.error || 'Erro ao criar pedido' })
         return
       }
 
-      // Redirect to success page
-      router.push(`/certidao-protesto/sucesso?orderId=${data.order.id}`)
-      
+      // Redirect to checkout page to process payment
+      router.push(`/certidao-protesto/checkout?orderId=${data.order.id}`)
+
     } catch (error) {
       console.error('Order creation error:', error)
       setErrors({ submit: 'Erro de conexão' })
@@ -422,8 +424,18 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
                 Selecione onde deseja solicitar a certidão
               </p>
               <div className="p-4 bg-accent-50 rounded-lg border border-accent-200">
-                <p className="text-accent-700 font-semibold text-lg">A partir de R$ 89,90</p>
-                <p className="text-sm text-accent-600">Preço final será informado em até 3 dias úteis</p>
+                <p className="text-accent-700 font-semibold text-lg">
+                  {formData.state
+                    ? `R$ ${formData.statePrice.toFixed(2)}`
+                    : 'A partir de R$ 48,62'
+                  }
+                </p>
+                <p className="text-sm text-accent-600">
+                  {formData.state
+                    ? 'Valor base para o estado selecionado'
+                    : 'Selecione o estado para ver o valor'
+                  }
+                </p>
               </div>
             </div>
 
@@ -719,12 +731,13 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
               <h2 className="text-2xl font-bold text-neutral-900 mb-2">
                 Pagamento
               </h2>
-              <p className="text-neutral-600">
-                Aguarde o orçamento para realizar o pagamento
-              </p>
               <div className="mt-4 p-4 bg-accent-50 rounded-lg border border-accent-200">
-                <p className="text-accent-700 font-semibold text-xl">A partir de R$ 89,90</p>
-                <p className="text-sm text-accent-600">Orçamento final será enviado em até 3 dias úteis</p>
+                <p className="text-accent-700 font-semibold text-xl">
+                  R$ {formData.statePrice.toFixed(2)}
+                </p>
+                <p className="text-sm text-accent-600">
+                  Valor base para {formData.state ? 'o estado selecionado' : 'certidão de protesto'}
+                </p>
               </div>
             </div>
 
@@ -736,10 +749,11 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
                     Como funciona o processo:
                   </h5>
                   <ul className="text-sm text-neutral-600 space-y-1">
-                    <li>• Você receberá um orçamento detalhado em até 3 dias úteis</li>
+                    {/* <li>• Você receberá um orçamento detalhado em até 3 dias úteis</li> */}
                     <li>• Terá 3 dias úteis para efetuar o pagamento</li>
                     <li>• A certidão será emitida em até 5 dias úteis após o pagamento</li>
                     <li>• Você receberá o documento por email e poderá baixar no painel</li>
+                    <li>• Se identificado mais de um protesto, poderá ocorrer cobrança adicional</li>
                   </ul>
                 </div>
               </div>
@@ -794,7 +808,7 @@ export function CertificateRequestForm({ initialUserData }: CertificateRequestFo
                 Processando...
               </>
             ) : currentStep === 5 ? (
-              'Solicitar Orçamento'
+              'Efetuar Pagamento'
             ) : (
               <>
                 Continuar

@@ -208,11 +208,9 @@ function CheckoutContent() {
       console.log('🎯 Payment API response:', data)
 
       if (!response.ok) {
-        console.log('📦 Error response data:', data)
         console.error('❌ Payment failed:', data.error || data.details)
         // Extract error message from different possible formats
         const errorMessage = data.error || data.details || data.message || 'Erro ao processar pagamento'
-        console.log('📝 Error message to display:', errorMessage)
         setError(errorMessage)
         return
       }
@@ -305,8 +303,8 @@ function CheckoutContent() {
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-neutral-900 mb-2">Erro</h2>
           <p className="text-neutral-600 mb-6">{error}</p>
-          <Link href="/consulta-protesto">
-            <Button>Voltar para Consulta</Button>
+          <Link href="/certidao-protesto">
+            <Button>Voltar para Certidão</Button>
           </Link>
         </div>
       </div>
@@ -468,11 +466,11 @@ function CheckoutContent() {
                 </li>
                 <li className="flex items-center gap-2">
                   <div className="w-5 h-5 bg-neutral-300 text-neutral-600 rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                  Realizaremos a consulta de protesto
+                  Realizaremos a emissão da Certidão de Protesto
                 </li>
                 <li className="flex items-center gap-2">
                   <div className="w-5 h-5 bg-neutral-300 text-neutral-600 rounded-full flex items-center justify-center text-xs font-bold">3</div>
-                  Enviaremos o resultado por email
+                  Enviaremos por email e disponibilizaremos na Área do cliente
                 </li>
               </ul>
             </div>

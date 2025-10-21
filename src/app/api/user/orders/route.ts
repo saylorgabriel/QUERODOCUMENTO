@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
+import { asaasService } from '@/lib/payment/asaas'
 
 // Helper function to get user from session
 async function getUserFromSession(): Promise<{ id: string; role: string } | null> {
@@ -64,6 +65,71 @@ function formatDocumentForDisplay(document: string, type: string): string {
   return document
 }
 
+// Helper function to sync payment status from ASAAS
+async function syncPaymentStatusFromAsaas(order: any): Promise<any> {
+  // Only sync if order has ASAAS payment ID and is not already completed
+  if (!order.asaasPaymentId || order.paymentStatus === 'COMPLETED') {
+    return order
+  }
+
+  try {
+    console.log(`🔄 Syncing payment status for order #${order.orderNumber}`)
+
+    // Get current status from ASAAS
+    const asaasPayment = await asaasService.getPayment(order.asaasPaymentId)
+
+    console.log(`   DB status: ${order.paymentStatus} → ASAAS status: ${asaasPayment.status}`)
+
+    // Check if status changed
+    if (asaasPayment.status !== order.paymentStatus) {
+      const isPaid = asaasPayment.status === 'CONFIRMED' || asaasPayment.status === 'RECEIVED'
+
+      console.log(`   ✅ Updating order status`)
+
+      // Update order in database
+      const updatedOrder = await prisma.order.update({
+        where: { id: order.id },
+        data: {
+          paymentStatus: asaasPayment.status,
+          paidAt: isPaid ? (order.paidAt || new Date()) : order.paidAt,
+          status: isPaid && order.status === 'AWAITING_PAYMENT' ? 'PROCESSING' : order.status,
+          metadata: {
+            ...(order.metadata as any || {}),
+            asaasPayment: {
+              ...(order.metadata as any)?.asaasPayment,
+              status: asaasPayment.status,
+              syncedAt: new Date().toISOString()
+            }
+          }
+        }
+      })
+
+      // Create order history entry
+      await prisma.orderHistory.create({
+        data: {
+          orderId: order.id,
+          previousStatus: order.status,
+          newStatus: updatedOrder.status,
+          changedById: order.userId,
+          notes: `Status sincronizado do ASAAS: ${order.paymentStatus} → ${asaasPayment.status}`,
+          metadata: {
+            autoSync: true,
+            oldPaymentStatus: order.paymentStatus,
+            newPaymentStatus: asaasPayment.status
+          }
+        }
+      })
+
+      return updatedOrder
+    }
+  } catch (error) {
+    console.error(`❌ Error syncing payment status for order #${order.orderNumber}:`, (error as Error).message)
+    // Return original order if sync fails - don't break the request
+  }
+
+  return order
+}
+
 export async function GET(request: NextRequest) {
   try {
     // Validate user session
@@ -87,7 +153,7 @@ export async function GET(request: NextRequest) {
 
     // If orderId is provided, return single order
     if (orderId) {
-      const order = await prisma.order.findFirst({
+      let order = await prisma.order.findFirst({
         where: {
           id: orderId,
           userId: user.id // Security: only user's own orders
@@ -115,6 +181,9 @@ export async function GET(request: NextRequest) {
           reason: true,
           createdAt: true,
           updatedAt: true,
+          asaasPaymentId: true, // Include for sync
+          metadata: true, // Include for sync
+          userId: true, // Include for sync
           user: {
             select: {
               id: true,
@@ -131,6 +200,9 @@ export async function GET(request: NextRequest) {
           { status: 404 }
         )
       }
+
+      // Sync payment status from ASAAS
+      order = await syncPaymentStatusFromAsaas(order)
 
       // Format single order response
       const formattedOrder = {
@@ -199,7 +271,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch user's orders with pagination
-    const orders = await prisma.order.findMany({
+    let orders = await prisma.order.findMany({
       where,
       select: {
         // Order information (hide sensitive admin fields)
@@ -208,41 +280,46 @@ export async function GET(request: NextRequest) {
         serviceType: true,
         status: true,
         paymentStatus: true,
-        
+
         // Document information
         documentNumber: true,
         documentType: true,
-        
+
         // Invoice information (user can see their own invoice data)
         invoiceName: true,
         invoiceDocument: true,
-        
+
         // Payment information
         amount: true,
         paymentMethod: true,
         paidAt: true,
-        
+        asaasPaymentId: true, // Include for sync
+
         // Results (if available)
         resultText: true,
         attachmentUrl: true,
         quotedAmount: true,
         protocolNumber: true,
-        
+
         // Certificate specific fields
         state: true,
         city: true,
         notaryOffice: true,
         reason: true,
-        
+
         // Timestamps
         createdAt: true,
         updatedAt: true,
-        
+
+        // Metadata for sync
+        metadata: true,
+        userId: true,
+
         // Hide sensitive admin fields:
         // - processingNotes: false (internal admin notes)
         // - processedBy: false (admin who processed)
         // - processedById: false
-        
+
         // Include basic user info for verification
         user: {
           select: {
@@ -256,6 +333,16 @@ export async function GET(request: NextRequest) {
       skip: offset,
       take: limit
     })
+
+    // Sync payment status for all PENDING orders
+    orders = await Promise.all(
+      orders.map(async (order) => {
+        if (order.paymentStatus === 'PENDING' && order.asaasPaymentId) {
+          return await syncPaymentStatusFromAsaas(order)
+        }
+        return order
+      })
+    )
 
     // Format response with display-friendly data
     const formattedOrders = orders.map(order => ({

@@ -5,6 +5,16 @@ import { ChevronDown, MapPin, Building2, CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { locations, type State, type City, type Notary } from '@/data/locations'
 
+interface EmolumentState {
+  state: string
+  value3Years: number
+  boletoFee: number
+  lucroFee: number
+  taxPercentage: number
+  taxValue: number
+  finalValue: number
+}
+
 interface LocationSelectorProps {
   selectedState: string | null
   selectedCity: string | null
@@ -15,6 +25,7 @@ interface LocationSelectorProps {
     city: string | null
     notary: string | null
     useAllNotaries: boolean
+    statePrice?: number
   }) => void
 }
 
@@ -28,6 +39,42 @@ export function LocationSelector({
   const [stateDropdownOpen, setStateDropdownOpen] = useState(false)
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false)
   const [notaryDropdownOpen, setNotaryDropdownOpen] = useState(false)
+  const [emolumentStates, setEmolumentStates] = useState<EmolumentState[]>([])
+  const [loadingEmoluments, setLoadingEmoluments] = useState(true)
+  const [stateSearchQuery, setStateSearchQuery] = useState('')
+
+  // Fetch emolument states from API
+  useEffect(() => {
+    const fetchEmoluments = async () => {
+      try {
+        const response = await fetch('/api/emoluments')
+        if (response.ok) {
+          const data = await response.json()
+          setEmolumentStates(data.emoluments || [])
+        }
+      } catch (error) {
+        console.error('Error fetching emoluments:', error)
+      } finally {
+        setLoadingEmoluments(false)
+      }
+    }
+
+    fetchEmoluments()
+  }, [])
+
+  // Filter locations to only show states that have emolument data
+  const availableStates = locations.filter(state =>
+    emolumentStates.some(emol => emol.state === state.code)
+  )
+
+  // Filter states by search query
+  const filteredStates = availableStates.filter(state => {
+    const searchLower = stateSearchQuery.toLowerCase()
+    return (
+      state.name.toLowerCase().includes(searchLower) ||
+      state.code.toLowerCase().includes(searchLower)
+    )
+  })
 
   const selectedStateData = locations.find(state => state.id === selectedState)
   const selectedCityData = selectedStateData?.cities.find(city => city.id === selectedCity)
@@ -35,6 +82,18 @@ export function LocationSelector({
 
   const availableCities = selectedStateData?.cities || []
   const availableNotaries = selectedCityData?.notaries || []
+
+  // Get emolument price for selected state
+  const selectedStateEmolument = emolumentStates.find(emol =>
+    emol.state === selectedStateData?.code
+  )
+
+  // Clear search when dropdown closes
+  useEffect(() => {
+    if (!stateDropdownOpen) {
+      setStateSearchQuery('')
+    }
+  }, [stateDropdownOpen])
 
   // Reset city and notary when state changes
   useEffect(() => {
@@ -68,13 +127,18 @@ export function LocationSelector({
   }, [selectedCity, selectedNotary, availableNotaries, selectedState, onLocationChange])
 
   const handleStateSelect = (stateId: string) => {
+    const stateData = locations.find(s => s.id === stateId)
+    const emolument = emolumentStates.find(emol => emol.state === stateData?.code)
+
     onLocationChange({
       state: stateId,
       city: null,
       notary: null,
-      useAllNotaries: false
+      useAllNotaries: false,
+      statePrice: emolument?.finalValue || 89.90
     })
     setStateDropdownOpen(false)
+    setStateSearchQuery('') // Clear search when selecting
   }
 
   const handleCitySelect = (cityId: string) => {
@@ -152,23 +216,59 @@ export function LocationSelector({
           </button>
           
           {stateDropdownOpen && (
-            <div className="absolute z-20 w-full mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg max-h-60 overflow-auto">
-              {locations.map((state) => (
-                <button
-                  key={state.id}
-                  type="button"
-                  onClick={() => handleStateSelect(state.id)}
-                  className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-neutral-50 transition-colors"
-                >
-                  <div>
-                    <span className="block font-medium text-neutral-900">{state.name}</span>
-                    <span className="text-sm text-neutral-600">{state.code}</span>
+            <div className="absolute z-20 w-full mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg overflow-hidden">
+              {/* Search Input */}
+              <div className="p-3 border-b border-neutral-200 sticky top-0 bg-white">
+                <input
+                  type="text"
+                  value={stateSearchQuery}
+                  onChange={(e) => setStateSearchQuery(e.target.value)}
+                  placeholder="Buscar estado..."
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  autoFocus
+                />
+              </div>
+
+              {/* States List */}
+              <div className="max-h-80 overflow-y-auto">
+                {loadingEmoluments ? (
+                  <div className="px-4 py-8 text-center">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600 mx-auto"></div>
+                    <p className="text-sm text-neutral-600 mt-2">Carregando estados...</p>
                   </div>
-                  {selectedState === state.id && (
-                    <CheckCircle className="w-5 h-5 text-primary-600 ml-auto" />
-                  )}
-                </button>
-              ))}
+                ) : filteredStates.length > 0 ? (
+                  filteredStates.map((state) => {
+                    const emolument = emolumentStates.find(emol => emol.state === state.code)
+                    return (
+                      <button
+                        key={state.id}
+                        type="button"
+                        onClick={() => handleStateSelect(state.id)}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-neutral-50 transition-colors border-b border-neutral-100 last:border-b-0"
+                      >
+                        <div className="flex-1">
+                          <span className="block font-medium text-neutral-900">{state.name}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-neutral-600">{state.code}</span>
+                            {emolument && (
+                              <span className="text-sm text-primary-600 font-medium">
+                                • R$ {emolument.finalValue.toFixed(2)}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        {selectedState === state.id && (
+                          <CheckCircle className="w-5 h-5 text-primary-600" />
+                        )}
+                      </button>
+                    )
+                  })
+                ) : (
+                  <div className="px-4 py-8 text-center text-sm text-neutral-600">
+                    {stateSearchQuery ? 'Nenhum estado encontrado' : 'Nenhum estado disponível'}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

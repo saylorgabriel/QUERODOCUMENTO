@@ -44,14 +44,14 @@ export function ReasonSelector({
 
   return (
     <div className="space-y-6">
-      <div className="text-center mb-6">
+      {/* <div className="text-center mb-6">
         <h3 className="text-lg font-semibold text-neutral-900 mb-2">
           Motivo da solicitação
         </h3>
         <p className="text-sm text-neutral-600">
           Informe o motivo para emissão da certidão de protesto
         </p>
-      </div>
+      </div> */}
 
       {/* Reason Selector */}
       <div className="space-y-2">

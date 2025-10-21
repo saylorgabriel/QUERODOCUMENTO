@@ -238,7 +238,7 @@ export default function Home() {
                 <div className="relative z-10">
                 <div className="mb-6">
                   <h3 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-3 text-center lg:text-left">
-                    Consulte <span className="text-primary-600">protestos</span> em<br className="hidden sm:block" /><span className="text-accent-600">poucos passos</span>
+                    Consulte <span className="text-primary-600">protestos</span> em <br className="hidden sm:block" /><span className="text-accent-600">poucos passos</span>
                   </h3>
                   
                   {/* Enhanced Step Indicators */}

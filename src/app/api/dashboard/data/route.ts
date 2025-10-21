@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
+import { asaasService } from '@/lib/payment/asaas'
 
 export async function GET() {
   try {
@@ -22,7 +23,7 @@ export async function GET() {
     const userId = sessionData.user.id
 
     // Get real data from database
-    const orders = await prisma.order.findMany({
+    let orders = await prisma.order.findMany({
       where: { userId },
       select: {
         id: true,
@@ -36,6 +37,10 @@ export async function GET() {
         resultText: true,
         createdAt: true,
         updatedAt: true,
+        asaasPaymentId: true, // For sync
+        metadata: true, // For sync
+        userId: true, // For sync
+        paidAt: true, // For sync
         documents: {
           where: { isActive: true },
           select: {
@@ -50,6 +55,64 @@ export async function GET() {
         createdAt: 'desc'
       }
     })
+
+    // Sync payment status for PENDING orders
+    orders = await Promise.all(
+      orders.map(async (order) => {
+        if (order.paymentStatus === 'PENDING' && order.asaasPaymentId) {
+          try {
+            console.log(`🔄 [Dashboard] Syncing payment status for order #${order.orderNumber}`)
+
+            const asaasPayment = await asaasService.getPayment(order.asaasPaymentId)
+            console.log(`   DB status: ${order.paymentStatus} → ASAAS status: ${asaasPayment.status}`)
+
+            if (asaasPayment.status !== order.paymentStatus) {
+              const isPaid = asaasPayment.status === 'CONFIRMED' || asaasPayment.status === 'RECEIVED'
+              console.log(`   ✅ Updating order status`)
+
+              const updatedOrder = await prisma.order.update({
+                where: { id: order.id },
+                data: {
+                  paymentStatus: asaasPayment.status,
+                  paidAt: isPaid ? (order.paidAt || new Date()) : order.paidAt,
+                  status: isPaid && order.status === 'AWAITING_PAYMENT' ? 'PROCESSING' : order.status,
+                  metadata: {
+                    ...(order.metadata as any || {}),
+                    asaasPayment: {
+                      ...(order.metadata as any)?.asaasPayment,
+                      status: asaasPayment.status,
+                      syncedAt: new Date().toISOString()
+                    }
+                  }
+                }
+              })
+
+              // Create order history entry
+              await prisma.orderHistory.create({
+                data: {
+                  orderId: order.id,
+                  previousStatus: order.status,
+                  newStatus: updatedOrder.status,
+                  changedById: order.userId,
+                  notes: `[Dashboard] Status sincronizado do ASAAS: ${order.paymentStatus} → ${asaasPayment.status}`,
+                  metadata: {
+                    autoSync: true,
+                    source: 'dashboard',
+                    oldPaymentStatus: order.paymentStatus,
+                    newPaymentStatus: asaasPayment.status
+                  }
+                }
+              })
+
+              return updatedOrder
+            }
+          } catch (error) {
+            console.error(`❌ Error syncing payment for order #${order.orderNumber}:`, (error as Error).message)
+          }
+        }
+        return order
+      })
+    )
 
     // Separate orders by type
     const protestQueryOrders = orders.filter(o => o.serviceType === 'PROTEST_QUERY')
