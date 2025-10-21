@@ -17,7 +17,8 @@ import {
   Eye,
   CheckCircle,
   AlertCircle,
-  Calendar
+  Calendar,
+  Phone
 } from 'lucide-react'
 import LogoutButton from '@/components/ui/logout-button'
 import OrdersSection from '@/components/dashboard/OrdersSection'
