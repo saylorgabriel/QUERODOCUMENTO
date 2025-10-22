@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 
+// Configure route segment
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 // GET - Get user by ID
 export async function GET(
   request: NextRequest,
