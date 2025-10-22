@@ -1,0 +1,81 @@
+# QueroDocumento
+
+> Plataforma digital brasileira para consulta de protesto e emissão de certidões de protesto de forma rápida, segura e 100% online. Atendemos todo o Brasil com preços transparentes e suporte especializado.
+
+QueroDocumento é uma plataforma B2C que facilita o acesso a serviços de cartórios de protesto em todo o Brasil. Oferecemos dois serviços principais:
+
+1. **Consulta de Protesto**: Verificação rápida e online da existência de protestos em nome de CPF ou CNPJ. Resultado em até 24 horas úteis por R$ 29,90. Não possui validade jurídica, ideal para conhecimento pessoal.
+
+2. **Certidão de Protesto**: Documento oficial emitido por cartórios com assinatura digital e validade jurídica plena. Essencial para processos judiciais, licitações, contratações e transações imobiliárias. Preço a partir de R$ 89,90 (varia por cartório). Orçamento em 3 dias úteis, emissão em até 5 dias úteis após pagamento.
+
+**Formas de Pagamento**: PIX (aprovação instantânea), Cartão de Crédito (à vista em 1x) e Boleto (vencimento em 3 dias úteis).
+
+**Diferencial**: Processo 100% online sem necessidade de ir ao cartório, suporte dedicado via WhatsApp e email, transparência total de preços e prazos, dados protegidos conforme LGPD.
+
+## Serviços
+
+- [Consulta de Protesto](/consulta-protesto): Verificação online de protestos em CPF/CNPJ - R$ 29,90
+- [Certidão de Protesto](/certidao-protesto): Solicitação de certidão oficial de cartório - A partir de R$ 89,90
+- [Dashboard](/dashboard): Painel do usuário para acompanhamento de pedidos
+- [Preços e Prazos](/precos-e-prazos): Informações detalhadas sobre valores e prazos de entrega
+
+## Informações Legais
+
+- [Termos de Uso](/termos-de-uso): Condições de uso da plataforma
+- [Política de Privacidade](/politica-de-privacidade): Como tratamos seus dados pessoais (LGPD)
+- [Contato](/fale-conosco): Canais de atendimento e suporte
+
+## Conteúdo Educativo
+
+- [Blog: Guia Completo de Consulta e Certidão](/blog/consulta-certidao-protesto-guia-completo): Artigo detalhado explicando o que é protesto, diferença entre consulta e certidão, quando você precisa desses documentos, como obtê-los e como cancelar protestos
+
+## Opcional
+
+**O que é Protesto?**
+Protesto é um ato formal realizado por cartórios que comprova publicamente o não pagamento de uma dívida. Quando um título (cheque, duplicata, nota promissória) não é pago, o credor pode registrá-lo em protesto no cartório competente.
+
+**Diferença entre Consulta e Certidão:**
+- Consulta: Verificação informal para conhecimento pessoal, sem validade jurídica
+- Certidão: Documento oficial do cartório com assinatura digital e validade legal
+
+**Tipos de Certidão:**
+- Certidão Negativa: Comprova ausência de protestos
+- Certidão Positiva: Lista protestos existentes com detalhes completos
+
+**Quando é necessário:**
+- Processos judiciais e licitações
+- Análise de crédito em bancos
+- Contratações e parcerias comerciais
+- Compra, venda ou locação de imóveis
+- Abertura ou alteração de empresas
+
+**Cobertura Geográfica:**
+Atendemos todos os estados brasileiros: SP, RJ, MG, RS, PR, SC, BA, PE, CE, PA, GO, MA, PB, ES, AM, RN, AL, MT, MS, SE, RO, TO, AC, PI, AP, RR, DF.
+
+**Empresa:**
+CNPJ: 62.757.039/0001-05
+Atendimento: WhatsApp (19) 98180-6261
+Email: contato@querodocumento.com.br
+
+**Garantias:**
+- Reembolso total em caso de não entrega
+- Suporte dedicado durante todo o processo
+- Dados protegidos conforme Lei Geral de Proteção de Dados (LGPD)
+- Pagamento seguro com criptografia SSL
+
+**Como Funciona:**
+1. Escolha o serviço (consulta ou certidão)
+2. Preencha os dados online
+3. Efetue o pagamento (PIX, cartão ou boleto)
+4. Acompanhe pelo painel do usuário
+5. Receba o documento por email em PDF
+
+**Prazos Garantidos:**
+- Consulta de Protesto: Até 24 horas úteis
+- Orçamento de Certidão: Até 3 dias úteis
+- Emissão de Certidão: Até 5 dias úteis após pagamento confirmado
+
+**FAQ:**
+A consulta substitui a certidão? Não. A consulta é para conhecimento pessoal, a certidão tem validade jurídica.
+Posso consultar protestos de outra pessoa? Sim, protestos são informações públicas.
+Como cancelar um protesto? Quite a dívida com o credor, obtenha carta de anuência, apresente no cartório e pague as taxas.
