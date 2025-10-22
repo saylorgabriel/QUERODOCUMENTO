@@ -3,9 +3,40 @@ import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import { validateResetToken, clearResetToken } from '@/lib/reset-tokens'
 import { logAudit } from '@/lib/database'
+import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    if (isRateLimitEnabled()) {
+      const clientIp = getClientIp(request)
+      const rateLimitResult = await rateLimit(
+        `reset-password:${clientIp}`,
+        RateLimits.RESET_PASSWORD.limit,
+        RateLimits.RESET_PASSWORD.windowMs
+      )
+
+      if (!rateLimitResult.success) {
+        // Log rate limit violation
+        await prisma.auditLog.create({
+          data: {
+            action: 'RATE_LIMIT_EXCEEDED',
+            resource: 'AUTH_RESET_PASSWORD',
+            metadata: {
+              ip: clientIp,
+              limit: rateLimitResult.limit,
+              resetAt: rateLimitResult.resetAt.toISOString()
+            }
+          }
+        }).catch(err => console.error('Failed to log rate limit:', err))
+
+        return createRateLimitResponse(
+          rateLimitResult,
+          'Muitas tentativas de redefinição de senha. Por favor, aguarde.'
+        )
+      }
+    }
+
     const body = await request.json()
     const { email, token, newPassword } = body
 

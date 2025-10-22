@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { asaasService } from '@/lib/payment/asaas'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
+import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 // Helper function to get user from session
 async function getUserFromSession(): Promise<{ id: string; role: string } | null> {
@@ -39,6 +40,35 @@ export async function POST(request: Request) {
         { error: 'Não autorizado' },
         { status: 401 }
       )
+    }
+
+    // Rate limiting - use user ID
+    if (isRateLimitEnabled()) {
+      const rateLimitResult = await rateLimit(
+        `payment-create:${user.id}`,
+        RateLimits.PAYMENT_CREATE.limit,
+        RateLimits.PAYMENT_CREATE.windowMs
+      )
+
+      if (!rateLimitResult.success) {
+        // Log rate limit violation
+        await prisma.auditLog.create({
+          data: {
+            action: 'RATE_LIMIT_EXCEEDED',
+            resource: 'PAYMENT_CREATE',
+            userId: user.id,
+            metadata: {
+              limit: rateLimitResult.limit,
+              resetAt: rateLimitResult.resetAt.toISOString()
+            }
+          }
+        }).catch(err => console.error('Failed to log rate limit:', err))
+
+        return createRateLimitResponse(
+          rateLimitResult,
+          'Muitas tentativas de pagamento. Por favor, aguarde.'
+        )
+      }
     }
 
     const body = await request.json()

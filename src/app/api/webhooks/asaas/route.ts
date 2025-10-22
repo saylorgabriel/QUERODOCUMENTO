@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
+import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 // Redis client for webhook queue (optional)
 let redis: any = null
@@ -33,6 +34,33 @@ async function initRedis() {
     console.warn('⚠️ Redis not available, webhooks will be processed synchronously')
     return null
   }
+}
+
+// Verify ASAAS webhook authenticity
+async function verifyWebhookSignature(request: NextRequest): Promise<boolean> {
+  const webhookToken = process.env.ASAAS_WEBHOOK_TOKEN
+
+  if (!webhookToken) {
+    console.error('🚨 ASAAS_WEBHOOK_TOKEN not configured - webhook security disabled!')
+    return false
+  }
+
+  // ASAAS sends the token in the 'asaas-access-token' header
+  const signature = request.headers.get('asaas-access-token')
+
+  if (!signature) {
+    console.warn('🚨 Webhook received without asaas-access-token header')
+    return false
+  }
+
+  // Verify the token matches
+  const isValid = signature === webhookToken
+
+  if (!isValid) {
+    console.warn('🚨 Invalid webhook signature received')
+  }
+
+  return isValid
 }
 
 async function processWebhookDirectly(event: string, payment: any) {
@@ -105,6 +133,24 @@ async function processWebhookDirectly(event: string, payment: any) {
         }
       })
 
+      // Log successful webhook processing for audit trail
+      await prisma.auditLog.create({
+        data: {
+          action: 'WEBHOOK_PROCESSED',
+          resource: 'ASAAS_WEBHOOK',
+          resourceId: order.id,
+          metadata: {
+            event,
+            paymentId: payment.id,
+            paymentStatus: payment.status,
+            orderNumber: order.orderNumber,
+            previousStatus: order.status,
+            newStatus: newOrderStatus,
+            processedAt: new Date().toISOString()
+          }
+        }
+      }).catch(e => console.error('Failed to log webhook processing:', e))
+
       console.log(`✅ Order ${order.orderNumber} updated (direct processing)`)
       return { success: true, message: 'Order updated' }
     }
@@ -118,9 +164,66 @@ async function processWebhookDirectly(event: string, payment: any) {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting for webhooks - protect against flooding
+    if (isRateLimitEnabled()) {
+      const clientIp = getClientIp(request)
+      const rateLimitResult = await rateLimit(
+        `webhook-asaas:${clientIp}`,
+        RateLimits.WEBHOOK.limit,
+        RateLimits.WEBHOOK.windowMs
+      )
+
+      if (!rateLimitResult.success) {
+        // Log rate limit violation
+        await prisma.auditLog.create({
+          data: {
+            action: 'RATE_LIMIT_EXCEEDED',
+            resource: 'WEBHOOK_ASAAS',
+            metadata: {
+              ip: clientIp,
+              limit: rateLimitResult.limit,
+              resetAt: rateLimitResult.resetAt.toISOString()
+            }
+          }
+        }).catch(err => console.error('Failed to log rate limit:', err))
+
+        return createRateLimitResponse(
+          rateLimitResult,
+          'Too many webhook requests'
+        )
+      }
+    }
+
+    // CRITICAL SECURITY: Verify webhook signature before processing
+    const isValidSignature = await verifyWebhookSignature(request)
+
+    if (!isValidSignature) {
+      // Log security incident with audit trail
+      await prisma.auditLog.create({
+        data: {
+          action: 'WEBHOOK_UNAUTHORIZED',
+          resource: 'ASAAS_WEBHOOK',
+          metadata: {
+            ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+            userAgent: request.headers.get('user-agent') || 'unknown',
+            signature: request.headers.get('asaas-access-token')?.substring(0, 10) || 'missing',
+            timestamp: new Date().toISOString(),
+            securityEvent: 'INVALID_WEBHOOK_SIGNATURE'
+          }
+        }
+      }).catch(e => console.error('Failed to log security incident:', e))
+
+      console.error('🚨 SECURITY: Unauthorized webhook attempt blocked')
+
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
     const body = await request.json()
 
-    console.log('🔔 ASAAS Webhook received:', JSON.stringify(body, null, 2))
+    console.log('🔔 ASAAS Webhook received (verified):', JSON.stringify(body, null, 2))
 
     const { event, payment } = body
 

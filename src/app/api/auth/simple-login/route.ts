@@ -2,9 +2,40 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    if (isRateLimitEnabled()) {
+      const clientIp = getClientIp(request)
+      const rateLimitResult = await rateLimit(
+        `login:${clientIp}`,
+        RateLimits.LOGIN.limit,
+        RateLimits.LOGIN.windowMs
+      )
+
+      if (!rateLimitResult.success) {
+        // Log rate limit violation
+        await prisma.auditLog.create({
+          data: {
+            action: 'RATE_LIMIT_EXCEEDED',
+            resource: 'AUTH_LOGIN',
+            metadata: {
+              ip: clientIp,
+              limit: rateLimitResult.limit,
+              resetAt: rateLimitResult.resetAt.toISOString()
+            }
+          }
+        }).catch(err => console.error('Failed to log rate limit:', err))
+
+        return createRateLimitResponse(
+          rateLimitResult,
+          'Muitas tentativas de login. Por favor, aguarde alguns minutos.'
+        )
+      }
+    }
+
     const body = await request.json()
     const { email, password } = body
 

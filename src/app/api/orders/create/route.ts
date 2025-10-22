@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 import { sendOrderConfirmationEmail } from '@/lib/email'
+import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 // Helper function to generate order number
 function generateOrderNumber(): string {
@@ -65,6 +66,35 @@ export async function POST(request: NextRequest) {
         { error: 'Usuário não autenticado' },
         { status: 401 }
       )
+    }
+
+    // Rate limiting - use user ID
+    if (isRateLimitEnabled()) {
+      const rateLimitResult = await rateLimit(
+        `order-create:${user.id}`,
+        RateLimits.ORDER_CREATE.limit,
+        RateLimits.ORDER_CREATE.windowMs
+      )
+
+      if (!rateLimitResult.success) {
+        // Log rate limit violation
+        await prisma.auditLog.create({
+          data: {
+            action: 'RATE_LIMIT_EXCEEDED',
+            resource: 'ORDER_CREATE',
+            userId: user.id,
+            metadata: {
+              limit: rateLimitResult.limit,
+              resetAt: rateLimitResult.resetAt.toISOString()
+            }
+          }
+        }).catch(err => console.error('Failed to log rate limit:', err))
+
+        return createRateLimitResponse(
+          rateLimitResult,
+          'Muitos pedidos criados. Por favor, aguarde antes de criar um novo pedido.'
+        )
+      }
     }
 
     // Parse request body

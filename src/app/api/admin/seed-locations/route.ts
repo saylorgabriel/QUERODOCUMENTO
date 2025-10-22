@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import fs from 'fs'
 import path from 'path'
+import { rateLimit, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 // Secret para proteger o endpoint
 const SEED_SECRET = process.env.SEED_SECRET
@@ -122,6 +123,34 @@ function parseCSV(filePath: string, stateCode: string) {
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting - global limit for seed endpoint (very strict)
+    if (isRateLimitEnabled()) {
+      const rateLimitResult = await rateLimit(
+        'admin-seed-global',
+        RateLimits.ADMIN_SEED.limit,
+        RateLimits.ADMIN_SEED.windowMs
+      )
+
+      if (!rateLimitResult.success) {
+        // Log rate limit violation
+        await prisma.auditLog.create({
+          data: {
+            action: 'RATE_LIMIT_EXCEEDED',
+            resource: 'ADMIN_SEED',
+            metadata: {
+              limit: rateLimitResult.limit,
+              resetAt: rateLimitResult.resetAt.toISOString()
+            }
+          }
+        }).catch(err => console.error('Failed to log rate limit:', err))
+
+        return createRateLimitResponse(
+          rateLimitResult,
+          'Seed endpoint can only be called once per hour'
+        )
+      }
+    }
+
     // Verificar autenticação
     const authHeader = request.headers.get('Authorization')
     const token = authHeader?.replace('Bearer ', '')

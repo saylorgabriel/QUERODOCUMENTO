@@ -3,9 +3,40 @@ import { prisma } from '@/lib/prisma'
 import { sendPasswordResetEmail } from '@/lib/email'
 import { storeResetToken, generateResetToken } from '@/lib/reset-tokens'
 import { logAudit } from '@/lib/database'
+import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    if (isRateLimitEnabled()) {
+      const clientIp = getClientIp(request)
+      const rateLimitResult = await rateLimit(
+        `forgot-password:${clientIp}`,
+        RateLimits.FORGOT_PASSWORD.limit,
+        RateLimits.FORGOT_PASSWORD.windowMs
+      )
+
+      if (!rateLimitResult.success) {
+        // Log rate limit violation
+        await prisma.auditLog.create({
+          data: {
+            action: 'RATE_LIMIT_EXCEEDED',
+            resource: 'AUTH_FORGOT_PASSWORD',
+            metadata: {
+              ip: clientIp,
+              limit: rateLimitResult.limit,
+              resetAt: rateLimitResult.resetAt.toISOString()
+            }
+          }
+        }).catch(err => console.error('Failed to log rate limit:', err))
+
+        return createRateLimitResponse(
+          rateLimitResult,
+          'Muitas tentativas de recuperação de senha. Por favor, aguarde.'
+        )
+      }
+    }
+
     const body = await request.json()
     const { email } = body
 

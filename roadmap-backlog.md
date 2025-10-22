@@ -208,9 +208,9 @@ Criar uma plataforma funcional que permite:
 **4.1 Setup ASAAS** ❌ **PENDENTE** (Adiado conforme solicitado)
 - [ ] Conta ASAAS configurada
 - [ ] Chaves API em ambiente dev/prod
-- [ ] Webhook endpoints `/api/webhook/asaas`
-- [ ] Verificação de assinatura
-- [ ] Logs de transações
+- [x] Webhook endpoints `/api/webhooks/asaas` (SECURE)
+- [x] Verificação de assinatura (IMPLEMENTED)
+- [x] Logs de transações (AUDIT TRAIL)
 
 **4.2 Fluxo de Pagamento** 🟡 **MOCK IMPLEMENTADO** (Real pendente)
 - [x] Página `/pagamento/[orderId]` com mock

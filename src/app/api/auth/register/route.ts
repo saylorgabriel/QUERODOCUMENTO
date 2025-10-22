@@ -3,13 +3,44 @@ import { validateDocument, detectDocumentType, sanitizeDocument, validatePhone }
 import { sendWelcomeEmail } from '@/lib/email'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    if (isRateLimitEnabled()) {
+      const clientIp = getClientIp(request)
+      const rateLimitResult = await rateLimit(
+        `register:${clientIp}`,
+        RateLimits.REGISTER.limit,
+        RateLimits.REGISTER.windowMs
+      )
+
+      if (!rateLimitResult.success) {
+        // Log rate limit violation
+        await prisma.auditLog.create({
+          data: {
+            action: 'RATE_LIMIT_EXCEEDED',
+            resource: 'AUTH_REGISTER',
+            metadata: {
+              ip: clientIp,
+              limit: rateLimitResult.limit,
+              resetAt: rateLimitResult.resetAt.toISOString()
+            }
+          }
+        }).catch(err => console.error('Failed to log rate limit:', err))
+
+        return createRateLimitResponse(
+          rateLimitResult,
+          'Muitas tentativas de registro. Por favor, aguarde.'
+        )
+      }
+    }
+
     const body = await request.json()
     const { name, email, password, document, phone, rg, address, addressNumber, addressComplement, neighborhood, city, state, zipCode } = body
 
-    console.log('Registration attempt:', { name, email, document, phone, password: password ? '[PROVIDED]' : '[MISSING]' })
+    console.log('Registration attempt:', { name, email, document: document ? '[PROVIDED]' : '[MISSING]', phone, password: password ? '[PROVIDED]' : '[MISSING]' })
 
     // Validate required fields
     const missingFields = []
@@ -172,7 +203,11 @@ export async function POST(request: Request) {
       })
     }
 
-    console.log('User registered successfully:', newUser)
+    console.log('User registered successfully:', {
+      id: newUser.id,
+      email: newUser.email,
+      role: newUser.role
+    })
 
     return NextResponse.json({
       message: 'Conta criada com sucesso',

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
+import { cookies } from 'next/headers'
 
 // Helper function to validate CPF/CNPJ
 function isValidDocument(document: string): boolean {
@@ -114,6 +116,50 @@ function generateMockProtestData(documentNumber: string, documentType: 'CPF' | '
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting - use user ID if authenticated, otherwise IP
+    if (isRateLimitEnabled()) {
+      const cookieStore = await cookies()
+      const sessionCookie = cookieStore.get('simple-session')
+      let userId: string | null = null
+
+      if (sessionCookie) {
+        try {
+          const session = JSON.parse(sessionCookie.value)
+          userId = session.user?.id
+        } catch (e) {
+          // Invalid session, continue with IP-based rate limiting
+        }
+      }
+
+      const identifier = userId || `ip:${getClientIp(request)}`
+      const rateLimitResult = await rateLimit(
+        `protest-query:${identifier}`,
+        RateLimits.PROTEST_QUERY.limit,
+        RateLimits.PROTEST_QUERY.windowMs
+      )
+
+      if (!rateLimitResult.success) {
+        // Log rate limit violation
+        await prisma.auditLog.create({
+          data: {
+            action: 'RATE_LIMIT_EXCEEDED',
+            resource: 'PROTEST_QUERY',
+            userId: userId || undefined,
+            metadata: {
+              identifier,
+              limit: rateLimitResult.limit,
+              resetAt: rateLimitResult.resetAt.toISOString()
+            }
+          }
+        }).catch(err => console.error('Failed to log rate limit:', err))
+
+        return createRateLimitResponse(
+          rateLimitResult,
+          'Muitas consultas. Por favor, aguarde antes de fazer uma nova consulta.'
+        )
+      }
+    }
+
     // Parse request body
     const body = await request.json()
     const {
@@ -128,9 +174,9 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!documentNumber || !name) {
       return NextResponse.json(
-        { 
+        {
           success: false,
-          error: 'Documento e nome são obrigatórios' 
+          error: 'Documento e nome são obrigatórios'
         },
         { status: 400 }
       )
@@ -194,8 +240,6 @@ export async function POST(request: NextRequest) {
 
     // Generate mock query result
     const mockResult = generateMockProtestData(documentNumber, detectedDocumentType, name, isPaidConsultation)
-    
-    const queryId = `mock-${Date.now()}-${Math.floor(Math.random() * 1000)}`
 
     // If this is a basic consultation, save lead data for remarketing
     if (!isPaidConsultation) {
@@ -228,7 +272,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        queryId,
         orderId: order?.id,
         orderNumber: order?.orderNumber,
         ...mockResult

@@ -55,3 +55,4 @@ docker-compose.override.yml
 # logs
 logs/
 *.log
+PRODUCTION_SECRETS.txt

@@ -1,5 +1,3 @@
-import { env } from '@/env'
-
 export interface AsaasCustomer {
   id: string
   name: string
@@ -105,8 +103,6 @@ class AsaasService {
 
     console.log('🔑 ASAAS Config:', {
       hasApiKey: !!this.apiKey,
-      apiKeyLength: this.apiKey.length,
-      apiKeyStart: this.apiKey.substring(0, 15),
       environment,
       baseUrl: this.baseUrl
     })
@@ -123,8 +119,6 @@ class AsaasService {
   ): Promise<T> {
     console.log('🔍 DEBUG - API Key check:', {
       hasApiKey: !!this.apiKey,
-      apiKeyLength: this.apiKey?.length,
-      apiKeyStart: this.apiKey,
       timestamp: new Date().toISOString()
     })
 
