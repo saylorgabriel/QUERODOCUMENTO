@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, UserPlus, MoreVertical, Shield, User as UserIcon, Calendar, Mail, Phone } from 'lucide-react'
+import { Search, UserPlus, Shield, User as UserIcon, Calendar, Mail, Phone, Edit, Trash2, AlertTriangle } from 'lucide-react'
+import { EditUserModal } from '@/components/admin/EditUserModal'
 
 interface User {
   id: string
@@ -38,6 +39,73 @@ export default function AdminUsers() {
     totalCount: 0,
     totalPages: 0,
   })
+
+  // Edit modal state
+  const [editingUser, setEditingUser] = useState<User | null>(null)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+
+  // Delete confirmation state
+  const [deletingUser, setDeletingUser] = useState<User | null>(null)
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [deleteMessage, setDeleteMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+
+  const handleEditUser = (user: User) => {
+    setEditingUser(user)
+    setIsEditModalOpen(true)
+  }
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false)
+    setEditingUser(null)
+  }
+
+  const handleEditSuccess = () => {
+    loadUsers()
+  }
+
+  const handleDeleteClick = (user: User) => {
+    setDeletingUser(user)
+    setIsDeleteConfirmOpen(true)
+    setDeleteMessage(null)
+  }
+
+  const handleCancelDelete = () => {
+    setIsDeleteConfirmOpen(false)
+    setDeletingUser(null)
+    setDeleteMessage(null)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!deletingUser) return
+
+    try {
+      setDeleteLoading(true)
+      setDeleteMessage(null)
+
+      const response = await fetch(`/api/admin/users/${deletingUser.id}`, {
+        method: 'DELETE'
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setDeleteMessage({ type: 'success', text: 'Usuário excluído com sucesso!' })
+        setTimeout(() => {
+          setIsDeleteConfirmOpen(false)
+          setDeletingUser(null)
+          setDeleteMessage(null)
+          loadUsers()
+        }, 1500)
+      } else {
+        setDeleteMessage({ type: 'error', text: data.error || 'Erro ao excluir usuário' })
+      }
+    } catch (error) {
+      setDeleteMessage({ type: 'error', text: 'Erro ao excluir usuário' })
+    } finally {
+      setDeleteLoading(false)
+    }
+  }
 
   useEffect(() => {
     loadUsers()
@@ -266,9 +334,24 @@ export default function AdminUsers() {
                       {formatDate(user.createdAt)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button className="text-neutral-400 hover:text-neutral-600">
-                        <MoreVertical className="w-5 h-5" />
-                      </button>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => handleEditUser(user)}
+                          className="inline-flex items-center gap-2 px-3 py-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Editar usuário"
+                        >
+                          <Edit className="w-4 h-4" />
+                          <span className="hidden sm:inline">Editar</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(user)}
+                          className="inline-flex items-center gap-2 px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Excluir usuário"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          <span className="hidden sm:inline">Excluir</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -325,6 +408,109 @@ export default function AdminUsers() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteConfirmOpen && deletingUser && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity"
+            onClick={handleCancelDelete}
+          />
+
+          {/* Modal */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div
+              className="bg-white rounded-2xl shadow-2xl max-w-md w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                  <AlertTriangle className="w-5 h-5 text-white" />
+                </div>
+                <h2 className="text-xl font-bold text-white">Excluir Usuário</h2>
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                {deleteMessage && (
+                  <div
+                    className={`mb-4 p-4 rounded-lg ${
+                      deleteMessage.type === 'success'
+                        ? 'bg-green-50 border border-green-200 text-green-800'
+                        : 'bg-red-50 border border-red-200 text-red-800'
+                    }`}
+                  >
+                    {deleteMessage.text}
+                  </div>
+                )}
+
+                <div className="mb-4">
+                  <p className="text-neutral-900 font-medium mb-2">
+                    Tem certeza que deseja excluir este usuário?
+                  </p>
+                  <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4 mb-4">
+                    <p className="text-sm text-neutral-700">
+                      <strong>Nome:</strong> {deletingUser.name}
+                    </p>
+                    <p className="text-sm text-neutral-700">
+                      <strong>Email:</strong> {deletingUser.email}
+                    </p>
+                    {deletingUser._count.orders > 0 && (
+                      <p className="text-sm text-neutral-700">
+                        <strong>Pedidos:</strong> {deletingUser._count.orders}
+                      </p>
+                    )}
+                  </div>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <p className="text-sm text-red-800">
+                      <strong>⚠️ Atenção:</strong> Esta ação é irreversível! Todos os dados do usuário
+                      {deletingUser._count.orders > 0 && ' e seus pedidos'} serão permanentemente excluídos.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="border-t border-neutral-200 px-6 py-4 flex items-center justify-end gap-3">
+                <button
+                  onClick={handleCancelDelete}
+                  className="px-4 py-2 text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+                  disabled={deleteLoading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleConfirmDelete}
+                  disabled={deleteLoading}
+                  className="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-lg transition-colors inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {deleteLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Excluindo...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="w-4 h-4" />
+                      Sim, Excluir
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Edit User Modal */}
+      <EditUserModal
+        user={editingUser}
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        onSuccess={handleEditSuccess}
+      />
     </div>
   )
 }

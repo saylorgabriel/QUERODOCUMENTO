@@ -1,13 +1,11 @@
-import { Metadata } from 'next'
-import { Clock, DollarSign, FileText, Search, CheckCircle, AlertCircle } from 'lucide-react'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Preços e Prazos | QueroDocumento',
-  description: 'Confira os preços e prazos dos nossos serviços de consulta de protesto e emissão de certidões.',
-  keywords: 'preços, prazos, valores, consulta protesto, certidão protesto, quanto custa'
-}
+import { useState } from 'react'
+import { Clock, DollarSign, FileText, Search, CheckCircle, AlertCircle } from 'lucide-react'
+import { StateEmolumentsModal } from '@/components/StateEmolumentsModal'
 
 export default function PrecosPrazosPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   return (
     <main className="min-h-screen bg-neutral-50 py-8">
       <div className="container-padded max-w-5xl">
@@ -106,6 +104,12 @@ export default function PrecosPrazosPage() {
                   <br />
                   <p className="text-xs text-neutral-600">Valor para certidão negativa/positivo com até 1 protesto</p>
                   <p className="text-xs text-neutral-600">Valor final de acordo com o cartório e quantidade de protestos e estado</p>
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="text-xs text-purple-600 hover:text-purple-700 font-medium underline mt-2 transition-colors"
+                  >
+                    Valor por estado*
+                  </button>
                   {/* <p className="text-xs text-neutral-500 mt-2">Orçamento enviado antes do pagamento</p> */}
                 </div>
               </div>
@@ -267,6 +271,12 @@ export default function PrecosPrazosPage() {
           </div>
         </div>
       </div>
+
+      {/* State Emoluments Modal */}
+      <StateEmolumentsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </main>
   )
 }

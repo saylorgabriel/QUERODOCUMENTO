@@ -79,3 +79,93 @@ export async function GET(request: Request) {
     )
   }
 }
+
+/**
+ * PUT /api/emoluments
+ *
+ * Atualiza múltiplos emolumentos de uma vez
+ *
+ * Body:
+ * {
+ *   "emoluments": [
+ *     { "state": "SP", "value5Years": 123.45 },
+ *     { "state": "RJ", "value5Years": 98.76 }
+ *   ]
+ * }
+ */
+export async function PUT(request: Request) {
+  try {
+    const body = await request.json()
+    const { emoluments } = body
+
+    if (!Array.isArray(emoluments)) {
+      return NextResponse.json(
+        { error: 'Emoluments deve ser um array' },
+        { status: 400 }
+      )
+    }
+
+    const updates = []
+
+    for (const emolument of emoluments) {
+      const { state, value5Years } = emolument
+
+      if (!state || value5Years === undefined) {
+        continue
+      }
+
+      // Calcular valores derivados
+      const boletoFee = 0.87
+      const lucroFee = 30.00
+      const serviceValue = 5.09
+      const taxPercentage = 6.00
+
+      const subtotal = Number(value5Years) + boletoFee + lucroFee + serviceValue
+      const taxValue = Number((subtotal * (taxPercentage / 100)).toFixed(2))
+      const finalValue = Number((subtotal + taxValue).toFixed(2))
+
+      // Atualizar registro
+      const updated = await prisma.certificateEmolument.upsert({
+        where: { state: state.toUpperCase() },
+        update: {
+          value5Years: Number(value5Years),
+          boletoFee,
+          lucroFee,
+          serviceValue,
+          taxPercentage,
+          taxValue,
+          finalValue,
+          updatedAt: new Date()
+        },
+        create: {
+          state: state.toUpperCase(),
+          value5Years: Number(value5Years),
+          boletoFee,
+          lucroFee,
+          serviceValue,
+          taxPercentage,
+          taxValue,
+          finalValue
+        }
+      })
+
+      updates.push(updated)
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `${updates.length} emolumentos atualizados com sucesso`,
+      count: updates.length
+    })
+  } catch (error) {
+    console.error('Error updating emoluments:', error)
+
+    return NextResponse.json(
+      {
+        error: 'Erro ao atualizar emolumentos',
+        details: (error as any).message
+      },
+      { status: 500 }
+    )
+  }
+}
