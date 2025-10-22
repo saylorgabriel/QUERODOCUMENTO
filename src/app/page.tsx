@@ -152,17 +152,24 @@ export default function Home() {
   const scrollToHero = () => {
     const heroSection = document.querySelector('.hero-section')
     if (heroSection) {
-      heroSection.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
+      heroSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       })
+      // Focus on first input after scroll
+      setTimeout(() => {
+        const firstInput = document.querySelector<HTMLInputElement>('.hero-section input[type="text"]')
+        if (firstInput) {
+          firstInput.focus()
+        }
+      }, 500) // Wait for scroll animation
     }
   }
 
   return (
     <main className="flex min-h-screen flex-col">
       {/* Hero Section - Modern Professional Design */}
-      <section className="relative overflow-hidden min-h-screen flex items-center justify-center px-4 py-8 sm:py-12 lg:py-16">
+      <section className="hero-section relative overflow-hidden min-h-screen flex items-center justify-center px-4 py-8 sm:py-12 lg:py-16">
         {/* Enhanced Background with Gradient Mesh */}
         <div className="absolute inset-0 bg-gradient-hero"></div>
         <div className="absolute inset-0 bg-gradient-mesh opacity-30"></div>
