@@ -331,7 +331,7 @@ export default function PaymentPage() {
                         </div>
                       </div>
 
-                      <div
+                      {/* <div
                         className={cn(
                           'border-2 rounded-lg p-4 cursor-pointer transition-colors',
                           paymentMethod === 'BOLETO'
@@ -350,7 +350,7 @@ export default function PaymentPage() {
                             <p className="text-sm text-neutral-600">Vencimento em 3 dias úteis</p>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
 
                     <Button 

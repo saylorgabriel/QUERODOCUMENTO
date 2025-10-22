@@ -201,7 +201,7 @@ export default function PoliticaDePrivacidade() {
               </p>
               <ul className="list-disc pl-6 mb-4 space-y-2">
                 <li><strong>E-mail:</strong> privacidade@querodocumento.com.br</li>
-                <li><strong>WhatsApp:</strong> +55 11 9999-9999</li>
+                <li><strong>WhatsApp:</strong> +55 19 98180-6261</li>
                 <li><strong>Portal:</strong> seção "Meus Dados" no dashboard</li>
               </ul>
               <p className="mb-4">
@@ -261,7 +261,7 @@ export default function PoliticaDePrivacidade() {
               </p>
               <ul className="list-disc pl-6 mb-4 space-y-2">
                 <li><strong>E-mail:</strong> dpo@querodocumento.com.br</li>
-                <li><strong>Telefone:</strong> +55 11 9999-9999</li>
+                <li><strong>Telefone:</strong> +55 19 98180-6261</li>
               </ul>
             </section>
 
@@ -289,8 +289,8 @@ export default function PoliticaDePrivacidade() {
               <div className="bg-primary-50 p-6 rounded-lg mb-4">
                 <p className="mb-2"><strong>QueroDocumento</strong></p>
                 <p className="mb-2">📧 E-mail: contato@querodocumento.com.br</p>
-                <p className="mb-2">📱 WhatsApp: +55 11 9999-9999</p>
-                <p className="mb-2">🕐 Atendimento: Segunda a sexta, 9h às 18h</p>
+                <p className="mb-2">📱 WhatsApp: +55 19 98180-6261</p>
+                <p className="mb-2">🕐 Atendimento: Segunda a sexta, 9h às 17h</p>
                 <p>📊 Dados: privacidade@querodocumento.com.br</p>
               </div>
             </section>

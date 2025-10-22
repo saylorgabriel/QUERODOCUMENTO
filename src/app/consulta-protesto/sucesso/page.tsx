@@ -292,11 +292,11 @@ function SucessoContent() {
                             O código PIX será enviado para seu email em instantes.
                           </p>
                         )}
-                        {order.paymentMethod === 'BOLETO' && (
+                        {/* {order.paymentMethod === 'BOLETO' && (
                           <p className="text-sm text-yellow-600">
                             O boleto será enviado para seu email e tem vencimento em 3 dias úteis.
                           </p>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>

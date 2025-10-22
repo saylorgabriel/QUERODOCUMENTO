@@ -704,7 +704,7 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
               </div>
             )}
 
-            {formData.paymentMethod === 'BOLETO' && (
+            {/* {formData.paymentMethod === 'BOLETO' && (
               <div className="p-6 bg-white rounded-lg border border-neutral-200">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
@@ -722,7 +722,7 @@ export function ConsultaProtestoForm({ initialData, onQuerySubmit }: ConsultaPro
                   </p>
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Invoice Data */}
             <div className="p-6 bg-white rounded-lg border border-neutral-200">

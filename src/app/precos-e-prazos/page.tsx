@@ -41,8 +41,9 @@ export default function PrecosPrazosPage() {
                   <h3 className="font-semibold text-neutral-900">Preço</h3>
                 </div>
                 <div className="ml-7">
-                  <p className="text-3xl font-bold text-blue-600 mb-2">R$ 29,90</p>
-                  <p className="text-sm text-neutral-600">Pagamento único via PIX, Cartão ou Boleto</p>
+                  <p className="text-3xl font-bold text-blue-600 mb-2">R$ 29,90</p> <b>Para todos os estados</b>
+                  <br />
+                  <p className="text-sm text-neutral-600">Pagamento único via PIX, Cartão</p>
                 </div>
               </div>
 
@@ -100,9 +101,12 @@ export default function PrecosPrazosPage() {
                   <h3 className="font-semibold text-neutral-900">Preço</h3>
                 </div>
                 <div className="ml-7">
-                  <p className="text-3xl font-bold text-purple-600 mb-2">A partir de R$ 89,90</p>
-                  <p className="text-sm text-neutral-600">O valor final depende do cartório e do tipo de certidão</p>
-                  <p className="text-xs text-neutral-500 mt-2">Orçamento enviado antes do pagamento</p>
+                  {/* A partir de  */}
+                  <p className="text-3xl font-bold text-purple-600 mb-2">R$ 89,90</p>  <b>Para nosso menor valor</b>
+                  <br />
+                  <p className="text-xs text-neutral-600">Valor para certidão negativa/positivo com até 1 protesto</p>
+                  <p className="text-xs text-neutral-600">Valor final de acordo com o cartório e quantidade de protestos e estado</p>
+                  {/* <p className="text-xs text-neutral-500 mt-2">Orçamento enviado antes do pagamento</p> */}
                 </div>
               </div>
 
@@ -113,10 +117,6 @@ export default function PrecosPrazosPage() {
                   <h3 className="font-semibold text-neutral-900">Prazos</h3>
                 </div>
                 <div className="ml-7 space-y-2">
-                  <div>
-                    <p className="text-sm font-medium text-neutral-900">Orçamento:</p>
-                    <p className="text-sm text-neutral-600">Até 3 dias úteis</p>
-                  </div>
                   <div>
                     <p className="text-sm font-medium text-neutral-900">Emissão:</p>
                     <p className="text-sm text-neutral-600">Até 5 dias úteis após pagamento</p>
@@ -165,10 +165,6 @@ export default function PrecosPrazosPage() {
                 <li className="flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
                   <span><strong>Cartão de Crédito:</strong> À vista em 1x</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 bg-blue-600 rounded-full"></div>
-                  <span><strong>Boleto:</strong> Vencimento em 3 dias úteis</span>
                 </li>
               </ul>
             </div>

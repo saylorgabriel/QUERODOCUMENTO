@@ -25,14 +25,14 @@ export default function RegistrySeal() {
         {/* Top text */}
         <text fontSize="9" fontWeight="600" fill="#333" letterSpacing="1">
           <textPath href="#circle-path-top" startOffset="50%" textAnchor="middle">
-            CONSULTA DE
+            CONSULTAS   
           </textPath>
         </text>
         
         {/* Bottom text */}
         <text fontSize="9" fontWeight="600" fill="#333" letterSpacing="1">
           <textPath href="#circle-path-bottom" startOffset="50%" textAnchor="middle">
-            PROTESTO EM 24H ÚTEIS
+            EM 24H   ÚTEIS
           </textPath>
         </text>
         

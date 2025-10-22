@@ -687,3 +687,72 @@ model CertificateEmolument {
   @@index([state])
   @@index([active])
 }
+
+// Location Models - Estados, Cidades e Cartórios
+model State {
+  id        String   @id @default(cuid())
+  code      String   @unique // Sigla do estado (AC, AL, etc.)
+  name      String   // Nome completo do estado
+  slug      String   @unique // URL-friendly ID (ac, al, etc.)
+
+  // Relations
+  cities    City[]
+
+  // Metadata
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([code])
+  @@index([slug])
+  @@index([active])
+}
+
+model City {
+  id        String   @id @default(cuid())
+  stateId   String   // Foreign key to State
+  name      String   // Nome da cidade
+  slug      String   // URL-friendly ID
+
+  // Relations
+  state     State    @relation(fields: [stateId], references: [id], onDelete: Cascade)
+  notaries  Notary[]
+
+  // Metadata
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([stateId, slug]) // Unique within state
+  @@index([stateId])
+  @@index([slug])
+  @@index([active])
+}
+
+model Notary {
+  id        String   @id @default(cuid())
+  cityId    String   // Foreign key to City
+  name      String   // Nome do cartório
+  slug      String   // URL-friendly ID
+  address   String   // Endereço completo
+  phone     String?  // Telefone (opcional)
+  email     String?  // Email (opcional)
+
+  // Additional info
+  website   String?  // Site do cartório (opcional)
+  hours     String?  // Horário de funcionamento (opcional)
+  notes     String?  @db.Text // Observações adicionais
+
+  // Relations
+  city      City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
+
+  // Metadata
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cityId, slug]) // Unique within city
+  @@index([cityId])
+  @@index([slug])
+  @@index([active])
+}

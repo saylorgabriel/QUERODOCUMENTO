@@ -165,7 +165,7 @@ export async function GET() {
 
       return {
         id: order.id,
-        type: certificateType === 'NEGATIVE' ? 'Certidão Negativa' : 'Certidão Positiva',
+        type: 'Certidão de Protesto',
         document: order.documentNumber || '',
         documentType: order.documentType || 'CPF',
         requestDate: order.createdAt.toISOString(),

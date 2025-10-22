@@ -1,0 +1,408 @@
+Estado;Cidade;Serventia;Tipo de Certidao;Forma de Entrega;Valor
+São Paulo;Adamantina;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Aguaí;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Águas de Lindóia;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Agudos;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Agudos;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Altinópolis;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Americana;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Americana;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Amparo;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Amparo;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Andradina;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Angatuba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Angatuba;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Aparecida;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Apiaí;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Araçatuba;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Araçatuba;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Araçatuba;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Araraquara;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Araraquara;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Araraquara;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Araraquara;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Araras;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Araras;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Artur Nogueira;REG. CIVIL E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Aruja;OFICIO DE REGISTRO CIVIL E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Assis;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Assis;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Atibaia;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Atibaia;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Auriflama;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Avaré;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Avaré;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Bananal;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Bariri;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Barra Bonita;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Barretos;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Barretos;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Barueri;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Batatais;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Bauru;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Bauru;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Bauru;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Bebedouro;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Bebedouro;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Bertioga;OFICIO DE REGISTRO CIVIL E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Bilac;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Birigui;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Birigui;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Boituva;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Borborema;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Botucatu;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Botucatu;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Bragança Paulista;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Bragança Paulista;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Brodowski;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Brotas;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Buritama;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Buritama;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Cabreúva;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Caçapava;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Caçapava;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Caçapava;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Cachoeira Paulista;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cachoeira Paulista;CARTORIO BENEDITO ESTANISLAU RODRIGUES;Certidão de Protesto;E-mail;100
+São Paulo;Caconde;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cafelândia;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cajuru;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Campinas;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Campinas;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Campinas;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Campos do Jordão;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cananéia;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cândido Mota;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Capão Bonito;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Capão Bonito;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Capivari;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Caraguatatuba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Carapicuíba;OFICIO DE RC E TABELIAO DE NOTAS;Certidão de Protesto;E-mail;100
+São Paulo;Cardoso;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Casa Branca;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Catanduva;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Catanduva;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cerqueira César;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cerquilho;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Chavantes;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Colina;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+;Conchal;OFICIO DE RC E TABELIAO DE NOTAS;Certidão de Protesto;E-mail;100
+São Paulo;Conchas;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cordeirópolis;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cosmópolis;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cotia;1 TABELIONATO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cravinhos;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cruzeiro;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cruzeiro;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cubatão;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cubatão;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Cunha;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Descalvado;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Descalvado;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Diadema;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Dois Córregos;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Dois Córregos;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Dracena;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Duartina;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Eldorado;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Embu das Artes;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Espirito Santo do Pinhal;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Estrela D Oeste;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Fartura;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Fernandópolis;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Fernandópolis;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Franca;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Franca;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Franca;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Francisco Morato;OFICIO DE RC E TABELIAO DE NOTAS;Certidão de Protesto;E-mail;100
+São Paulo;Franco da Rocha;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Gália;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Garça;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Garça;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;General Salgado;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Getulina;TAB DE NOTAS E PROT DE LETRAS;Certidão de Protesto;E-mail;100
+São Paulo;Guaíra;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Guaíra;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Guara;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Guararapes;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Guaratinguetá;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Guaratinguetá;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Guariba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Guariba;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Guarujá;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Guarulhos;1 TABELIÃO DE PROTESTOS DE TITULOS;Certidão de Protesto;E-mail;100
+São Paulo;Guarulhos;2 TABELIÃO DE PROTESTOS DE TITULOS;Certidão de Protesto;E-mail;100
+São Paulo;Hortolandia;OFICIO DE RC E TABELIAO DE NOTAS;Certidão de Protesto;E-mail;100
+São Paulo;Ibitinga;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ibitinga;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ibiúna;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Igarapava;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Iguapé;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ilha Solteira;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Indaiatuba;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ipaussu;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ipuã;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itaí;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itanhaém;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itapecerica da Serra;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itapetininga;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itapetininga;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itapeva;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itapeva;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itapevi;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itapira;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itapira;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itápolis;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itápolis;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Itaporanga;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itaquaquecetuba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itararé;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itatiba;1 TABELIONATO DE NOTAS E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Itatiba;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itatiba;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Itu;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Itu;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ituverava;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jaboticabal;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jaboticabal;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jaboticabal;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Jacareí;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jacareí;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jacareí;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Jacupiranga;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jaguariúna;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jales;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jales;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jardinópolis;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jarinu;OFICIO DE REC E TABELIÃO DE NOTAS E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Jaú;1 OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Jaú;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jaú;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;José Bonifácio;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;José Bonifácio;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Jundiaí;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Junqueirópolis;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Juquiá;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Laranjal Paulista;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Leme;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Lençóis Paulista;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Lençóis Paulista;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Limeira;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Limeira;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Limeira;1 OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Lins;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Lins;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Lorena;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Lorena;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Lucélia;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Macatuba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mairinque;TABELIONATO DE NOTAS E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Mairiporã;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Maracai;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Marília;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Marília;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Marília;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Marília;1 OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Martinópolis;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Matão;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Matão;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Matão;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mauá;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mauá;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Miguelópolis;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Miracatu;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mirandópolis;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mirante do Paranapanema;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mirassol;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mirassol;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Mococa;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mococa;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mogi Guaçu;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mogi Mirim;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mogi Mirim;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mogi das Cruzes;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mogi das Cruzes;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mogi das Cruzes;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Mogi das Cruzes;1 OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Mongaguá;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Monte Alto;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Monte Alto;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Monte Aprazível;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Monte Aprazível;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Monte Azul Paulista;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Monte Mor;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Morro Agudo;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Nhandeara;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Nova Granada;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Nova Odessa;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Novo Horizonte;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Nuporanga;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Nuporanga;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Olímpia;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Olímpia;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Orlândia;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Osasco;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Osvaldo Cruz;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Osvaldo Cruz;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Ourinhos;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ourinhos;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pacaembu;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Palestina;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Palmeira D Oeste;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Palmital;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Palmital;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Panorama;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Paraguaçu Paulista;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Paraibuna;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Patrocínio Paulista;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Paulinia;OFICIO DE REGISTRO CIVIL E TABELIONATO DE NOTAS;Certidão de Protesto;E-mail;100
+São Paulo;Paulo de Faria;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pederneiras;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pedregulho;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pedreira;TABELIONATO DE NOTAS E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Penápolis;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Penápolis;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pereira Barreto;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Peruíbe;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Piedade;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pilar do Sul;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pindamonhangaba;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pindamonhangaba;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Piracaia;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Piracicaba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Piraju;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pirajui;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pirapozinho;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pirassununga;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pirassununga;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Piratininga;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pitangueiras;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Pitangueiras;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Poá;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pompéia;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Pontal;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Porangaba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Porto Feliz;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Porto Feliz;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Porto Ferreira;OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Porto Ferreira;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Potirendaba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Praia Grande;TABELIONATO DE NOTAS E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Presidente Bernardes;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Presidente Epitácio;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Presidente Prudente;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Presidente Prudente;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Presidente Prudente;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Presidente Prudente;4 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Presidente Prudente;1 OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Presidente Venceslau;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Promissão;TABELIONATO DE NOTAS E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Quatá;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Queluz;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Rancharia;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Regente Feijó;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Registro;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ribeirão Bonito;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ribeirão Pires;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ribeirão Preto;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ribeirão Preto;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Rio Claro;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Rio Claro;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Rio Claro;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Rio Claro;1 OFICIO DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Rosana;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Salto;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santa Adélia;TABELIONATO DE NOTAS E PROTESTOS;Certidão de Protesto;E-mail;100
+São Paulo;Santa Bárbara D'Oeste;OFICIAL DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Santa Bárbara D'Oeste;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santa Branca;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santa Cruz das Palmeiras;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santa Cruz do Rio Pardo;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santa Fé do Sul;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santa Isabel;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santa Rita do Passa Quatro;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santa Rosa do Viterbo;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santana de Parnaiba;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santo Anastácio;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Santo André;TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;Santos;TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Bento do Sapucaí;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Bernardo do Campo;1 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Bernardo do Campo;2 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Caetano do Sul;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Caetano do Sul;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Caetano do Sul;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Caetano do Sul;4 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Carlos;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Carlos;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São João do Boa Vista;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São João do Boa Vista;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Joaquim da Barra;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São José do Rio Pardo;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São José do Rio Pardo;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São José do Rio Preto;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São José do Rio Preto;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São José dos Campos;TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Luiz do Paraitinga;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Manuel;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Manuel;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Miguel Arcanjo;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;1 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;2 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;3 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;4 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;5 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;6 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;7 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;8 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;9 TABELIÃO DE PROTESTO;Certidão de Protesto;E-mail;100
+São Paulo;São Paulo;10 TABELIÃO DE PROTESTO LETRAS E TITULOS;Certidão de Protesto;E-mail;100
+São Paulo;São Pedro;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Roque;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Roque;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Roque;OFICIAL DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;São Sebastião;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Simão;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Vicente ;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Vicente ;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;São Vicente ;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Serra Negra;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Serrana;OFICIAL DE RC E TABELIONATO DE NOTAS;Certidão de Protesto;E-mail;100
+São Paulo;Sertãozinho;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Sertãozinho;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Sertãozinho;OFICIAL DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Socorro;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Sorocaba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Sumaré;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Suzano;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Suzano;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Suzano;OFICIAL DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Taboão da Serra;OFICIAL DE REC E TABELIONATO DE NOTAS;Certidão de Protesto;E-mail;100
+São Paulo;Tambaú;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Tanabi;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Tanabi;OFICIAL DE REGISTRO DE IMOVEIS E OUTROS;Certidão de Protesto;E-mail;100
+São Paulo;Taquaritinga;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Taquaritinga;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Taquarituba;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Tatuí;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Tatuí;SEGUNDO TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Taubaté;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Taubaté;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Taubaté;3 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Teodoro Sampaio;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Tietê;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Tremembé;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Tupã;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Tupi Paulista;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Ubatuba;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Urânia;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Urupês;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Valinhos;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Valparaíso;TABELIÃO DE NOTAS DE VALPARAISO;Certidão de Protesto;E-mail;100
+São Paulo;Vargem Grande do Sul;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Várzea Paulista;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Vinhedo;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Viradouro;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Votorantim;TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Votuporanga;1 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
+São Paulo;Votuporanga;2 TABELIÃO DE NOTAS E PROTESTO ;Certidão de Protesto;E-mail;100
