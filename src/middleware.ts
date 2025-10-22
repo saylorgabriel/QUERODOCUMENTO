@@ -17,6 +17,11 @@ const adminPaths = [
   '/api/admin',
 ]
 
+// Admin API paths that have their own authentication (bypass middleware)
+const adminApiBypassPaths = [
+  '/api/admin/seed-locations',
+]
+
 // Paths that should redirect to dashboard if authenticated
 const authPaths = [
   '/auth/login',
@@ -68,10 +73,20 @@ export async function middleware(request: NextRequest) {
     )
     
     // Check if the current path is an admin auth path
-    const isAdminAuthPath = adminAuthPaths.some(path => 
+    const isAdminAuthPath = adminAuthPaths.some(path =>
       pathname.startsWith(path)
     )
-    
+
+    // Check if the current path is an admin API bypass path (has own auth)
+    const isAdminApiBypassPath = adminApiBypassPaths.some(path =>
+      pathname === path
+    )
+
+    // Bypass middleware for admin API paths with their own authentication
+    if (isAdminApiBypassPath) {
+      return NextResponse.next()
+    }
+
     // Handle admin paths
     if (isAdminPath && !isAdminAuthPath) {
       console.log('🔐 Admin path check:', {
