@@ -121,16 +121,18 @@ export default function PaymentPage() {
   const startPaymentPolling = (paymentId: string) => {
     const pollInterval = setInterval(async () => {
       try {
-        const response = await fetch(`/api/payment/create?paymentId=${paymentId}`)
-        
+        const response = await fetch(`/api/payment/status?paymentId=${paymentId}`)
+
         if (response.ok) {
           const data = await response.json()
-          
+
+          console.log('Payment status poll:', data.payment.status)
+
           if (data.payment.status === 'paid') {
             setPayment(prev => prev ? { ...prev, status: 'paid' } : null)
             setIsPolling(false)
             clearInterval(pollInterval)
-            
+
             // Redirect to success page after a short delay
             setTimeout(() => {
               router.push(`/pagamento/sucesso?orderId=${orderId}`)
