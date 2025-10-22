@@ -96,14 +96,10 @@ export default function PrecosPrazosPage() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <DollarSign className="w-5 h-5 text-neutral-600" />
-                  <h3 className="font-semibold text-neutral-900">Preço</h3>
+                  <h3 className="font-semibold text-neutral-900">Preço a partir de</h3>
                 </div>
                 <div className="ml-7">
-                  {/* A partir de  */}
-                  <p className="text-3xl font-bold text-purple-600 mb-2">R$ 89,90</p>  <b>Para nosso menor valor</b>
-                  <br />
-                  <p className="text-xs text-neutral-600">Valor para certidão negativa/positivo com até 1 protesto</p>
-                  <p className="text-xs text-neutral-600">Valor final de acordo com o cartório e quantidade de protestos e estado</p>
+                  <p className="text-3xl font-bold text-purple-600 mb-2">R$ 51,54</p>  
                   <button
                     onClick={() => setIsModalOpen(true)}
                     className="text-xs text-purple-600 hover:text-purple-700 font-medium underline mt-2 transition-colors"

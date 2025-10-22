@@ -12,8 +12,8 @@ export default function LoginPage() {
   const [errorType, setErrorType] = useState<'credentials' | 'network' | 'general'>('general')
   
   const [formData, setFormData] = useState({
-    email: 'demo@querodocumento.com',
-    password: '123456',
+    email: '',
+    password: '',
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
