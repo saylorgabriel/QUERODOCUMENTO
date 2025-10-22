@@ -61,12 +61,48 @@ function parseCSV(filePath, stateCode) {
   const citiesMap = new Map();
 
   dataLines.forEach(line => {
-    // Split by semicolon
-    const parts = line.split(';');
+    // Parse CSV line properly (handle quoted fields with semicolons)
+    const parts = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const nextChar = line[i + 1];
+
+      if (char === '"') {
+        if (inQuotes && nextChar === '"') {
+          // Escaped quote (two double quotes) - but NOT if followed by a third quote
+          const thirdChar = line[i + 2];
+          if (thirdChar === '"') {
+            // Three quotes: first two are escape, third closes the field
+            current += '"';
+            i += 2; // Skip the next two quotes
+            inQuotes = false; // Close quotes
+          } else {
+            // Two quotes: escaped quote
+            current += '"';
+            i++; // Skip next quote
+          }
+        } else {
+          // Toggle quote mode
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ';' && !inQuotes) {
+        // Field separator
+        parts.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    parts.push(current.trim()); // Add last field
+
     if (parts.length < 3) return;
 
-    const city = parts[1]?.trim();
-    const notaryName = parts[2]?.trim();
+    // Clean data - remove leading/trailing quotes AND all internal quotes
+    const city = parts[1]?.trim().replace(/^"|"$/g, '').replace(/"/g, '');
+    const notaryName = parts[2]?.trim().replace(/^"|"$/g, '').replace(/"/g, '');
 
     if (!city || !notaryName) return;
 
@@ -174,7 +210,16 @@ export interface State {
 
 export const locations: State[] = ${JSON.stringify(states, null, 2)
   .replace(/"([^"]+)":/g, '$1:') // Remove quotes from keys
-  .replace(/: "([^"]+)"/g, ": '$1'") // Use single quotes for strings
+  .replace(/: "([^"]*)"/g, (_match, p1) => {
+    // Clean and escape string values for JavaScript
+    // Remove any problematic characters from CSV parsing
+    const cleaned = p1
+      .replace(/\\+/g, '')      // Remove backslashes
+      .replace(/"+/g, '')       // Remove all double quotes
+      .replace(/`/g, '')        // Remove backticks (for template literal safety)
+      .replace(/\$/g, '')       // Remove dollar signs (for template literal safety)
+    return `: '${cleaned.replace(/'/g, "\\'")}'` // Escape single quotes last
+  })
   .replace(/: undefined/g, '') // Remove undefined values
 }
 

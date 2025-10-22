@@ -64,12 +64,48 @@ function parseCSV(filePath, stateCode) {
   const citiesMap = new Map();
 
   dataLines.forEach(line => {
-    // Split by semicolon
-    const parts = line.split(';');
+    // Parse CSV line properly (handle quoted fields with semicolons)
+    const parts = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const nextChar = line[i + 1];
+
+      if (char === '"') {
+        if (inQuotes && nextChar === '"') {
+          // Escaped quote (two double quotes) - but NOT if followed by a third quote
+          const thirdChar = line[i + 2];
+          if (thirdChar === '"') {
+            // Three quotes: first two are escape, third closes the field
+            current += '"';
+            i += 2; // Skip the next two quotes
+            inQuotes = false; // Close quotes
+          } else {
+            // Two quotes: escaped quote
+            current += '"';
+            i++; // Skip next quote
+          }
+        } else {
+          // Toggle quote mode
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ';' && !inQuotes) {
+        // Field separator
+        parts.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    parts.push(current.trim()); // Add last field
+
     if (parts.length < 3) return;
 
-    const city = parts[1]?.trim();
-    const notaryName = parts[2]?.trim();
+    // Clean data - remove leading/trailing quotes AND all internal quotes
+    const city = parts[1]?.trim().replace(/^"|"$/g, '').replace(/"/g, '');
+    const notaryName = parts[2]?.trim().replace(/^"|"$/g, '').replace(/"/g, '');
 
     if (!city || !notaryName) return;
 

@@ -615,12 +615,12 @@ export const locations: State[] = [
       },
       {
         id: 'olho-dagua-das-flores',
-        name: 'Olho D'Água das Flores',
+        name: 'Olho D\'Água das Flores',
         notaries: [
           {
             id: 'cartorio-do-unico-oficio-olho-dagua-das-flores-al',
             name: 'CARTÓRIO DO ÚNICO OFÍCIO',
-            address: 'Olho D'Água das Flores - AL'
+            address: 'Olho D\'Água das Flores - AL'
           }
         ]
       },
@@ -846,12 +846,12 @@ export const locations: State[] = [
       },
       {
         id: 'tanque-darca',
-        name: 'Tanque D'Arca',
+        name: 'Tanque D\'Arca',
         notaries: [
           {
             id: 'cartorio-do-unico-oficio-tanque-darca-tanque-darca-al',
-            name: 'CARTORIO DO UNICO OFICIO TANQUE D'ARCA',
-            address: 'Tanque D'Arca - AL'
+            name: 'CARTORIO DO UNICO OFICIO TANQUE D\'ARCA',
+            address: 'Tanque D\'Arca - AL'
           }
         ]
       },
@@ -2573,12 +2573,12 @@ export const locations: State[] = [
       },
       {
         id: 'dias-davila',
-        name: 'Dias d'Ávila',
+        name: 'Dias d\'Ávila',
         notaries: [
           {
             id: 'tabelionato-de-notas-e-protesto-de-titulos-da-comarca-de-dias-davila-dias-davila-ba',
-            name: 'TABELIONATO DE NOTAS E PROTESTO DE TITULOS DA COMARCA DE DIAS D'AVILA',
-            address: 'Dias d'Ávila - BA'
+            name: 'TABELIONATO DE NOTAS E PROTESTO DE TITULOS DA COMARCA DE DIAS D\'AVILA',
+            address: 'Dias d\'Ávila - BA'
           }
         ]
       },
@@ -8659,19 +8659,8 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'tabelionato-de-notas-de-protesto-de-titulos-registro-de-imoveis-titulos-e-documentos-e-civil-das-pessoas-juridicas-e-civil-das-pessoas-naturais-apore-go',
-            name: '\'TABELIONATO DE NOTAS, DE PROTESTO DE TITULOS, REGISTRO DE IMOVEIS, TITULOS E DOCUMENTOS E CIVIL DAS PESSOAS JURIDICAS E CIVIL DAS PESSOAS NATURAIS",
+            name: 'TABELIONATO DE NOTAS, DE PROTESTO DE TITULOS, REGISTRO DE IMOVEIS, TITULOS E DOCUMENTOS E CIVIL DAS PESSOAS JURIDICAS E CIVIL DAS PESSOAS NATURAIS',
             address: 'Aporé - GO'
-          }
-        ]
-      },
-      {
-        id: 'certidao-de-protesto',
-        name: 'Certidão de Protesto',
-        notaries: [
-          {
-            id: 'e-mail-certidao-de-protesto-go',
-            name: 'E-mail',
-            address: 'Certidão de Protesto - GO'
           }
         ]
       },
@@ -9785,8 +9774,8 @@ export const locations: State[] = [
         name: 'Ivolândia',
         notaries: [
           {
-            id: 'servico-do-tabelionato-de-notas-ivolandia-go',
-            name: '\'Serviço do Tabelionato de Notas",
+            id: 'servico-do-tabelionato-de-notas-protestos-de-titulos-tabelionato-oficialato-de-registros-de-contratos-maritimos-ivolandia-go',
+            name: 'Serviço do Tabelionato de Notas; Protestos de Títulos; Tabelionato; Oficialato de Registros de Contratos Marítimos',
             address: 'Ivolândia - GO'
           }
         ]
@@ -10783,12 +10772,12 @@ export const locations: State[] = [
       },
       {
         id: 'sao-joao-dalianca',
-        name: 'São João D'Aliança',
+        name: 'São João D\'Aliança',
         notaries: [
           {
             id: 'cartorio-e-tabelionato-do-distrito-jud-de-sao-joao-d-alianca-sao-joao-dalianca-go',
             name: 'CARTÓRIO E TABELIONATO DO DISTRITO JUD. DE SAO JOAO D ALIANÇA',
-            address: 'São João D'Aliança - GO'
+            address: 'São João D\'Aliança - GO'
           }
         ]
       },
@@ -10919,7 +10908,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-sitio-d-abadia-go-tabelionato-de-notas-e-registros-publicos-sitio-d-abadia-go',
-            name: 'CARTÓRIO SÍTIO D' ABADIA-GO, TABELIONATO DE NOTAS E REGISTROS PÚBLICOS.',
+            name: 'CARTÓRIO SÍTIO D\' ABADIA-GO, TABELIONATO DE NOTAS E REGISTROS PÚBLICOS.',
             address: 'Sitio D abadia - GO'
           }
         ]
@@ -12472,12 +12461,12 @@ export const locations: State[] = [
       },
       {
         id: 'olho-dagua-das-cunhas',
-        name: 'Olho d'Água das Cunhãs',
+        name: 'Olho d\'Água das Cunhãs',
         notaries: [
           {
             id: 'serventia-extrajudicial-olho-dagua-das-cunhas-ma',
             name: 'SERVENTIA EXTRAJUDICIAL',
-            address: 'Olho d'Água das Cunhãs - MA'
+            address: 'Olho d\'Água das Cunhãs - MA'
           }
         ]
       },
@@ -13859,12 +13848,12 @@ export const locations: State[] = [
       },
       {
         id: 'mirassol-doeste',
-        name: 'Mirassol d'Oeste',
+        name: 'Mirassol d\'Oeste',
         notaries: [
           {
             id: 'tabelionato-de-notas-e-protestos-mirassol-doeste-mt',
             name: 'TABELIONATO DE NOTAS E PROTESTOS',
-            address: 'Mirassol d'Oeste - MT'
+            address: 'Mirassol d\'Oeste - MT'
           }
         ]
       },
@@ -14538,8 +14527,8 @@ export const locations: State[] = [
         name: 'Costa Rica',
         notaries: [
           {
-            id: 'costa-rica-1-tabelionato-de-notas-e-oficio-de-imoveis-tit-costa-rica-ms',
-            name: '\'COSTA RICA - 1º TABELIONATO DE NOTAS E OFÍCIO DE IMÓVEIS, TIT",
+            id: 'costa-rica-1-tabelionato-de-notas-e-oficio-de-imoveis-tit-e-documentos-e-civil-de-pessoas-juridicas-costa-rica-ms',
+            name: 'COSTA RICA - 1º TABELIONATO DE NOTAS E OFÍCIO DE IMÓVEIS, TIT; E DOCUMENTOS E CIVIL DE PESSOAS JURÍDICAS',
             address: 'Costa Rica - MS'
           }
         ]
@@ -18905,7 +18894,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'unico-oficio-goncalves-mocajuba-pa',
-            name: '\'ÚNICO OFICIO\"\" GONÇALVES\"",
+            name: 'ÚNICO OFICIO GONÇALVES',
             address: 'Mocajuba - PA'
           }
         ]
@@ -18993,19 +18982,8 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-rocha-passos-2-oficio-obidos-pa',
-            name: '\'CARTÓRIO ROCHA PASSOS - 2º OFICIO",
+            name: 'CARTÓRIO ROCHA PASSOS - 2º OFICIO',
             address: 'Óbidos - PA'
-          }
-        ]
-      },
-      {
-        id: 'certidao-de-protesto',
-        name: 'Certidão de Protesto',
-        notaries: [
-          {
-            id: 'e-mail-certidao-de-protesto-pa',
-            name: 'E-mail',
-            address: 'Certidão de Protesto - PA'
           }
         ]
       },
@@ -19070,7 +19048,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-do-unico-oficio-de-paragominas-paragominas-pa',
-            name: '\'CARTÓRIO DO ÚNICO OFÍCIO DE PARAGOMINAS",
+            name: 'CARTÓRIO DO ÚNICO OFÍCIO DE PARAGOMINAS',
             address: 'Paragominas - PA'
           }
         ]
@@ -19158,7 +19136,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-maia-servico-notarial-e-registral-do-unico-oficio-primavera-pa',
-            name: '\'CARTÓRIO \"\"MAIA\"\" - SERVIÇO NOTARIAL E REGISTRAL DO ÚNICO OFÍCIO\"",
+            name: 'CARTÓRIO MAIA - SERVIÇO NOTARIAL E REGISTRAL DO ÚNICO OFÍCIO',
             address: 'Primavera - PA'
           }
         ]
@@ -19367,7 +19345,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-do-oficio-unico-de-smg-sao-miguel-do-guama-pa',
-            name: '\'CARTÓRIO DO OFÍCIO ÚNICO DE SMG",
+            name: 'CARTÓRIO DO OFÍCIO ÚNICO DE SMG',
             address: 'São Miguel do Guamá - PA'
           }
         ]
@@ -19378,7 +19356,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-de-unico-oficio-de-sao-sebastiao-da-boa-vista-sao-sebastiao-da-boa-vista-pa',
-            name: '\'CARTÓRIO DE ÚNICO OFÍCIO DE SÃO SEBASTIÃO DA BOA VISTA",
+            name: 'CARTÓRIO DE ÚNICO OFÍCIO DE SÃO SEBASTIÃO DA BOA VISTA',
             address: 'São Sebastião da Boa Vista - PA'
           }
         ]
@@ -19400,7 +19378,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-magalhaes-guilhon-2-oficio-da-comarca-de-soure-soure-pa',
-            name: '\'CARTORIO MAGALHÃES GUILHON - 2º OFICIO DA COMARCA DE SOURE",
+            name: 'CARTORIO MAGALHÃES GUILHON - 2º OFICIO DA COMARCA DE SOURE',
             address: 'Soure - PA'
           }
         ]
@@ -19510,7 +19488,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'vitoria-do-xingucartorio-do-unico-oficio-de-vitoria-do-xingu-vitoria-do-xingu-pa',
-            name: '\'Vitória do XinguCARTÓRIO DO ÚNICO OFÍCIO DE VITÓRIA DO XINGU",
+            name: 'Vitória do XinguCARTÓRIO DO ÚNICO OFÍCIO DE VITÓRIA DO XINGU',
             address: 'Vitória do Xingu - PA'
           }
         ]
@@ -20181,7 +20159,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-santana-santana-dos-garrotes-pb',
-            name: 'CARTÓRIO SANT'ANA',
+            name: 'CARTÓRIO SANT\'ANA',
             address: 'Santana dos Garrotes - PB'
           }
         ]
@@ -21261,19 +21239,8 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-mari-paulina-franco-ferreira-laranjeiras-do-sul-pr',
-            name: '\'CARTORIO MARI PAULINA FRANCO FERREIRA",
+            name: 'CARTORIO MARI PAULINA FRANCO FERREIRA',
             address: 'Laranjeiras do Sul - PR'
-          }
-        ]
-      },
-      {
-        id: 'certidao-de-protesto',
-        name: 'Certidão de Protesto',
-        notaries: [
-          {
-            id: 'e-mail-certidao-de-protesto-pr',
-            name: 'E-mail',
-            address: 'Certidão de Protesto - PR'
           }
         ]
       },
@@ -21392,7 +21359,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: '1-tabelionato-de-protestos-marialva-pr',
-            name: '\'1 TABELIONATO DE PROTESTOS",
+            name: '1 TABELIONATO DE PROTESTOS',
             address: 'Marialva - PR'
           }
         ]
@@ -21611,7 +21578,7 @@ export const locations: State[] = [
           },
           {
             id: '2-oficio-de-protesto-de-paranagua-paranagua-pr',
-            name: '\'2º OFÍCIO DE PROTESTO DE PARANAGUÁ",
+            name: '2º OFÍCIO DE PROTESTO DE PARANAGUÁ',
             address: 'Paranaguá - PR'
           }
         ]
@@ -22001,7 +21968,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: '1-tabelionato-de-notas-e-de-protesto-de-titulos-sao-jose-dos-pinhais-pr',
-            name: '\'1 TABELIONATO DE NOTAS E DE PROTESTO DE TITULOS",
+            name: '1 TABELIONATO DE NOTAS E DE PROTESTO DE TITULOS',
             address: 'São José dos Pinhais - PR'
           },
           {
@@ -22824,19 +22791,8 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'cartorio-paulo-arruda-servico-notarial-e-registral-cupira-pe',
-            name: '\'CARTÓRIO PAULO ARRUDA - Serviço Notarial e Registral",
+            name: 'CARTÓRIO PAULO ARRUDA - Serviço Notarial e Registral',
             address: 'Cupira - PE'
-          }
-        ]
-      },
-      {
-        id: 'certidao-de-protesto',
-        name: 'Certidão de Protesto',
-        notaries: [
-          {
-            id: 'e-mail-certidao-de-protesto-pe',
-            name: 'E-mail',
-            address: 'Certidão de Protesto - PE'
           }
         ]
       },
@@ -23032,8 +22988,8 @@ export const locations: State[] = [
         name: 'Igarassu',
         notaries: [
           {
-            id: 'tabelionato-de-notas-protestos-e-oficio-de-registro-de-imoveis-tit-igarassu-pe',
-            name: '\'TABELIONATO DE NOTAS, PROTESTOS E OFÍCIO DE REGISTRO DE IMÓVEIS TÍT",
+            id: 'tabelionato-de-notas-protestos-e-oficio-de-registro-de-imoveis-tit-e-doc-e-pessoas-juridicas-igarassu-pe',
+            name: 'TABELIONATO DE NOTAS, PROTESTOS E OFÍCIO DE REGISTRO DE IMÓVEIS TÍT; E DOC, E PESSOAS JURÍDICAS',
             address: 'Igarassu - PE'
           }
         ]
@@ -26411,19 +26367,8 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'oficio-unico-de-saquarema-saquarema-rj',
-            name: '\'Ofício Ùnico de Saquarema",
+            name: 'Ofício Ùnico de Saquarema',
             address: 'Saquarema - RJ'
-          }
-        ]
-      },
-      {
-        id: 'certidao-de-protesto',
-        name: 'Certidão de Protesto',
-        notaries: [
-          {
-            id: 'e-mail-certidao-de-protesto-rj',
-            name: 'E-mail',
-            address: 'Certidão de Protesto - RJ'
           }
         ]
       },
@@ -27188,7 +27133,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'oficio-unico-do-municipio-de-lagoa-danta-lagoa-danta-rn',
-            name: 'OFICIO UNICO DO MUNICIPIO DE LAGOA D'ANTA',
+            name: 'OFICIO UNICO DO MUNICIPIO DE LAGOA D\'ANTA',
             address: 'Lagoa d’Anta - RN'
           }
         ]
@@ -31190,19 +31135,8 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'servicos-notariais-e-de-registros-de-tabai-tabai-rs',
-            name: '\'SERVIÇOS NOTARIAIS E DE REGISTROS DE TABAI",
+            name: 'SERVIÇOS NOTARIAIS E DE REGISTROS DE TABAI',
             address: 'Tabaí - RS'
-          }
-        ]
-      },
-      {
-        id: 'certidao-de-protesto',
-        name: 'Certidão de Protesto',
-        notaries: [
-          {
-            id: 'e-mail-certidao-de-protesto-rs',
-            name: 'E-mail',
-            address: 'Certidão de Protesto - RS'
           }
         ]
       },
@@ -31256,7 +31190,7 @@ export const locations: State[] = [
         notaries: [
           {
             id: 'tabelionato-de-notas-e-protestos-de-titulos-de-taquari-taquari-rs',
-            name: '\'TABELIONATO DE NOTAS E PROTESTOS DE TITULOS DE TAQUARI",
+            name: 'TABELIONATO DE NOTAS E PROTESTOS DE TITULOS DE TAQUARI',
             address: 'Taquari - RS'
           }
         ]
@@ -31975,17 +31909,6 @@ export const locations: State[] = [
             address: 'Rorainópolis - RR'
           }
         ]
-      },
-      {
-        id: 'oficio-unico-da-comarca-de-sao-luiz',
-        name: 'OFÍCIO ÚNICO DA COMARCA DE SÃO LUIZ',
-        notaries: [
-          {
-            id: 'certidao-de-protesto-oficio-unico-da-comarca-de-sao-luiz-rr',
-            name: 'Certidão de Protesto',
-            address: 'OFÍCIO ÚNICO DA COMARCA DE SÃO LUIZ - RR'
-          }
-        ]
       }
     ]
   },
@@ -32511,12 +32434,12 @@ export const locations: State[] = [
       },
       {
         id: 'herval-doeste',
-        name: '\'Herval  D\"\"Oeste\"",
+        name: 'Herval  DOeste',
         notaries: [
           {
             id: 'tabelionato-de-notas-e-protestos-de-titulos-herval-doeste-sc',
             name: 'TABELIONATO DE NOTAS E PROTESTOS DE TITULOS',
-            address: '\'Herval  D\"\"Oeste\" - SC"
+            address: 'Herval  DOeste - SC'
           }
         ]
       },
@@ -32526,24 +32449,13 @@ export const locations: State[] = [
         notaries: [
           {
             id: '1-tabelionato-de-notas-e-protestos-ibirama-sc',
-            name: '\'1 TABELIONATO DE NOTAS E PROTESTOS",
+            name: '1 TABELIONATO DE NOTAS E PROTESTOS',
             address: 'Ibirama - SC'
           },
           {
             id: '2-tabelionato-de-notas-e-protestos-comarca-de-ibirama--ibirama-sc',
             name: '2º Tabelionato de Notas e Protestos - Comarca de Ibirama-',
             address: 'Ibirama - SC'
-          }
-        ]
-      },
-      {
-        id: 'certidao-de-protesto',
-        name: 'Certidão de Protesto',
-        notaries: [
-          {
-            id: 'e-mail-certidao-de-protesto-sc',
-            name: 'E-mail',
-            address: 'Certidão de Protesto - SC'
           }
         ]
       },
@@ -36306,17 +36218,17 @@ export const locations: State[] = [
       },
       {
         id: 'santa-barbara-doeste',
-        name: 'Santa Bárbara D'Oeste',
+        name: 'Santa Bárbara D\'Oeste',
         notaries: [
           {
             id: 'oficial-de-registro-de-imoveis-e-outros-santa-barbara-doeste-sp',
             name: 'OFICIAL DE REGISTRO DE IMOVEIS E OUTROS',
-            address: 'Santa Bárbara D'Oeste - SP'
+            address: 'Santa Bárbara D\'Oeste - SP'
           },
           {
             id: '1-tabeliao-de-notas-e-protesto-santa-barbara-doeste-sp',
             name: '1 TABELIÃO DE NOTAS E PROTESTO',
-            address: 'Santa Bárbara D'Oeste - SP'
+            address: 'Santa Bárbara D\'Oeste - SP'
           }
         ]
       },
@@ -37341,12 +37253,12 @@ export const locations: State[] = [
       },
       {
         id: 'itaporanga-dajuda',
-        name: 'Itaporanga d'Ajuda',
+        name: 'Itaporanga d\'Ajuda',
         notaries: [
           {
             id: 'cartorio-do-1-oficio-d-itaporanga-d-ajuda-itaporanga-dajuda-se',
             name: 'CARTORIO DO 1. OFICIO D ITAPORANGA D AJUDA',
-            address: 'Itaporanga d'Ajuda - SE'
+            address: 'Itaporanga d\'Ajuda - SE'
           }
         ]
       },
@@ -38536,12 +38448,12 @@ export const locations: State[] = [
       },
       {
         id: 'pau-darco',
-        name: 'Pau d'Arco',
+        name: 'Pau d\'Arco',
         notaries: [
           {
             id: 'cartorio-de-registro-de-imoveis-pessoas-juridicas-titulos-e-documento-protesto-e-tabelionato-de-notas-pau-darco-to',
             name: 'CARTÓRIO DE REGISTRO DE IMÓVEIS, PESSOAS JURÍDICAS, TÍTULOS E DOCUMENTO, PROTESTO E TABELIONATO DE NOTAS',
-            address: 'Pau d'Arco - TO'
+            address: 'Pau d\'Arco - TO'
           }
         ]
       },
