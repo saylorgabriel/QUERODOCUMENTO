@@ -53,8 +53,21 @@ export function getOrderConfirmationTemplate(data: EmailTemplateData): EmailTemp
       <div class="alert alert-warning">
         <div class="alert-title">💳 Pagamento Necessário</div>
         <div class="alert-text">
-          Este pedido requer pagamento. {{#if isPIX}}O PIX deve ser pago em até 30 minutos.{{/if}}
-          {{#if isCreditCard}}Seu cartão será cobrado automaticamente.{{/if}}
+          Este pedido requer pagamento.
+        </div>
+      </div>
+      {{/if}}
+      {{#if isPIX}}
+      <div class="alert alert-info">
+        <div class="alert-text">
+          ⏱️ O PIX deve ser pago em até 30 minutos para garantir o processamento.
+        </div>
+      </div>
+      {{/if}}
+      {{#if isCreditCard}}
+      <div class="alert alert-success">
+        <div class="alert-text">
+          ✅ Seu cartão será cobrado automaticamente.
         </div>
       </div>
       {{/if}}
@@ -153,8 +166,13 @@ export function getOrderConfirmationTemplate(data: EmailTemplateData): EmailTemp
     
     {{#if requiresPayment}}
     💳 PAGAMENTO NECESSÁRIO
-    Este pedido requer pagamento. {{#if isPIX}}O PIX deve ser pago em até 30 minutos.{{/if}}
-    {{#if isCreditCard}}Seu cartão será cobrado automaticamente.{{/if}}
+    Este pedido requer pagamento.
+    {{/if}}
+    {{#if isPIX}}
+    ⏱️ O PIX deve ser pago em até 30 minutos para garantir o processamento.
+    {{/if}}
+    {{#if isCreditCard}}
+    ✅ Seu cartão será cobrado automaticamente.
     {{/if}}
     
     ⏰ PRÓXIMAS ETAPAS:
