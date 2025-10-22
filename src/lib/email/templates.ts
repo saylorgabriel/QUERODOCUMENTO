@@ -16,7 +16,7 @@ import { getStatusUpdateTemplate } from './templates/status-update'
 import { EmailTemplateData, EmailTemplate } from './templates/base'
 
 // Re-export for compatibility
-export { EmailTemplateData, EmailTemplate }
+export type { EmailTemplateData, EmailTemplate } from './templates/base'
 
 /**
  * Legacy base email template wrapper (deprecated)

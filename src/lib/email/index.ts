@@ -4,7 +4,7 @@
  */
 
 // Core email service
-export { EmailService } from './email-service'
+export { emailService } from './email-service'
 
 // Template functions
 export {
@@ -22,10 +22,8 @@ export {
 export type { EmailTemplateData, EmailTemplate } from './templates/base'
 
 // Email helper functions
-import { EmailService } from './email-service'
+import { emailService } from './email-service'
 import { getEmailTemplate } from './templates'
-
-const emailService = new EmailService()
 
 /**
  * Send welcome email to new users

@@ -310,12 +310,15 @@ class EmailService {
     }
     
     try {
+      // Convert provider to uppercase to match Prisma enum
+      const providerUpperCase = result.provider.toUpperCase() as 'SENDGRID' | 'MAILGUN' | 'SMTP' | 'RESEND' | 'MAILHOG'
+      
       await prisma.emailLog.create({
         data: {
           to: Array.isArray(message.to) ? message.to.join(', ') : message.to,
           from: message.from || this.config.defaultFrom,
           subject: message.subject,
-          provider: result.provider,
+          provider: providerUpperCase,
           status: result.success ? 'sent' : 'failed',
           messageId: result.messageId,
           error: result.error,

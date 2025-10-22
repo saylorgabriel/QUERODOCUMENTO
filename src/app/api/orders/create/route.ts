@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
-import { sendOrderConfirmationEmail, sendAdminNewOrderNotification } from '@/lib/email'
+import { sendOrderConfirmationEmail, sendAdminNewOrderNotification } from '@/lib/email/index'
 import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 // Helper function to generate order number
