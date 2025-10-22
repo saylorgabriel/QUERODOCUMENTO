@@ -227,3 +227,57 @@ export async function sendPasswordResetEmail(data: {
     return { success: false, error: (error as any).message }
   }
 }
+
+/**
+ * Send admin notification for new orders
+ */
+export async function sendAdminNewOrderNotification(data: {
+  orderNumber: string
+  customerName: string
+  customerEmail: string
+  serviceType: string
+  documentNumber: string
+  documentType: 'CPF' | 'CNPJ'
+  amount: string
+  paymentMethod: string
+  status: string
+  orderId: string
+}): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  try {
+    const { generateAdminNewOrderEmail } = await import('./templates/admin-new-order')
+
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://querodocumento.com.br'
+    const adminUrl = `${baseUrl}/admin/pedidos?order=${data.orderId}`
+
+    const template = generateAdminNewOrderEmail({
+      orderNumber: data.orderNumber,
+      customerName: data.customerName,
+      customerEmail: data.customerEmail,
+      serviceType: data.serviceType,
+      documentNumber: data.documentNumber,
+      documentType: data.documentType,
+      amount: data.amount,
+      paymentMethod: data.paymentMethod,
+      status: data.status,
+      adminUrl
+    })
+
+    const adminEmail = process.env.ADMIN_EMAIL || 'contato@querodocumento.com.br'
+
+    const result = await emailService.sendEmail({
+      to: adminEmail,
+      subject: template.subject,
+      html: template.html,
+      text: template.text
+    })
+
+    return {
+      success: result.success,
+      messageId: result.messageId,
+      error: result.error
+    }
+  } catch (error) {
+    console.error('Failed to send admin new order notification:', error)
+    return { success: false, error: (error as any).message }
+  }
+}

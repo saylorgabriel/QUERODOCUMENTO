@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
-import { sendOrderConfirmationEmail } from '@/lib/email'
+import { sendOrderConfirmationEmail, sendAdminNewOrderNotification } from '@/lib/email'
 import { rateLimit, getClientIp, createRateLimitResponse, RateLimits, isRateLimitEnabled } from '@/lib/rate-limiter'
 
 // Helper function to generate order number
@@ -267,7 +267,7 @@ export async function POST(request: NextRequest) {
 
     if (emailResult.success) {
       console.log('Order confirmation email sent successfully to:', order.user.email)
-      
+
       // Log email success
       await prisma.auditLog.create({
         data: {
@@ -275,16 +275,16 @@ export async function POST(request: NextRequest) {
           action: 'ORDER_CONFIRMATION_EMAIL_SENT',
           resource: 'EMAIL',
           resourceId: order.id,
-          metadata: { 
-            email: order.user.email, 
+          metadata: {
+            email: order.user.email,
             orderNumber: order.orderNumber,
-            messageId: emailResult.messageId 
+            messageId: emailResult.messageId
           }
         }
       })
     } else {
       console.error('Failed to send order confirmation email:', emailResult.error)
-      
+
       // Log email failure (but don't fail the order creation)
       await prisma.auditLog.create({
         data: {
@@ -292,11 +292,63 @@ export async function POST(request: NextRequest) {
           action: 'EMAIL_FAILED',
           resource: 'EMAIL',
           resourceId: order.id,
-          metadata: { 
-            email: order.user.email, 
+          metadata: {
+            email: order.user.email,
             orderNumber: order.orderNumber,
             error: emailResult.error,
             emailType: 'order-confirmation'
+          }
+        }
+      })
+    }
+
+    // Send admin notification about new order
+    const adminNotificationResult = await sendAdminNewOrderNotification({
+      orderNumber: order.orderNumber,
+      customerName: order.user.name || 'Cliente',
+      customerEmail: order.user.email,
+      serviceType: serviceType === 'PROTEST_QUERY' ? 'Consulta de Protesto' : 'Certidão de Protesto',
+      documentNumber: documentNumber,
+      documentType: getDocumentType(documentNumber),
+      amount: `R$ ${amountValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+      paymentMethod: paymentMethod === 'PIX' ? 'PIX'
+                   : paymentMethod === 'CREDIT_CARD' ? 'Cartão de Crédito'
+                   : 'Boleto',
+      status: 'Aguardando Pagamento',
+      orderId: order.id
+    })
+
+    if (adminNotificationResult.success) {
+      console.log('✅ Admin notification sent successfully for order:', order.orderNumber)
+
+      // Log admin notification success
+      await prisma.auditLog.create({
+        data: {
+          userId: user.id,
+          action: 'ADMIN_NOTIFICATION_SENT',
+          resource: 'EMAIL',
+          resourceId: order.id,
+          metadata: {
+            orderNumber: order.orderNumber,
+            messageId: adminNotificationResult.messageId,
+            adminEmail: process.env.ADMIN_EMAIL || 'contato@querodocumento.com.br'
+          }
+        }
+      })
+    } else {
+      console.error('❌ Failed to send admin notification:', adminNotificationResult.error)
+
+      // Log admin notification failure (but don't fail the order creation)
+      await prisma.auditLog.create({
+        data: {
+          userId: user.id,
+          action: 'ADMIN_NOTIFICATION_FAILED',
+          resource: 'EMAIL',
+          resourceId: order.id,
+          metadata: {
+            orderNumber: order.orderNumber,
+            error: adminNotificationResult.error,
+            adminEmail: process.env.ADMIN_EMAIL || 'contato@querodocumento.com.br'
           }
         }
       })
