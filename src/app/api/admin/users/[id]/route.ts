@@ -2,6 +2,78 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { cookies } from 'next/headers'
 
+// GET - Get user by ID
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    // Verify admin session
+    const cookieStore = await cookies()
+    const sessionCookie = cookieStore.get('simple-session')
+
+    if (!sessionCookie) {
+      return NextResponse.json(
+        { success: false, error: 'Não autorizado' },
+        { status: 401 }
+      )
+    }
+
+    const sessionData = JSON.parse(sessionCookie.value)
+    if (sessionData.user.role !== 'ADMIN') {
+      return NextResponse.json(
+        { success: false, error: 'Acesso negado' },
+        { status: 403 }
+      )
+    }
+
+    const { id } = await params
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        cpf: true,
+        cnpj: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            orders: true
+          }
+        }
+      }
+    })
+
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'Usuário não encontrado' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json({
+      success: true,
+      user
+    })
+  } catch (error) {
+    console.error('Error fetching user:', error)
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Erro ao buscar usuário',
+        details: (error as any).message
+      },
+      { status: 500 }
+    )
+  }
+}
+
+// PUT - Update user
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
