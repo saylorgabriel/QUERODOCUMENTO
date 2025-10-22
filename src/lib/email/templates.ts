@@ -197,7 +197,7 @@ export function getLegacyPasswordResetTemplate(data: EmailTemplateData): { html:
   
   const html = wrapTemplate(`
     <div class="content">
-      <h1>Redefinir Senha</h1>
+      <h1>Esqueceu sua senha?</h1>
       <p>Olá <strong>${name}</strong>,</p>
       <p>Recebemos uma solicitação para redefinir a senha da sua conta no QueroDocumento.</p>
       <p>Se você fez esta solicitação, clique no botão abaixo para criar uma nova senha:</p>

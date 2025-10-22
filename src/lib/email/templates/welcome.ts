@@ -62,15 +62,7 @@ export function getWelcomeTemplate(data: EmailTemplateData): EmailTemplate {
           Para sua primeira consulta, recomendamos começar com a <strong>Consulta de Protesto</strong> - você conhecerá nossa agilidade!
         </div>
       </div>
-      
-      <h3>📞 Precisa de Ajuda?</h3>
-      <p>Nossa equipe de especialistas está sempre disponível para ajudá-lo:</p>
-      <ul>
-        <li><strong>WhatsApp:</strong> Resposta em até 2 horas úteis</li>
-        <li><strong>Email:</strong> suporte@querodocumento.com.br</li>
-        <li><strong>Chat Online:</strong> Disponível em sua conta</li>
-      </ul>
-      
+            
       <hr class="divider">
       
       <div class="info-box">

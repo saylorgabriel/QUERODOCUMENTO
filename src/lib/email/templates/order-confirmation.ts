@@ -119,7 +119,6 @@ export function getOrderConfirmationTemplate(data: EmailTemplateData): EmailTemp
       
       <div class="button-center">
         <a href="{{dashboardUrl}}/pedidos/{{orderNumber}}" class="button">Acompanhar Pedido</a>
-        <a href="{{dashboardUrl}}" class="button button-secondary">Ir para Dashboard</a>
       </div>
       
       <div class="alert alert-info">
@@ -128,15 +127,6 @@ export function getOrderConfirmationTemplate(data: EmailTemplateData): EmailTemp
           Você pode acompanhar o status do seu pedido a qualquer momento em sua conta. Também enviaremos notificações por email a cada mudança de status.
         </div>
       </div>
-      
-      <h3>🔒 Segurança e Privacidade</h3>
-      <p>Seus dados e documentos são tratados com máxima segurança:</p>
-      <ul>
-        <li>✅ Conexão criptografada (SSL)</li>
-        <li>✅ Dados protegidos conforme LGPD</li>
-        <li>✅ Acesso restrito apenas à nossa equipe autorizada</li>
-        <li>✅ Documentos com validade jurídica</li>
-      </ul>
       
       <hr class="divider">
       
