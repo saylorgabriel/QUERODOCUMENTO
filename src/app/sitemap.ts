@@ -1,10 +1,12 @@
 import { MetadataRoute } from 'next'
+import { cities } from '@/data/cities'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://querodocumento.com.br'
   const currentDate = new Date()
 
-  return [
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: currentDate,
@@ -54,4 +56,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
   ]
+
+  // City pages - high priority for SEO
+  const cityPages: MetadataRoute.Sitemap = cities.map((city) => ({
+    url: `${baseUrl}/consulta-protesto/${city.stateSlug}/${city.slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly' as const,
+    priority: 0.85, // High priority for local SEO
+  }))
+
+  return [...staticPages, ...cityPages]
 }
