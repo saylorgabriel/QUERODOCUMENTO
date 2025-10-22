@@ -1,0 +1,27 @@
+{
+  "name": "QueroDocumento - Consulta e Certidão de Protesto",
+  "short_name": "QueroDocumento",
+  "description": "Consulte protestos e emita certidões de forma rápida e segura em cartórios de todo o Brasil",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#dc2626",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/iconeqdm.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/iconeqdm.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "business", "productivity"],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}
