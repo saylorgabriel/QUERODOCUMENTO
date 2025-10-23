@@ -11,8 +11,24 @@ const nextConfig = {
     // Ignore TypeScript errors during build
     ignoreBuildErrors: true,
   },
+  // Optimize JavaScript - remove unnecessary polyfills for modern browsers
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
+  // Modern build targets (ES2020+)
+  experimental: {
+    optimizePackageImports: ['@/components', '@/lib', 'lucide-react', 'date-fns'],
+  },
+  // Enable compression
+  compress: true,
+  // Optimize production bundles
+  productionBrowserSourceMaps: false,
+  poweredByHeader: false,
   images: {
     remotePatterns: [],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
   // Security Headers
   async headers() {
