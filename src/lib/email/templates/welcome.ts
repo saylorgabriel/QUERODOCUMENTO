@@ -122,7 +122,7 @@ export function getWelcomeTemplate(data: EmailTemplateData): EmailTemplate {
     
     📞 PRECISA DE AJUDA?
     • WhatsApp: Resposta em até 2 horas úteis
-    • Email: suporte@querodocumento.com.br
+    • Email: contato@querodocumento.com.br
     • Chat Online: Disponível em sua conta
     
     DADOS DA SUA CONTA:
