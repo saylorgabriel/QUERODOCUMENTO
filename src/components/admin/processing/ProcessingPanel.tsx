@@ -100,7 +100,7 @@ export default function ProcessingPanel({ order, onUpdate, onStatusChange, updat
       {/* Header */}
       <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center justify-between">
-          <div>
+          {/* <div>
             <h3 className="text-lg font-semibold text-gray-900 flex items-center">
               <ClipboardCheck className="w-5 h-5 mr-2 text-gray-400" />
               Painel de Processamento
@@ -108,7 +108,7 @@ export default function ProcessingPanel({ order, onUpdate, onStatusChange, updat
             <p className="text-sm text-gray-600 mt-1">
               {serviceTypeDisplay} • {documentDisplay}: {order.documentNumber}
             </p>
-          </div>
+          </div> */}
 
           {/* Status indicator */}
           <div className="flex items-center space-x-3">
@@ -153,7 +153,7 @@ export default function ProcessingPanel({ order, onUpdate, onStatusChange, updat
 
       {/* Processing guidance for specific statuses */}
       <div className="px-6 py-4">
-        {needsPayment && (
+        {/* {needsPayment && (
           <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
             <div className="flex">
               <AlertCircle className="h-5 w-5 text-red-400 mr-2 mt-0.5" />
@@ -166,7 +166,7 @@ export default function ProcessingPanel({ order, onUpdate, onStatusChange, updat
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         {order.status === 'ORDER_CONFIRMED' && (
           <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
