@@ -221,7 +221,7 @@ export default function ProcessingPanel({ order, onUpdate, onStatusChange, updat
         )}
 
         {/* Client info quick reference */}
-        <div className="bg-gray-50 border border-gray-200 rounded-md p-4 mb-6">
+        {/* <div className="bg-gray-50 border border-gray-200 rounded-md p-4 mb-6">
           <div className="flex items-start">
             <User className="h-5 w-5 text-gray-400 mr-2 mt-0.5" />
             <div>
@@ -238,7 +238,7 @@ export default function ProcessingPanel({ order, onUpdate, onStatusChange, updat
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Tab navigation */}
         <div className="border-b border-gray-200">

@@ -203,7 +203,7 @@ export default function ClientInfo({ order }: ClientInfoProps) {
         </div>
 
         {/* LGPD Compliance Note */}
-        <div className="mt-8 border-t border-gray-200 pt-6">
+        {/* <div className="mt-8 border-t border-gray-200 pt-6">
           <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
             <div className="flex">
               <div className="flex-shrink-0">
@@ -222,7 +222,7 @@ export default function ClientInfo({ order }: ClientInfoProps) {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

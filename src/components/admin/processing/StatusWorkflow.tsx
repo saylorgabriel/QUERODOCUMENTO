@@ -340,7 +340,7 @@ export default function StatusWorkflow({ order, onStatusChange, updating }: Stat
       )}
 
       {/* Workflow visualization */}
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
+      {/* <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h4 className="text-lg font-medium text-gray-900 mb-6 flex items-center">
           <FileText className="w-5 h-5 mr-2 text-gray-400" />
           Fluxo do Processamento
@@ -350,30 +350,30 @@ export default function StatusWorkflow({ order, onStatusChange, updating }: Stat
           {steps.map((step, index) => (
             <div key={step.id} className="relative">
               {/* Connector line */}
-              {index < steps.length - 1 && (
+              {/* {index < steps.length - 1 && (
                 <div className="absolute left-6 top-12 w-px h-16 bg-gray-300" />
-              )}
+              )} */}
 
-              <div className="flex items-start">
+              {/* <div className="flex items-start">
                 {/* Step icon */}
-                <div className={`p-3 rounded-full border-2 ${
+                {/* <div className={`p-3 rounded-full border-2 ${
                   step.status === 'completed' ? 'border-green-200 bg-green-100' :
                   step.status === 'current' ? 'border-blue-200 bg-blue-100' :
                   step.status === 'blocked' ? 'border-red-200 bg-red-100' :
                   'border-gray-200 bg-gray-100'
-                }`}>
-                  <div className={`${
+                }`}> */}
+                  {/* <div className={`${
                     step.status === 'completed' ? 'text-green-600' :
                     step.status === 'current' ? 'text-blue-600' :
                     step.status === 'blocked' ? 'text-red-600' :
-                    'text-gray-400'
-                  }`}>
-                    {step.icon}
-                  </div>
-                </div>
+                    'text-gray-400' */}
+                  {/* }`}> */}
+                    {/* {step.icon}
+                  </div> */}
+                {/* </div> */} 
 
                 {/* Step content */}
-                <div className="ml-6 flex-1 min-w-0">
+                {/* <div className="ml-6 flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <h5 className={`text-lg font-medium ${
                       step.status === 'completed' ? 'text-green-900' :
@@ -390,16 +390,16 @@ export default function StatusWorkflow({ order, onStatusChange, updating }: Stat
                         {step.estimatedTime}
                       </span>
                     )}
-                  </div>
+                  </div> */}
 
-                  <p className={`mt-1 ${
+                  {/* <p className={`mt-1 ${
                     step.status === 'current' ? 'text-blue-700' : 'text-gray-600'
                   }`}>
                     {step.description}
-                  </p>
+                  </p> */}
 
                   {/* Actions for current step */}
-                  {step.status === 'current' && step.actions && (
+                  {/* {step.status === 'current' && step.actions && (
                     <div className="mt-4">
                       <h6 className="text-sm font-medium text-gray-900 mb-2">Ações necessárias:</h6>
                       <ul className="text-sm text-gray-600 space-y-1">
@@ -411,10 +411,10 @@ export default function StatusWorkflow({ order, onStatusChange, updating }: Stat
                         ))}
                       </ul>
                     </div>
-                  )}
+                  )} */}
 
                   {/* Tips */}
-                  {step.status === 'current' && step.tips && (
+                  {/* {step.status === 'current' && step.tips && (
                     <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-md p-3">
                       <div className="flex items-start">
                         <HelpCircle className="w-4 h-4 text-yellow-600 mr-2 mt-0.5 flex-shrink-0" />
@@ -428,13 +428,13 @@ export default function StatusWorkflow({ order, onStatusChange, updating }: Stat
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
+                  )} */}
+                {/* </div>
               </div>
             </div>
           ))}
         </div>
-      </div>
+      </div> */} 
     </div>
   )
 }
