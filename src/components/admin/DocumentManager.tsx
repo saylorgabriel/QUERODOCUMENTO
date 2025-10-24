@@ -74,18 +74,23 @@ export default function DocumentManager({
   }
 
   // Fetch documents
-  const fetchDocuments = async () => {
+  const fetchDocuments = async (notifyChange = true) => {
     try {
       setLoading(true)
       const response = await fetch(`/api/admin/orders/${orderId}/upload`)
-      
+
       if (!response.ok) {
         throw new Error('Erro ao carregar documentos')
       }
 
       const data = await response.json()
       setDocuments(data.documents || [])
-      onDocumentsChange?.(data.documents || [])
+
+      // Only notify parent component if requested (e.g., after upload/delete)
+      if (notifyChange) {
+        onDocumentsChange?.(data.documents || [])
+      }
+
       setError(null)
     } catch (err) {
       console.error('Error fetching documents:', err)
@@ -148,8 +153,8 @@ export default function DocumentManager({
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
 
-      // Refresh documents to update download count
-      await fetchDocuments()
+      // Refresh documents to update download count (without notifying parent)
+      await fetchDocuments(false)
       
     } catch (err) {
       console.error('Error downloading document:', err)
@@ -195,7 +200,9 @@ export default function DocumentManager({
   }
 
   useEffect(() => {
-    fetchDocuments()
+    // Initial load should not notify parent to avoid reload loops
+    fetchDocuments(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId])
 
   if (loading) {

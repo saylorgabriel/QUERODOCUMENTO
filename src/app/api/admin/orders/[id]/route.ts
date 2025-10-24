@@ -52,7 +52,7 @@ function isValidStatusTransition(currentStatus: string, newStatus: string): bool
 // GET - Fetch single order with full details
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Validate user session and admin role
@@ -64,7 +64,7 @@ export async function GET(
       )
     }
 
-    const orderId = params.id
+    const { id: orderId } = await params
 
     // Validate order ID format
     if (!orderId || orderId.length < 10) {
@@ -185,7 +185,7 @@ export async function GET(
 // PUT - Update order details (admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Validate user session and admin role
@@ -197,7 +197,7 @@ export async function PUT(
       )
     }
 
-    const orderId = params.id
+    const { id: orderId } = await params
 
     // Validate order ID format
     if (!orderId || orderId.length < 10) {

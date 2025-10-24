@@ -133,7 +133,7 @@ async function sendDocumentReadyNotification(
 // POST - Upload files to order
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Validate user session and admin role
@@ -145,7 +145,7 @@ export async function POST(
       )
     }
 
-    const orderId = params.id
+    const { id: orderId } = await params
 
     // Validate order ID format
     if (!orderId || orderId.length < 10) {
@@ -401,7 +401,7 @@ export async function POST(
 // GET - List uploaded documents for an order
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Validate user session and admin role
@@ -413,7 +413,7 @@ export async function GET(
       )
     }
 
-    const orderId = params.id
+    const { id: orderId } = await params
 
     // Validate order ID format
     if (!orderId || orderId.length < 10) {
@@ -460,7 +460,7 @@ export async function GET(
 // DELETE - Remove uploaded document
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Validate user session and admin role
@@ -472,7 +472,7 @@ export async function DELETE(
       )
     }
 
-    const orderId = params.id
+    const { id: orderId } = await params
     const { searchParams } = new URL(request.url)
     const documentId = searchParams.get('documentId')
 
